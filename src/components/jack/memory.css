@@ -1,0 +1,166 @@
+/* v2 Memory (design "Memory — what Jack knows, editable"). */
+.mem {
+  max-width: 1160px;
+  padding: 24px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.mem-head {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.mem-head > div:first-child {
+  flex: 1;
+  min-width: 280px;
+}
+.mem-head h1 {
+  margin: 0;
+}
+.mem-head p {
+  margin: 6px 0 0;
+  color: var(--ink-muted);
+  font: 400 15px/24px var(--font-sans);
+  max-width: 70ch;
+}
+.mem-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.mem-safe {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--surface-hover);
+  font: 400 13px/20px var(--font-sans);
+}
+.mem-safe .as-icon {
+  margin-top: 2px;
+  flex: none;
+}
+.mem-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  font: 400 14px/20px var(--font-sans);
+}
+.mem-toast span {
+  flex: 1;
+}
+.mem-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+.mem-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  padding: 16px 16px 4px;
+}
+.mem-ov {
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 11px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.mem-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mem-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.mem-text {
+  flex: 1;
+  min-width: 0;
+  font: 400 14px/20px var(--font-sans);
+}
+.mem-meta {
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+.mem-meta a {
+  color: var(--ink-muted);
+}
+.mem-none {
+  margin: 0;
+  padding: 10px 0 12px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+.mem-edit {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.mem-input,
+.mem-textarea {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 7px 10px;
+  font: 400 14px/20px var(--font-sans);
+}
+.mem-input:focus-visible,
+.mem-textarea:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+.mem-add {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mem-textarea {
+  width: 100%;
+  resize: vertical;
+}
+.mem-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mem-error {
+  margin: 0;
+  font: 400 13px/20px var(--font-sans);
+}
+@media (max-width: 1023px) {
+  .mem-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .mem {
+    padding: 8px 16px 24px;
+  }
+  .mem-head h1 {
+    display: none;
+  }
+}

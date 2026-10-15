@@ -1,0 +1,52 @@
+.soon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 28px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg, 12px);
+}
+.soon-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.soon-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.soon-title {
+  margin: 0;
+  font: 600 20px/28px var(--font-sans);
+}
+.soon-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--ink);
+  font: 400 15px/24px var(--font-sans);
+}
+.soon-points li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.soon-points .as-icon {
+  margin-top: 4px;
+  color: var(--ink-muted);
+  flex: none;
+}
+.soon a {
+  color: var(--brand-text);
+}

@@ -1,0 +1,147 @@
+/* v2 Activity (design "Activity — everything done and planned"). */
+.act {
+  display: flex;
+  min-height: 100%;
+}
+.act-main {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.act-head h1 {
+  margin: 0;
+}
+.act-head p {
+  margin: 6px 0 4px;
+  color: var(--ink-muted);
+  font: 400 15px/24px var(--font-sans);
+}
+.act-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.act-ov {
+  margin: 12px 0 0;
+  font: 600 11px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.act-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.act-row {
+  display: grid;
+  grid-template-columns: 48px 36px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.act-time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 36px;
+  color: var(--ink-faint);
+}
+.act-what {
+  font: 400 14px/20px var(--font-sans);
+  padding-top: 2px;
+  min-width: 0;
+}
+.act-what b {
+  font-weight: 600;
+}
+.act-detail {
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+.act-ic {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.act-open {
+  font: 400 13px/36px var(--font-sans);
+  color: var(--brand-text);
+}
+.act-row .as-btn {
+  text-decoration: none;
+  margin-top: 2px;
+}
+.act-empty {
+  margin: 24px 0 0;
+  color: var(--ink-muted);
+  font: 400 15px/24px var(--font-sans);
+}
+.act-aside {
+  width: 360px;
+  flex: none;
+  border-left: 1px solid var(--line);
+  background: var(--surface);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.act-aside .act-ov {
+  margin: 0 0 4px;
+}
+.act-up {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.act-up li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font: 500 14px/20px var(--font-sans);
+}
+.act-up a {
+  color: var(--ink);
+}
+@media (max-width: 1279px) {
+  .act-aside {
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+  .act-main {
+    padding: 8px 16px 24px;
+  }
+  .act-head h1 {
+    display: none;
+  }
+  .act-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
+  .act-row {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+  .act-time {
+    display: none;
+  }
+  .act-row > a {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .act-open {
+    line-height: 20px;
+  }
+}

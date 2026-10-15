@@ -1,0 +1,33 @@
+/* Space switch in the header (v2 designs: Jack home, Business home). */
+.space-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.space-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 220px;
+  padding: 4px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font: 500 13px/18px var(--font-sans);
+  text-decoration: none;
+}
+.space-name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.space-name:hover {
+  background: var(--surface-hover);
+}
+@media (max-width: 767px) {
+  .space-name {
+    display: none;
+  }
+}

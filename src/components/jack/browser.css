@@ -1,0 +1,295 @@
+/* v2 Jack's browser, live (design "Jack's browser, live"). */
+.brw {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+}
+.brw-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brw-side {
+  width: 360px;
+  flex: none;
+  border-right: 1px solid var(--line);
+  background: var(--surface);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+}
+.brw-ov {
+  margin: 0;
+  font: 600 11px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.brw-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font: 400 14px/20px var(--font-sans);
+}
+.brw-log li {
+  display: grid;
+  grid-template-columns: 44px 20px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+.brw-log .as-icon {
+  margin-top: 1px;
+}
+.brw-t {
+  font: 400 12px/20px var(--font-mono);
+  color: var(--ink-faint);
+}
+.brw-log .ok .as-icon {
+  color: var(--success);
+}
+.brw-log .you .as-icon {
+  color: var(--warning);
+}
+.brw-log .bad .as-icon {
+  color: var(--danger);
+}
+.brw-log .now span:last-child {
+  font-weight: 600;
+}
+.brw-log .next {
+  color: var(--ink-muted);
+}
+.brw-rule {
+  height: 1px;
+  background: var(--line);
+  flex: none;
+}
+.brw-safety {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font: 400 13px/20px var(--font-sans);
+}
+.brw-safety li {
+  display: flex;
+  gap: 10px;
+}
+.brw-safety .as-icon {
+  flex: none;
+  margin-top: 2px;
+}
+.brw-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 500 14px/20px var(--font-sans);
+  margin-top: auto;
+}
+.brw-main {
+  flex: 1;
+  min-width: 0;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+.brw-frame {
+  flex: 1;
+  min-height: 420px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-raised);
+}
+.brw-bar {
+  height: 44px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--line);
+}
+.brw-url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 400 13px/20px var(--font-mono);
+  color: var(--ink-muted);
+}
+.brw-live {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #fff;
+}
+/* A drawing of the page Jack is on (sample mode). Sites are white whatever the app theme. */
+.brw-site {
+  flex: 1;
+  padding: 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #ffffff;
+  color: #1f2933;
+  font-family: var(--font-sans);
+}
+.brw-site-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brw-site-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #1f2933;
+}
+.brw-site-name {
+  font-size: 18px;
+  font-weight: 700;
+}
+.brw-site-h {
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 700;
+}
+.brw-site-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+  max-width: 760px;
+}
+.brw-site-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #52606d;
+  font-weight: 500;
+}
+.brw-fld {
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid #cbd2d9;
+  border-radius: 6px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  color: #1f2933;
+  background: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.brw-fld.on {
+  border-color: #1f2933;
+  box-shadow: 0 0 0 3px rgba(31, 41, 51, 0.18);
+}
+.brw-caret {
+  display: inline-block;
+  border-left: 2px solid #1f2933;
+  height: 18px;
+  margin-left: 1px;
+  animation: brw-blink 1s steps(1) infinite;
+}
+@keyframes brw-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.brw-site-foot {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.brw-site-btn {
+  height: 44px;
+  padding: 0 24px;
+  border-radius: 6px;
+  background: #1f2933;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+}
+.brw-site-note {
+  font-size: 13px;
+  color: #52606d;
+}
+.brw-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--ink-muted);
+  font: 400 14px/20px var(--font-sans);
+}
+.brw-note {
+  margin: 0;
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+@media (prefers-reduced-motion: reduce) {
+  .brw-caret {
+    animation: none;
+  }
+}
+@media (max-width: 1023px) {
+  .brw {
+    flex-direction: column-reverse;
+    height: auto;
+  }
+  .brw-side {
+    width: auto;
+    border-right: 0;
+    border-top: 1px solid var(--line);
+  }
+  .brw-back {
+    margin-top: 0;
+  }
+}
+@media (max-width: 767px) {
+  .brw-main {
+    padding: 12px 16px;
+    overflow: visible;
+  }
+  .brw-side {
+    padding: 16px;
+  }
+  .brw-frame {
+    min-height: 360px;
+  }
+  .brw-site {
+    padding: 20px;
+    gap: 16px;
+  }
+  .brw-site-h {
+    font-size: 20px;
+    line-height: 26px;
+  }
+  .brw-site-fields {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .brw-controls .as-badge {
+    display: none;
+  }
+}

@@ -1,0 +1,179 @@
+/* Model picker, upgrade and compare dialogs (designs: ModelFlow, MobileFlow "Choose a model"). */
+
+.as-model-item.active {
+  background: var(--surface-hover);
+}
+.as-model-item[aria-selected='true'].active {
+  background: var(--surface-active, var(--surface-hover));
+}
+.mp-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--brand-text);
+  font: 500 12px/16px var(--font-sans);
+  cursor: pointer;
+}
+.mp-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Phone sheet */
+.as-dialog.flush .as-dialog-body {
+  padding: 0;
+  gap: 0;
+}
+.as-dialog.flush .as-dialog-head {
+  padding: 10px 8px 6px 20px;
+  align-items: center;
+}
+.as-dialog.flush .as-dialog-head h2 {
+  font: 600 17px/24px var(--font-sans);
+}
+.mp-sheet-list {
+  padding-bottom: 8px;
+}
+.mp-sheet-group {
+  padding: 14px 20px 6px;
+  font: 600 11px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.mp-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 20px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+.mp-opt:hover,
+.mp-opt.on {
+  background: var(--surface-hover);
+}
+.mp-opt:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.mp-opt .tx {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.mp-opt .a {
+  font: 500 15px/20px var(--font-sans);
+}
+.mp-opt .b {
+  font: 400 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.mp-opt .c {
+  font: 400 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.mp-sheet-foot {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--surface-raised);
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.mp-sheet-foot .mp-link {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* Upgrade dialog */
+.mp-perks {
+  list-style: none;
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font: 400 14px/20px var(--font-sans);
+}
+.mp-perks li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mp-perks .as-icon,
+.mp-perks svg {
+  color: var(--success);
+  flex: none;
+}
+
+/* Compare dialog */
+.mp-foot-note {
+  flex: 1;
+  font: 400 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.mp-table-wrap {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+}
+.mp-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  font: 400 14px/20px var(--font-sans);
+}
+.mp-table thead th {
+  padding: 8px 12px;
+  background: var(--surface);
+  text-align: left;
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--line);
+}
+.mp-table tbody th,
+.mp-table td {
+  padding: 16px 12px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--line);
+}
+.mp-table tbody tr:last-child th,
+.mp-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.mp-table tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.mp-table .muted {
+  color: var(--ink-muted);
+}
+.mp-table .mono {
+  font: 400 13px/20px var(--font-mono);
+  white-space: nowrap;
+}
+.mp-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.mp-tags .as-model-tag {
+  white-space: nowrap;
+}

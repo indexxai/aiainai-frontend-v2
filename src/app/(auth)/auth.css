@@ -1,0 +1,535 @@
+/* Auth pages: brand panel (left, desktop) + form column (right). From the Sign-up & onboarding designs. */
+.au-page {
+  min-height: 100dvh;
+  display: flex;
+  background: var(--bg);
+}
+
+.au-brandpanel {
+  width: 47%;
+  max-width: 680px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding: 48px 56px 56px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  box-sizing: border-box;
+}
+.au-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  text-decoration: none;
+  font: 600 18px/24px var(--font-sans);
+}
+.au-brand img {
+  border-radius: 6px;
+  object-fit: contain;
+}
+.au-brand:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+.au-pitch {
+  margin-top: 104px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.au-pitch-title {
+  margin: 0;
+  max-width: 560px;
+  font: 700 40px/46px var(--font-sans);
+  letter-spacing: -0.02em;
+}
+.au-pitch-title em {
+  font-style: italic;
+  color: var(--brand-text);
+}
+.au-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.au-features li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.au-feature-icon {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 8px;
+  background: var(--surface-hover);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+}
+.au-features b {
+  display: block;
+  font: 600 15px/22px var(--font-sans);
+}
+.au-features li > span:last-child > span {
+  display: block;
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.au-brandpanel-foot {
+  margin: auto 0 0;
+  padding-top: 32px;
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+
+.au-side {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.au-brand-compact {
+  display: none;
+}
+.au-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 104px 24px 32px;
+}
+.au-card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.au-foot {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 20px;
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-faint);
+}
+.au-foot a {
+  color: var(--ink-faint);
+  text-decoration: none;
+}
+.au-foot a:hover {
+  color: var(--ink);
+}
+
+/* Top-right link ("Already have an account? Sign in") */
+.au-topaction {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.au-topaction a {
+  text-decoration: none;
+}
+
+.au-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.au-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  background: var(--surface-hover);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+}
+.au-title {
+  margin: 0;
+  font: 650 28px/34px var(--font-sans);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.au-sub {
+  margin: 0;
+  font: 400 15px/24px var(--font-sans);
+  color: var(--ink-muted);
+}
+.au-sub b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.au-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  color: var(--ink-muted);
+  font: 500 13px/20px var(--font-sans);
+  text-decoration: none;
+}
+.au-back:hover {
+  color: var(--ink);
+}
+.au-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.au-full {
+  width: 100%;
+  justify-content: center;
+  height: 44px;
+}
+.au-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 400 12px/16px var(--font-sans);
+  color: var(--ink-faint);
+}
+.au-or::before,
+.au-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.au-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.au-link {
+  color: var(--brand-text);
+  font: 500 14px/20px var(--font-sans);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.au-link:hover {
+  text-decoration: underline;
+}
+.au-link:disabled {
+  color: var(--ink-faint);
+  cursor: default;
+  text-decoration: none;
+}
+.au-small {
+  margin: 0;
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.au-small a {
+  color: var(--brand-text);
+}
+.au-small .au-link {
+  font-size: 13px;
+}
+
+/* Sign-up's last step: "What will you use Jack for?" (Personal or Business) */
+.au-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.au-choice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.au-choice:hover:not(:disabled),
+.au-choice.on {
+  border-color: var(--line-strong);
+  background: var(--surface-hover);
+}
+.au-choice:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.au-choice:disabled {
+  cursor: default;
+}
+.au-choice:disabled:not(.on) {
+  opacity: 0.6;
+}
+.au-choice-av {
+  width: 80px;
+  height: 96px;
+  flex: none;
+  border-radius: 16px;
+  background: var(--surface-hover);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.au-choice-av img {
+  height: 84px;
+  width: auto;
+  max-width: 72px;
+  object-fit: contain;
+  display: block;
+}
+.au-choice-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.au-choice-who {
+  font: 600 12px/16px var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.au-choice-who span {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+.au-choice-text {
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.au-choice-go {
+  flex: none;
+  display: flex;
+  color: var(--ink-muted);
+}
+
+.au-note {
+  margin: 0;
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+
+/* Sign-up step 2: "What do you want Jack to help with first?" */
+.au-jack {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.au-jack img {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  object-fit: cover;
+  background: var(--surface-hover);
+  display: block;
+}
+.au-goals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.au-goal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: 500 14px/20px var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+}
+.au-goal:hover {
+  border-color: var(--line-strong);
+}
+.au-goal:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.au-goal.on {
+  border-color: var(--ink-muted);
+  background: var(--surface-hover);
+}
+.au-goal-ic {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 8px;
+  background: var(--surface-hover);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-muted);
+}
+.au-goal-label {
+  flex: 1;
+  min-width: 0;
+}
+.au-goal-ck {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 5px;
+  border: 1px solid var(--line-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.au-goal.on .au-goal-ck {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+.au-goal-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  color: var(--ink-faint);
+}
+.au-goal-note:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.au-goal-note input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 400 14px/20px var(--font-sans);
+}
+.au-goal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+@media (max-width: 480px) {
+  .au-goals {
+    grid-template-columns: 1fr;
+  }
+  .au-choice-av {
+    width: 64px;
+    height: 80px;
+  }
+  .au-choice-av img {
+    height: 68px;
+  }
+}
+
+/* Password rules under the password field */
+.au-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: -6px;
+}
+.au-rules-meter {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+.au-rules-meter i {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--line);
+}
+.au-rules-meter i.on {
+  background: var(--success);
+}
+.au-rules ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+.au-rules li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 400 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.au-rules li.ok {
+  color: var(--success);
+}
+
+.au-google-g {
+  font: 700 17px/20px var(--font-sans);
+}
+
+/* Narrow screens: no brand panel; logo above the form */
+@media (max-width: 1023px) {
+  .au-brandpanel {
+    display: none;
+  }
+  .au-brand-compact {
+    display: inline-flex;
+    margin: 18px 0 0 20px;
+    font-size: 16px;
+  }
+  .au-main {
+    padding-top: 40px;
+  }
+}
+@media (max-width: 767px) {
+  .au-main {
+    padding: 28px 16px 24px;
+  }
+  .au-title {
+    font-size: 24px;
+    line-height: 30px;
+  }
+  .au-topaction {
+    top: 16px;
+    right: 16px;
+  }
+  .au-topaction > span {
+    display: none;
+  }
+}
+.au-link-sm {
+  font-size: 13px;
+  line-height: 18px;
+}

@@ -1,0 +1,164 @@
+/* Files (v2): one open list with thin dividers, no boxes inside boxes. */
+.fl {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100%;
+  border-radius: var(--radius-lg);
+}
+.fl-drag {
+  outline: 2px dashed var(--ink-muted);
+  outline-offset: -8px;
+}
+.fl-head {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.fl-titles {
+  flex: 1;
+  min-width: 240px;
+}
+.fl-titles h1 {
+  margin: 0;
+}
+.fl-sub {
+  margin: 4px 0 0;
+  color: var(--ink-muted);
+  font: 400 14px/20px var(--font-sans);
+}
+.fl-search {
+  width: 260px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--ink-muted);
+}
+.fl-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 400 14px/20px var(--font-sans);
+}
+.fl-reading {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-muted);
+  font: 400 14px/20px var(--font-sans);
+}
+.fl-spin {
+  animation: fl-spin 0.9s linear infinite;
+}
+@keyframes fl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.fl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.fl-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.fl-ic {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--surface-hover);
+  color: var(--ink-muted);
+}
+.fl-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fl-name {
+  color: var(--ink);
+  font: 500 14px/20px var(--font-sans);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.fl-name:hover {
+  text-decoration: underline;
+}
+.fl-meta {
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+.fl-meta a {
+  color: var(--ink-muted);
+}
+.fl-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+.fl-acts {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+.fl-acts a.as-iconbtn {
+  text-decoration: none;
+  color: var(--ink);
+}
+.fl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 64px 16px;
+  text-align: center;
+  color: var(--ink-muted);
+  font: 400 14px/20px var(--font-sans);
+}
+.fl-empty b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.fl-more {
+  display: flex;
+  justify-content: center;
+}
+@media (max-width: 767px) {
+  .fl {
+    padding: 20px 16px 48px;
+  }
+  .fl-search {
+    width: 100%;
+    order: 3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fl-spin {
+    animation: none;
+  }
+}

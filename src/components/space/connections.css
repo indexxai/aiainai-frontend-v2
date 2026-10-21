@@ -1,0 +1,140 @@
+/* v2 Connections (design "Connections — apps and how much Jack may do"). */
+.cx {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px;
+  align-items: start;
+  max-width: 1240px;
+  padding: 24px 40px 40px;
+}
+.cx-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.cx-head h1 {
+  margin: 0;
+}
+.cx-head p {
+  margin: 6px 0 0;
+  color: var(--ink-muted);
+  font: 400 15px/24px var(--font-sans);
+}
+.cx-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  padding: 4px 16px;
+}
+.cx-app {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.cx-app:first-child {
+  border-top: 0;
+}
+.cx-ic {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 10px;
+  background: var(--surface-hover);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cx-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cx-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font: 500 15px/22px var(--font-sans);
+}
+.cx-what,
+.cx-hint {
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+.cx-levels {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.cx-level {
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-muted);
+  padding: 6px 12px;
+  font: 400 13px/18px var(--font-sans);
+  cursor: pointer;
+}
+.cx-level:first-child {
+  border-left: 0;
+}
+.cx-level.on {
+  background: var(--surface-hover);
+  color: var(--ink);
+  font-weight: 600;
+}
+.cx-level:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.cx-act {
+  flex: none;
+}
+.cx-note {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+@media (max-width: 1023px) {
+  .cx {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px;
+  }
+}
+@media (max-width: 767px) {
+  .cx {
+    padding: 8px 16px 24px;
+  }
+  .cx-head h1 {
+    display: none;
+  }
+  .cx-app {
+    flex-wrap: wrap;
+  }
+  .cx-info {
+    flex: 1 1 calc(100% - 54px);
+  }
+  .cx-act {
+    margin-left: 54px;
+  }
+  .cx-levels {
+    display: flex;
+    align-self: stretch;
+    margin-left: -54px;
+  }
+  .cx-level {
+    flex: 1;
+    padding: 8px 4px;
+  }
+}

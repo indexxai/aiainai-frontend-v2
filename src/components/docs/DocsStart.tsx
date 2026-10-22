@@ -1,4 +1,5 @@
 'use client';
+import { useJack } from '@/lib/assistant';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -41,7 +42,22 @@ const withKeys = (s: Section[]) => s.map((x) => ({ ...x, key: ++keySeq }));
  * AI Docs start: describe the document (or pick a type or template), check the outline,
  * then write it. Designs: DocsFlow landing → outline.
  */
-export function DocsStart({ menu, credits }: { menu: ModelMenu; credits: number }) {
+/** The project a new document goes in, when started from a project page. */
+export interface DocProject {
+  id: string;
+  name: string;
+}
+
+export function DocsStart({
+  menu,
+  credits,
+  project = null,
+}: {
+  menu: ModelMenu;
+  credits: number;
+  project?: DocProject | null;
+}) {
+  const jack = useJack();
   const router = useRouter();
   const pathname = usePathname();
   const [type, setType] = useState<DocType>('proposal');
@@ -51,17 +67,33 @@ export function DocsStart({ menu, credits }: { menu: ModelMenu; credits: number 
   const [error, setError] = useState('');
   const [outline, setOutline] = useState<OutlineState | null>(null);
 
+  const projectId = project?.id;
+  const here = project ? `/docs?project=${project.id}` : '/docs';
   useShellCrumbs({
     path: pathname,
-    items: outline
-      ? [{ label: 'Docs', href: '/docs' }, { label: `New ${TYPE_INFO[outline.type].label.toLowerCase()}` }]
-      : [{ label: 'Docs' }],
+    items: [
+      ...(project
+        ? [
+            { label: 'Projects', href: '/projects' },
+            { label: project.name, href: `/projects/${project.id}` },
+          ]
+        : []),
+      ...(outline
+        ? [
+            { label: project ? 'New document' : 'Docs', href: here },
+            { label: `New ${TYPE_INFO[outline.type].label.toLowerCase()}` },
+          ]
+        : [{ label: project ? 'New document' : 'Docs' }]),
+    ],
+    ...(project ? { back: `/projects/${project.id}` } : {}),
   });
 
   const askOutline = async (text: string) => {
     setError('');
     setBusy(true);
-    const { data, error: err } = await api.POST('/api/docs/outline', { body: { brief: text, type, model } });
+    const { data, error: err } = await api.POST('/api/docs/outline', {
+      body: { brief: text, type, model, projectId },
+    });
     setBusy(false);
     if (!data) {
       setError(toApiError(err).message);
@@ -87,7 +119,7 @@ export function DocsStart({ menu, credits }: { menu: ModelMenu; credits: number 
   const blank = async () => {
     setBusy(true);
     const { data, error: err } = await api.POST('/api/docs', {
-      body: { title: 'Untitled document', type: 'other', sections: [] },
+      body: { title: 'Untitled document', type: 'other', sections: [], projectId },
     });
     setBusy(false);
     if (!data) return setError(toApiError(err).message);
@@ -103,6 +135,7 @@ export function DocsStart({ menu, credits }: { menu: ModelMenu; credits: number 
         onModelChange={setModel}
         credits={credits}
         onBack={() => setOutline(null)}
+        project={project}
       />
     );
 
@@ -110,9 +143,16 @@ export function DocsStart({ menu, credits }: { menu: ModelMenu; credits: number 
     <div className="dk">
       <div className="dk-main">
         <h1 className="title-lg dk-title">What would you like to write?</h1>
-        <p className="dk-sub">
-          Describe it, add any files to use, and we’ll draft an outline for you to check first.
-        </p>
+        <p className="dk-sub">Describe it, and we’ll draft an outline for you to check first.</p>
+        {project && (
+          <p className="dk-project">
+            <Icon name="folder" size={16} aria-hidden />
+            <span>
+              In <Link href={`/projects/${project.id}`}>{project.name}</Link>. {jack.name} follows its
+              instructions and reads its files.
+            </span>
+          </p>
+        )}
         {error && (
           <Banner tone="danger" onDismiss={() => setError('')}>
             {error}
@@ -122,8 +162,6 @@ export function DocsStart({ menu, credits }: { menu: ModelMenu; credits: number 
           menu={menu}
           model={model}
           onModelChange={setModel}
-          connectors={false}
-          modeChip={false}
           placeholder="e.g. A proposal for a six-week website relaunch for a roofing company"
           label="Describe your document"
           text={brief}
@@ -243,6 +281,7 @@ function OutlineStep({
   onModelChange,
   credits,
   onBack,
+  project,
 }: {
   initial: OutlineState;
   menu: ModelMenu;
@@ -250,6 +289,7 @@ function OutlineStep({
   onModelChange: (m: string) => void;
   credits: number;
   onBack: () => void;
+  project: DocProject | null;
 }) {
   const router = useRouter();
   const [title, setTitle] = useState(initial.title);
@@ -304,6 +344,7 @@ function OutlineStep({
         length,
         tone,
         model,
+        projectId: project?.id,
       },
     });
     if (!data) {
@@ -323,7 +364,10 @@ function OutlineStep({
   return (
     <div className="do">
       <div className="do-col">
-        <div className="do-eyebrow">New {typeLabel.toLowerCase()} · Step 1 of 2</div>
+        <div className="do-eyebrow">
+          New {typeLabel.toLowerCase()}
+          {project ? ` in ${project.name}` : ''} · Step 1 of 2
+        </div>
         <h1 className="do-title">Check the outline</h1>
         <p className="do-sub">
           We’ll write one section for each heading. Rename, remove, reorder or add headings before we start.

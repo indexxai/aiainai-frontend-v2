@@ -5,7 +5,7 @@ import { serverApi } from '@/lib/session';
 
 export const metadata: Metadata = { title: 'Activity' };
 
-/** v2 Activity: what you, Jack and your team did across both spaces, and what's coming up. */
+/** v2 Activity: what you and Jack did across both spaces, and what's coming up. */
 export default async function Activity() {
   const cookie = (await cookies()).toString();
   const { data } = await serverApi().GET('/api/activity', { headers: { cookie }, cache: 'no-store' });

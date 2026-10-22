@@ -1,12 +1,19 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
-import { GodRing } from '@/components/jack/GodRing';
-import { JackImg } from '@/components/jack/JackImg';
-import { Icon, type IconName } from '@/ui';
-import { JACKS } from '@/lib/jack';
-import '@/components/jack/jack.css';
-import './landing.css';
+import {
+  AI_LOGOS,
+  End,
+  Face,
+  Faq,
+  H2,
+  Plans,
+  Points,
+  Ring,
+  SiteFooter,
+  SiteHeader,
+  Stand,
+} from '@/components/landing/parts';
+import { Badge, Icon, type IconName } from '@/ui';
 
 export const metadata: Metadata = {
   title: { absolute: 'Jack’s AI — God’s Perspective AI Gateway. One Jack. Every AI.' },
@@ -14,452 +21,413 @@ export const metadata: Metadata = {
     'Every AI works for Jack: ChatGPT, Claude, Gemini and hundreds more. He picks the best quality for the price, gets it done, and asks before anything important.',
 };
 
-const MODELS = ['ChatGPT', 'Claude', 'Gemini', 'Kimi', 'Qwen', 'Llama', 'Mistral', 'Grok'];
-
-const STATS = [
-  ['500+', 'AI models', 'from more than 80 companies, each with its own app, sign-up and bill.'],
-  ['~600×', 'price gap', 'between the cheapest and the most expensive model for the same amount of text.'],
-  ['3%', 'of US households', 'pay for AI today. Most people simply don’t know what to buy.'],
+/** Ring positions: Jack and the seven logos, evenly spaced (same layout as the Jack of all trades page). */
+const RING_LOGOS = [
+  { x: 270, y: 230 },
+  { x: 455, y: 197 },
+  { x: 602, y: 304 },
+  { x: 572, y: 486 },
+  { x: 430, y: 610 },
+  { x: 245, y: 643 },
+  { x: 98, y: 536 },
 ];
 
-const STEPS = [
-  ['You ask', 'In plain words. No model names, no settings.'],
-  ['Jack plans', 'Works out what you really need and splits it into steps.'],
-  ['Jack picks', 'The right AI, agent or tool, with the best quality for the price.'],
-  ['Jack delivers', 'Checks the work and asks you before anything important.'],
+/** 72 app tiles in uneven greys: "a lot of separate AI apps". */
+const TILES = Array.from({ length: 72 }, (_, i) => {
+  const o = 0.18 + (((i * 37) % 11) / 11) * 0.5 - (i % 12) * 0.012;
+  return Math.max(0.12, Math.min(0.75, o)).toFixed(2);
+});
+
+const STEPS: [IconName, string, string][] = [
+  ['message-circle', 'You ask', 'In plain words'],
+  ['list-checks', 'Jack plans', 'Splits it into steps'],
+  ['sparkles', 'Jack picks', 'The best AI for each'],
+  ['check', 'You approve', 'Then it’s done'],
 ];
 
-const PICKS = [
-  ['A quick question', 'Small, fast model', 'Simple job: no need to pay more'],
-  ['Compare 3 airline websites', 'Low-cost reading model', 'Lots of reading, simple choices'],
-  ['Write a business report', 'Strong reasoning model', 'Quality matters, so it’s worth it'],
-  ['Check the final result', 'A second, different model', 'Catches mistakes before you see them'],
+const TRIP: [IconName, string, string, string][] = [
+  ['globe', 'Compare flights on 3 sites', 'DeepSeek', '1 credit'],
+  ['file-text', 'Write the day-by-day plan', 'Claude', '2 credits'],
+  ['list-checks', 'Double-check prices', 'GPT', '1 credit'],
 ];
 
-const FEATURES: [IconName, string, string][] = [
-  ['sparkles', 'God’s Perspective', 'One AI gateway that directs every other AI for you.'],
-  [
-    'zap',
-    'Best quality for the price',
-    'Jack compares quality and cost, then picks the right AI for each job.',
-  ],
-  ['message-circle', 'Plain words', 'Ask like you would ask a person. No settings to learn.'],
-  ['user-round', 'Two Jacks', 'Personal and Business spaces, kept completely apart.'],
-  ['users', 'AI Crews', 'Captain Jack runs agents for leads, posts and your CRM.'],
-  ['globe', 'Jack’s browser', 'Compares prices, fills in forms and books things for you.'],
-  ['lock', 'Safe wallet', 'One-time cards with spending limits you set.'],
-  ['hand', 'Asks first', 'Your OK before paying, sending or posting anything.'],
-  ['brain', 'Memory', 'Remembers what you like. You can see and edit it.'],
-  ['workflow', 'Connections', 'Gmail, Google Calendar, HubSpot, YaysApp and more.'],
-  ['file-text', 'Create', 'Documents, images and research with sources.'],
-  ['list-checks', 'Activity log', 'Every step, the AI that did it, and what it cost.'],
+const JOBS: [IconName, string, string, number, string][] = [
+  ['message-circle', 'A quick question', 'Fast model', 30, '$'],
+  ['globe', 'Compare 3 websites', 'Reading model', 60, '$$'],
+  ['file-text', 'A business report', 'Strongest model', 95, '$$$'],
 ];
 
-const PLANS = [
-  [
-    'Jack Free',
-    'Get started',
-    '$0',
-    '',
-    ['Limited trial or bring your own API key', 'Explore AI models, agents and tools'],
-    'Start free',
-  ],
-  [
-    'Jack Personal',
-    'Individual productivity',
-    '$20',
-    '/ month',
-    [
-      'Platform plan with included credit',
-      'Access to leading AI models and tools',
-      'Transparent top-ups, no surprises',
-    ],
-    'Get Jack Personal',
-  ],
-  [
-    'Jack Plus',
-    'Power users',
-    '$50',
-    '/ month',
-    [
-      'Higher usage limits and more credit',
-      'Priority workflows and advanced tools',
-      'Early access to new models and features',
-    ],
-    'Get Jack Plus',
-  ],
-  [
-    'Captain Jack Team',
-    'Teams and small businesses',
-    '$100',
-    '/ workspace / month',
-    [
-      'Shared workspace for your team',
-      'Central billing and usage controls',
-      'Team collaboration and admin features',
-    ],
-    'Start a team',
-  ],
-  [
-    'Captain Jack Enterprise',
-    'Organisations at scale',
-    'Custom',
-    '/ agreement',
-    ['Custom pricing and usage pools', 'Governance, security and compliance', 'Dedicated support and SLA'],
-    'Talk to us',
-  ],
-] as const;
-
-const WALLET = [
-  ['$20 collected', 'Your Jack Personal plan this month', '$20', true],
-  ['OpenAI / GPT usage', 'Model usage and tools', '$5', false],
-  ['Claude / Anthropic usage', 'Model usage and tools', '$6', false],
-  ['Other AI and tools', 'For example Google, Perplexity, specialist tools', '$4', false],
-  ['Remaining for platform', 'Platform operations and your balance', '$5', true],
-] as const;
-
-const TRUST: [IconName, string, string][] = [
-  ['hand', 'Asks before anything important', 'Paying, sending emails or posting always needs your OK.'],
-  ['sliders-horizontal', 'Limits you set', 'Spending caps per purchase and per day, and one-time cards.'],
-  ['list-checks', 'Every step on record', 'What was done, by which AI, and what it cost.'],
-  ['lock', 'Business data stays put', 'Choose which AI companies may see company data.'],
+const FEATURES: [IconName, string][] = [
+  ['globe', 'Browser'],
+  ['credit-card', 'Wallet'],
+  ['brain', 'Memory'],
+  ['file-text', 'Docs'],
+  ['image', 'Images'],
+  ['search', 'Research'],
+  ['link', 'Your apps'],
+  ['mic', 'Voice'],
 ];
 
-const WHY = [
-  ['AIs from every company', 'One company’s models', 'Hundreds, in one place'],
-  ['Best quality for the price', 'You choose, or one default', 'Picked automatically'],
-  ['Gets real tasks done', 'Some, inside their app', 'Plans, acts, asks first'],
-  ['Personal and business', 'Separate plans', 'Two Jacks, one account'],
-  ['Paying for AI', 'One bill per app', 'One subscription'],
-];
-
-const FAQ = [
+const FAQ: [string, string][] = [
   [
     'Do I need to know which AI to use?',
     'No. Jack compares quality and cost and picks for you, every time, and tells you which one did the work.',
   ],
   [
-    'Will Jack spend my money without asking?',
+    'Will Jack spend money without asking?',
     'Never. Payments, emails and posts always need your OK, within limits you set.',
   ],
   [
-    'Is my business data safe?',
-    'Business and Personal spaces are kept apart, and you choose which AI companies may see company data.',
+    'Is my business data kept apart?',
+    'Yes. Business and Personal spaces are kept apart, and you choose which AI companies may see company data.',
   ],
-  [
-    'What if I run out of credit mid-task?',
-    'Jack pauses and shows a one-tap top-up. Nothing is charged without you.',
-  ],
-  ['Can I switch between Personal and Business?', 'Yes, any time, from the top bar or the sidebar.'],
+  ['What if I run out of credit?', 'Jack pauses and shows a one-tap top-up. Nothing is charged without you.'],
 ];
 
-function Head({ eyebrow, title, lead, id }: { eyebrow: string; title: string; lead?: string; id: string }) {
-  return (
-    <div className="lp-head">
-      <div className="lp-eyebrow">{eyebrow}</div>
-      <h2 id={id} className="lp-h2">
-        {title}
-      </h2>
-      {lead && <p className="lp-lead">{lead}</p>}
-    </div>
-  );
-}
-
-/**
- * The Jack’s AI landing page for signed-out visitors (designs "ainsi.si landing page", desktop and
- * phone): a flat, open layout with thin dividers — no boxes inside boxes.
- */
+/** The Jack’s AI landing page for signed-out visitors (design "40 · Main landing page — minimal"). */
 export default function LandingPage() {
   return (
-    <div className="lp" data-theme="dark">
-      <header className="lp-top">
-        <Link href="/" className="lp-brand">
-          <Image src="/brand/jacks-ai-mark.png" alt="" width={27} height={32} priority />
-          <span>Jack&rsquo;s AI</span>
-        </Link>
-        <nav className="lp-nav" aria-label="Page">
-          <a href="#how">How it works</a>
-          <a href="#features">Features</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#two-jacks">For business</a>
-          <a href="#faq">FAQ</a>
-        </nav>
-      </header>
+    <div className="ml">
+      <SiteHeader
+        current="home"
+        links={[
+          { href: '#how', label: 'How it works' },
+          { href: '/for/personal', label: 'Jack of all trades' },
+          { href: '/for/business', label: 'Captain Jack' },
+          { href: '#pricing', label: 'Pricing' },
+        ]}
+        cta={{ href: '/signup', label: 'Get started free' }}
+      />
 
       <main>
-        <section className="lp-hero" aria-labelledby="lp-title">
-          <div className="lp-hero-text">
-            <h1 id="lp-title" className="lp-h1">
+        <section className="ml-hero" aria-labelledby="ml-title">
+          <div className="ml-hero-text">
+            <h1 id="ml-title" className="ml-h1">
               God’s Perspective AI&nbsp;Gateway
             </h1>
-            <p className="lp-tag">
-              One Jack. <em>Every AI.</em>
+            <p className="ml-slogan">
+              One Jack. <span>Every AI.</span>
             </p>
-            <p className="lp-lead">
+            <p className="ml-lead">
               Every AI works for Jack: ChatGPT, Claude, Gemini and hundreds more. Tell him what you need. He
               picks the best quality for the price, gets it done, and asks before anything important.
             </p>
-          </div>
-          <GodRing space="personal" />
-        </section>
-
-        <section className="lp-models" aria-label="Every AI works for Jack">
-          <div className="lp-eyebrow">Every AI works for Jack</div>
-          <div className="lp-model-row">
-            {MODELS.map((m) => (
-              <span key={m}>{m}</span>
-            ))}
-            <span className="lp-muted">+ hundreds more</span>
-          </div>
-        </section>
-
-        <section className="lp-sec" aria-labelledby="lp-problem">
-          <Head
-            id="lp-problem"
-            eyebrow="The problem"
-            title="Too many AIs. Too many prices. Nobody knows which one to use."
-          />
-          <div className="lp-cols lp-cols-3">
-            {STATS.map(([n, t, d]) => (
-              <div key={t} className="lp-col">
-                <span className="lp-num">{n}</span>
-                <span className="lp-t">{t}</span>
-                <span className="lp-d">{d}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="lp-sec" id="how" aria-labelledby="lp-how">
-          <Head
-            id="lp-how"
-            eyebrow="How it works"
-            title="You ask once. Jack does the rest."
-            lead="Jack works like a family doctor. He listens, finds what you really need, and hands each part to the right specialist. You never have to know which AI does what."
-          />
-          <div className="lp-cols lp-cols-4">
-            {STEPS.map(([t, d], i) => (
-              <div key={t} className="lp-col">
-                <span className="lp-step">0{i + 1}</span>
-                <span className="lp-t">{t}</span>
-                <span className="lp-d">{d}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="lp-sec" aria-labelledby="lp-price">
-          <Head
-            id="lp-price"
-            eyebrow="Feature highlight"
-            title="Best quality for the price, automatically."
-            lead="~600× price gap between models. Jack only pays for top models when the quality is worth it. Every answer shows which model did the work."
-          />
-          <table className="lp-tbl">
-            <thead>
-              <tr>
-                <th scope="col">The task</th>
-                <th scope="col">What Jack picks</th>
-                <th scope="col">Why</th>
-              </tr>
-            </thead>
-            <tbody>
-              {PICKS.map(([a, b, c]) => (
-                <tr key={a}>
-                  <td>{a}</td>
-                  <td className="lp-strong">{b}</td>
-                  <td className="lp-muted">{c}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-
-        <section className="lp-sec" id="two-jacks" aria-labelledby="lp-two">
-          <Head
-            id="lp-two"
-            eyebrow="Two Jacks"
-            title="One for your life. One for your business."
-            lead="At sign-up we ask one question: personal or business? One click, and the right Jack shows up. Switch any time from the top bar or the sidebar."
-          />
-          <div className="lp-cols lp-cols-2">
-            {(
-              [
-                [
-                  'personal',
-                  'Personal',
-                  'Your personal assistant for everyday life.',
-                  [
-                    'Plans trips and compares flights',
-                    'Pays bills and finds better plans',
-                    'Shops and books, with your OK',
-                  ],
-                ],
-                [
-                  'business',
-                  'Business and groups',
-                  'Runs a team of AI agents for your business.',
-                  [
-                    'Replies to leads and keeps your CRM tidy',
-                    'Writes and schedules social posts',
-                    'Invoices, reports and meetings',
-                  ],
-                ],
-              ] as const
-            ).map(([space, eyebrow, line, items]) => (
-              <div key={space} className="lp-col lp-jack">
-                <JackImg space={space} part="full" className="lp-jack-img" />
-                <div>
-                  <div className="lp-eyebrow">{eyebrow}</div>
-                  <div className="lp-jack-name">{JACKS[space].name}</div>
-                  <p className="lp-d">{line}</p>
-                  <ul className="lp-checks">
-                    {items.map((t) => (
-                      <li key={t}>
-                        <Icon name="check" size={16} />
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="lp-sec" id="features" aria-labelledby="lp-features">
-          <Head id="lp-features" eyebrow="Features" title="Everything Jack does for you" />
-          <div className="lp-grid">
-            {FEATURES.map(([icon, t, d]) => (
-              <div key={t} className="lp-feature">
-                <Icon name={icon} size={20} />
-                <span className="lp-t">{t}</span>
-                <span className="lp-d">{d}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="lp-sec" id="pricing" aria-labelledby="lp-pricing">
-          <Head
-            id="lp-pricing"
-            eyebrow="Pricing"
-            title="Pricing and the Jack Wallet"
-            lead="Pay Jack to save time, cut the confusion and route your work to the right AI. One plan instead of many AI subscriptions."
-          />
-          <div className="lp-plans">
-            {PLANS.map(([name, who, price, per, rows]) => (
-              <div key={name} className="lp-plan">
-                <div className="lp-t">{name}</div>
-                <div className="lp-d">{who}</div>
-                <div className="lp-plan-price">
-                  {price} <span>{per}</span>
-                </div>
-                <ul className="lp-checks">
-                  {rows.map((r) => (
-                    <li key={r}>
-                      <Icon name="check" size={16} />
-                      {r}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div className="lp-wallet">
-            <div>
-              <div className="lp-t lp-big-t">The Jack Wallet</div>
-              <p className="lp-d">
-                See where every dollar goes. An illustrative month on Jack Personal. Actual provider costs,
-                markups and top-ups are always shown to you and need your OK. Run low mid-task? One tap tops
-                up, and Jack carries on.
-              </p>
+            <div className="ml-ctas">
+              <Link href="/signup" className="as-btn primary">
+                Get started free
+                <Icon name="arrow-right" size={16} />
+              </Link>
+              <a href="#how" className="as-btn ghost">
+                See how it works
+              </a>
             </div>
-            <dl className="lp-wallet-rows">
-              {WALLET.map(([k, d, v, strong]) => (
-                <div key={k} className={strong ? 'lp-wallet-row strong' : 'lp-wallet-row'}>
-                  <dt>
-                    <span>{k}</span>
-                    <span className="lp-d">{d}</span>
-                  </dt>
-                  <dd>{v}</dd>
+          </div>
+          <Ring
+            label={`Jack of all trades on a ring of AI companies: ${AI_LOGOS.flatMap((l) => (l.alt ? [l.alt] : [])).join(', ')} and more`}
+            logos={RING_LOGOS}
+            mascots={[{ space: 'personal', x: 128, y: 406, height: 250 }]}
+          />
+        </section>
+
+        <section className="ml-sec" aria-labelledby="ml-many">
+          <H2 id="ml-many" muted="One Jack.">
+            500+ AI apps.
+          </H2>
+          <div className="ml-many">
+            <div className="ml-many-side">
+              <div className="ml-tiles" role="img" aria-label="Dozens of separate AI apps">
+                {TILES.map((o, i) => (
+                  <i key={i} style={{ opacity: Number(o) }} />
+                ))}
+              </div>
+              <div className="ml-facts">
+                <span>
+                  <b>80+</b> companies
+                </span>
+                <span>
+                  <b>80+</b> sign-ups
+                </span>
+                <span>
+                  <b>80+</b> bills
+                </span>
+              </div>
+            </div>
+            <span className="ml-arrow" aria-hidden>
+              <Icon name="arrow-right" size={28} />
+            </span>
+            <div className="ml-many-side">
+              <span className="ml-one">
+                <Face space="personal" size={132} />
+              </span>
+              <div className="ml-facts">
+                <span>
+                  <b>1</b> app
+                </span>
+                <span>
+                  <b>1</b> bill
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="how" className="ml-sec" aria-labelledby="ml-how">
+          <H2 id="ml-how" muted="Jack does the rest.">
+            Ask once.
+          </H2>
+          <ol className="ml-flow">
+            {STEPS.map(([icon, t, d], i) => (
+              <li key={t}>
+                <span className={i === STEPS.length - 1 ? 'ml-node done' : 'ml-node'}>
+                  <Icon name={icon} size={28} />
+                </span>
+                <b>{t}</b>
+                <span>{d}</span>
+              </li>
+            ))}
+          </ol>
+          <figure className="ml-example" style={{ margin: 0 }} aria-label="Example: a trip planned in steps">
+            <div className="ml-bubble">Plan a 4-day Dubai trip for two, under $2,000.</div>
+            <div className="ml-answer">
+              <span className="ml-avatar">
+                <Face space="personal" size={36} motion="nod" />
+              </span>
+              <div className="ml-card">
+                {TRIP.map(([icon, t, model, cost]) => (
+                  <div key={t} className="ml-row">
+                    <Icon name={icon} size={20} />
+                    <span>{t}</span>
+                    <span className="ml-chip">{model}</span>
+                    <span className="ml-cost">{cost}</span>
+                  </div>
+                ))}
+                <div className="ml-row">
+                  <Icon name="credit-card" size={20} />
+                  <span>Book the flight · $412</span>
+                  <Badge tone="warning" icon="hand">
+                    Needs your OK
+                  </Badge>
                 </div>
-              ))}
+              </div>
+            </div>
+          </figure>
+        </section>
+
+        <section className="ml-sec" aria-labelledby="ml-jobs">
+          <H2 id="ml-jobs" muted="for each job.">
+            The right AI
+          </H2>
+          <div className="ml-meters">
+            {JOBS.map(([icon, t, model, power, cost]) => (
+              <div key={t} className="ml-meter">
+                <Icon name={icon} size={24} />
+                <b>{t}</b>
+                <div className="ml-meter-row">
+                  <span>Power</span>
+                  <span>{model}</span>
+                </div>
+                <div className="ml-bar" role="img" aria-label={`${model}: ${power}% of the strongest`}>
+                  <i style={{ width: `${power}%` }} />
+                </div>
+                <div className="ml-meter-row">
+                  <span>Cost</span>
+                  <strong>{cost}</strong>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="ml-sub">
+            Up to <b>600×</b> price gap between AIs. Jack never overpays.
+          </p>
+        </section>
+
+        <section id="jacks" className="ml-sec" aria-labelledby="ml-jacks">
+          <H2 id="ml-jacks" muted="One for business.">
+            One for life.
+          </H2>
+          <div className="ml-jacks">
+            <div className="ml-jack">
+              <div className="ml-jack-art">
+                <Stand space="personal" height={230} />
+              </div>
+              <div className="ml-jack-name">Jack of all trades</div>
+              <div className="ml-jack-line">Your everyday helper.</div>
+              <div className="ml-tags">
+                <span className="ml-tag">
+                  <Icon name="map-pin" size={16} />
+                  Trips
+                </span>
+                <span className="ml-tag">
+                  <Icon name="receipt" size={16} />
+                  Bills
+                </span>
+                <span className="ml-tag">
+                  <Icon name="credit-card" size={16} />
+                  Shopping
+                </span>
+                <span className="ml-tag">
+                  <Icon name="mail" size={16} />
+                  Email
+                </span>
+              </div>
+              <Link href="/for/personal" className="ml-link">
+                Meet Jack of all trades <Icon name="arrow-right" size={16} />
+              </Link>
+            </div>
+            <div className="ml-jack">
+              <div className="ml-jack-art">
+                <span className="ml-pill">
+                  <i />
+                  Coming soon
+                </span>
+                <Stand space="business" height={230} late />
+              </div>
+              <div className="ml-jack-name">Captain Jack</div>
+              <div className="ml-jack-line">An AI crew for your business.</div>
+              <div className="ml-tags">
+                <span className="ml-tag">
+                  <Icon name="users" size={16} />
+                  Leads
+                </span>
+                <span className="ml-tag">
+                  <Icon name="message-circle" size={16} />
+                  Social posts
+                </span>
+                <span className="ml-tag">
+                  <Icon name="layers" size={16} />
+                  CRM
+                </span>
+                <span className="ml-tag">
+                  <Icon name="file-text" size={16} />
+                  Reports
+                </span>
+              </div>
+              <Link href="/for/business" className="ml-link">
+                Meet Captain Jack <Icon name="arrow-right" size={16} />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="ml-sec ml-pair" aria-labelledby="ml-ok">
+          <figure
+            className="ml-approve"
+            style={{ margin: 0 }}
+            aria-label="Example payment waiting for approval"
+          >
+            <span className="ml-peeker" aria-hidden>
+              <Face space="personal" size={76} motion="peek" />
+            </span>
+            <div className="ml-approve-head">
+              <Icon name="credit-card" size={20} />
+              <b>Pay $412 to Skyline Air</b>
+              <Badge tone="warning" icon="hand">
+                Waiting
+              </Badge>
+            </div>
+            <dl className="ml-kv">
+              <dt>What</dt>
+              <dd>2 seats · Dubai · 14 Nov</dd>
+              <dt>Card</dt>
+              <dd>One-time card · limit $500</dd>
+              <dt>Today</dt>
+              <dd>$412 of your $1,000 limit</dd>
             </dl>
+            <div className="ml-bar" style={{ height: 6 }}>
+              <i style={{ width: '41%' }} />
+            </div>
+            <div className="ml-ctas">
+              <span className="as-btn primary" aria-hidden>
+                <Icon name="check" size={16} />
+                Approve and pay
+              </span>
+              <span className="as-btn ghost" aria-hidden>
+                Not now
+              </span>
+            </div>
+          </figure>
+          <div className="ml-pair-text">
+            <H2 id="ml-ok" muted="without your OK.">
+              Nothing happens
+            </H2>
+            <Points
+              items={[
+                ['hand', 'Asks before paying or sending'],
+                ['sliders-horizontal', 'Spending limits you set'],
+                ['list-checks', 'Every step on record'],
+              ]}
+            />
           </div>
         </section>
 
-        <section className="lp-sec" aria-labelledby="lp-trust">
-          <Head id="lp-trust" eyebrow="Trust" title="Jack is powerful. You stay in charge." />
-          <div className="lp-cols lp-cols-4">
-            {TRUST.map(([icon, t, d]) => (
-              <div key={t} className="lp-col">
-                <Icon name={icon} size={20} />
-                <span className="lp-t">{t}</span>
-                <span className="lp-d">{d}</span>
-              </div>
+        <section className="ml-sec" aria-labelledby="ml-all">
+          <div className="ml-heads">
+            <Stand space="personal" height={130} />
+            <H2 id="ml-all" muted="in one place.">
+              Everything
+            </H2>
+            <Stand space="business" height={130} late />
+          </div>
+          <ul className="ml-feats" style={{ ['--n' as string]: 8 }}>
+            {FEATURES.map(([icon, t]) => (
+              <li key={t} className="ml-feat">
+                <span>
+                  <Icon name={icon} size={28} />
+                </span>
+                <span>{t}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
 
-        <section className="lp-sec" aria-labelledby="lp-why">
-          <Head id="lp-why" eyebrow="Why Jack’s AI" title="We don’t compete with the AIs. We run them." />
-          <table className="lp-tbl">
-            <thead>
-              <tr>
-                <th scope="col">
-                  <span className="sr-only">Compared</span>
-                </th>
-                <th scope="col">Single-AI apps</th>
-                <th scope="col">Jack&rsquo;s AI</th>
-              </tr>
-            </thead>
-            <tbody>
-              {WHY.map(([a, b, c]) => (
-                <tr key={a}>
-                  <td>{a}</td>
-                  <td className="lp-muted">{b}</td>
-                  <td className="lp-strong">{c}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <section id="pricing" className="ml-sec" aria-labelledby="ml-pricing">
+          <H2 id="ml-pricing" muted="Every AI.">
+            One plan.
+          </H2>
+          <Plans
+            plans={[
+              {
+                name: 'Free',
+                price: '$0',
+                lines: ['Starter credit', 'Try every feature'],
+                cta: { href: '/signup', label: 'Start free' },
+              },
+              {
+                name: 'Personal',
+                price: '$20',
+                per: '/ month',
+                lines: ['Monthly credit included', 'Browser, Wallet and apps'],
+                cta: { href: '/signup', label: 'Get Personal' },
+                main: true,
+                face: 'personal',
+              },
+              {
+                name: 'Plus',
+                price: '$50',
+                per: '/ month',
+                lines: ['More credit, higher limits', 'The strongest AIs'],
+                cta: { href: '/signup', label: 'Get Plus' },
+              },
+            ]}
+          />
+          <Link href="/for/business" className="ml-cross">
+            <Face space="business" size={36} late />
+            <span>
+              <b>Captain Jack for teams</b> · coming soon
+            </span>
+          </Link>
         </section>
 
-        <section className="lp-sec" id="faq" aria-labelledby="lp-faq">
-          <Head id="lp-faq" eyebrow="Questions" title="Good to know" />
-          <div className="lp-faq">
-            {FAQ.map(([q, a]) => (
-              <div key={q} className="lp-faq-row">
-                <span className="lp-t">{q}</span>
-                <span className="lp-d">{a}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+        <Faq items={FAQ} />
 
-        <section className="lp-end" aria-labelledby="lp-end">
-          <div className="lp-end-jacks">
-            <JackImg space="personal" part="full" className="lp-end-jack" />
-            <JackImg space="business" part="full" className="lp-end-jack lp-end-captain" />
-          </div>
-          <h2 id="lp-end" className="lp-h2">
-            Stop choosing AIs. Just ask Jack.
-          </h2>
-          <p className="lp-small">Free to start · No card needed</p>
-        </section>
+        <End
+          spaces={['personal', 'business']}
+          title="Got a to-do list?"
+          muted="Just ask Jack."
+          cta={{ href: '/signup', label: 'Get started free' }}
+        />
       </main>
-
-      <footer className="lp-foot">
-        <span className="lp-brand">
-          <Image src="/brand/jacks-ai-mark.png" alt="" width={20} height={24} />
-          <span>Jack&rsquo;s AI</span>
-        </span>
-        <a href="#how">How it works</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#two-jacks">For business</a>
-        <span className="lp-muted">© 2026 Jack&rsquo;s AI</span>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

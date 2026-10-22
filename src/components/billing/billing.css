@@ -239,53 +239,71 @@
   margin: 8px 0 12px;
 }
 
-.bl-plans {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-}
-.bl-plan-tag {
-  min-height: 22px;
+/* Top-up packs */
+.bl-packs {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-.bl-plan-price {
-  font: 650 22px/28px var(--font-sans);
-  color: var(--ink);
-}
-.bl-plan-price span {
-  display: block;
-  font: 400 12px/16px var(--font-sans);
-  color: var(--ink-muted);
-}
-.bl-plan {
+.bl-pack {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
 }
-.bl-plan.current {
+.bl-pack:hover {
   border-color: var(--line-strong);
 }
-.bl-plan ul {
-  list-style: none;
-  margin: 4px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font: 400 14px/20px var(--font-sans);
+.bl-pack.on {
+  border-color: var(--ink);
 }
-.bl-plan li {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+.bl-pack:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
-.bl-plan li svg {
+.bl-pack-dot {
   flex: none;
-  margin-top: 2px;
-  color: var(--success);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+}
+.bl-pack.on .bl-pack-dot {
+  border: 5px solid var(--ink);
+}
+.bl-pack-credits {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 15px/22px var(--font-sans);
+}
+.bl-pack-credits small {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  font: 500 12px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.bl-pack-price {
+  font: 600 16px/22px var(--font-sans);
+}
+.bl-pay-err {
+  margin-top: 12px;
+}
+.bl-secure {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 14px 0 0;
 }
 
 @media (max-width: 1279px) {
@@ -319,9 +337,6 @@
   }
   .bl-hist-head {
     flex-wrap: wrap;
-  }
-  .bl-plans {
-    grid-template-columns: minmax(0, 1fr);
   }
 }
 

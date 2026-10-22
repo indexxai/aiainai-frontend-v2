@@ -1,4 +1,5 @@
 'use client';
+import { useJack } from '@/lib/assistant';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -16,6 +17,7 @@ interface Props {
  * pinned first, then grouped by day; search, rename, pin and delete.
  */
 export function ChatsPanel({ items, nextCursor }: Props) {
+  const jack = useJack();
   const router = useRouter();
   const pathname = usePathname();
   const [query, setQuery] = useState('');
@@ -93,7 +95,7 @@ export function ChatsPanel({ items, nextCursor }: Props) {
   return (
     <aside className="cp-panel" aria-label="Conversations">
       <div className="cp-head">
-        <h2>Conversations with Jack</h2>
+        <h2>Conversations with {jack.name}</h2>
         <Link href="/" className="as-iconbtn" aria-label="New conversation" title="New conversation">
           <Icon name="message-square-plus" size={20} />
         </Link>

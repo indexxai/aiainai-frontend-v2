@@ -32,6 +32,7 @@ import {
   type Reference,
 } from './ImageExtras';
 import './images.css';
+import { VoiceField } from '@/components/voice/Voice';
 
 type Caps = Schemas['ImageCapabilitiesDto'];
 type ToolKind = 'edit' | 'upscale' | 'cutout';
@@ -48,6 +49,7 @@ export function ImageStudio({
   caps,
   initial,
   initialIndex = 0,
+  saved,
 }: {
   menu: ModelMenu;
   credits: number;
@@ -55,6 +57,8 @@ export function ImageStudio({
   initial: ImageBatch | null;
   /** The image to show first (from ?i= in the gallery link). */
   initialIndex?: number;
+  /** Set when arriving from "Keep …" on the previous image (?saved=edit), to confirm it here. */
+  saved?: string;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -87,7 +91,13 @@ export function ImageStudio({
   const [result, setResult] = useState<{ kind: ToolKind; batch: ImageBatch } | null>(null);
   const [proDialog, setProDialog] = useState(false);
   const [toolBusy, setToolBusy] = useState(false);
-  const [toast, setToast] = useState('');
+  const [toast, setToast] = useState(() =>
+    saved && saved in TOOL_TEXT ? TOOL_TEXT[saved as keyof typeof TOOL_TEXT].done : '',
+  );
+  // Tidy the address so a reload doesn't confirm it again.
+  useEffect(() => {
+    if (saved) window.history.replaceState(window.history.state, '', window.location.pathname);
+  }, [saved]);
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(''), 3200);
@@ -224,8 +234,7 @@ export function ImageStudio({
   const leaveResult = async (keep: boolean) => {
     if (!result) return;
     if (keep) {
-      setToast(TOOL_TEXT[result.kind].done);
-      router.push(`/image/${result.batch.id}`);
+      router.push(`/image/${result.batch.id}?saved=${result.kind}`);
       return;
     }
     if (result.batch.status === 'generating')
@@ -256,7 +265,7 @@ export function ImageStudio({
           <Icon name="layout-dashboard" size={16} />
           All images
         </Link>
-        <Link href="/inbox" className="as-iconbtn" aria-label="Notifications" title="Notifications">
+        <Link href="/approvals" className="as-iconbtn" aria-label="Approvals" title="Approvals">
           <Icon name="bell" size={20} />
         </Link>
       </header>
@@ -296,19 +305,21 @@ export function ImageStudio({
                   />
                 </div>
                 <div className={cx('is-prompt', blocked && 'error')}>
-                  <textarea
-                    id="is-prompt"
-                    ref={promptRef}
-                    rows={4}
-                    maxLength={MAX_PROMPT}
-                    placeholder="What do you want to see? Describe the subject, setting, light and style."
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey))
-                        e.currentTarget.form?.requestSubmit();
-                    }}
-                  />
+                  <VoiceField value={prompt} onChange={setPrompt} maxLength={MAX_PROMPT}>
+                    <textarea
+                      id="is-prompt"
+                      ref={promptRef}
+                      rows={4}
+                      maxLength={MAX_PROMPT}
+                      placeholder="What do you want to see? Describe the subject, setting, light and style."
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey))
+                          e.currentTarget.form?.requestSubmit();
+                      }}
+                    />
+                  </VoiceField>
                   {reference && (
                     <ReferenceRow
                       reference={reference}
@@ -440,14 +451,16 @@ export function ImageStudio({
                   <label htmlFor="is-neg" className="is-label">
                     Leave out <span className="muted">(optional)</span>
                   </label>
-                  <input
-                    id="is-neg"
-                    className="is-input"
-                    maxLength={300}
-                    placeholder="e.g. text, people, clutter"
-                    value={negative}
-                    onChange={(e) => setNegative(e.target.value)}
-                  />
+                  <VoiceField value={negative} onChange={setNegative} maxLength={300}>
+                    <input
+                      id="is-neg"
+                      className="is-input"
+                      maxLength={300}
+                      placeholder="e.g. text, people, clutter"
+                      value={negative}
+                      onChange={(e) => setNegative(e.target.value)}
+                    />
+                  </VoiceField>
                 </div>
               </>
             )}
@@ -469,7 +482,11 @@ export function ImageStudio({
               <span>
                 {mode === 'edit'
                   ? `About ${caps.editModel?.credits ?? '—'} credits for this edit`
-                  : `About ${cost} credits · ${count} × ${target?.name ?? 'image model'}`}
+                  : target
+                    ? `About ${cost} credits · ${count} × ${target.name}`
+                    : menu.models.length
+                      ? 'Image models come with Jack Personal'
+                      : 'No image model is set up yet'}
               </span>
               <span className={cx('muted', !enough && 'short')}>
                 {enough

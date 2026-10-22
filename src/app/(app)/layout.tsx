@@ -4,7 +4,7 @@ import { AppShell } from '@/components/shell/AppShell';
 import { SIDEBAR_COOKIE } from '@/components/shell/nav';
 import { PATH_HEADER } from '@/lib/auth/redirect';
 import { ServiceDown } from '@/components/system/ServiceDown';
-import { getMe, toShellSession } from '@/lib/session';
+import { getMe, getPendingApprovals, toShellSession } from '@/lib/session';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   let me: Awaited<ReturnType<typeof getMe>>;
@@ -23,8 +23,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     redirect(path && path !== '/' ? `/welcome?next=${encodeURIComponent(path)}` : '/welcome');
   }
   const collapsed = (await cookies()).get(SIDEBAR_COOKIE)?.value === 'collapsed';
+  const pending = await getPendingApprovals();
   return (
-    <AppShell session={toShellSession(me)} initialCollapsed={collapsed}>
+    <AppShell session={toShellSession(me, pending)} initialCollapsed={collapsed}>
       {children}
     </AppShell>
   );

@@ -1,9 +1,9 @@
 'use client';
+import { useJack } from '@/lib/assistant';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Composer } from '@/components/composer/Composer';
-import { AgentAvatar, AgentStatus } from '@/components/team/AgentAvatar';
 import { GodRing } from './GodRing';
 import { Icon, type IconName } from '@/ui';
 import type { Schemas } from '@/lib/api/client';
@@ -18,11 +18,9 @@ type Item = Schemas['HomeItemDto'];
 const SHOW_COLUMNS = false;
 
 const KIND_ICON: Record<Item['kind'], IconName> = {
-  approval: 'hand',
   action: 'hand',
   doc: 'file-text',
   image: 'image',
-  task: 'users',
 };
 
 /**
@@ -34,21 +32,21 @@ export function JackHome({
   menu,
   home,
   business,
-  team,
   banner,
 }: {
   menu: ModelMenu;
   home: Home;
   business: { id: string; name: string } | null;
-  team: Schemas['TeamDto'] | null;
   banner?: ReactNode;
 }) {
+  const jack = useJack();
   const router = useRouter();
   const [model, setModel] = useState(menu.selected);
+  // Apps Jack may use in the chat this starts (Connectors chip).
+  const [appsOff, setAppsOff] = useState<string[]>([]);
   const [text, setText] = useState('');
   const [error, setError] = useState('');
   const isBusiness = home.space === 'business' && !!business;
-  const agents = (team?.agents ?? []).slice(0, 5);
 
   // While something is running, check again every 10 seconds so finished work drops off.
   useEffect(() => {
@@ -68,12 +66,12 @@ export function JackHome({
           {isBusiness ? (
             <>
               Captain Jack here. What does {business.name} need today? He picks the best quality for the price
-              for each job, works with your team, and asks before anything important.
+              for each job, and asks before anything important.
             </>
           ) : (
             <>
-              Hi, I’m Jack. What do you need today? Tell me in plain words: I pick the best quality for the
-              price, get it done, and ask before anything important.
+              Hi, I’m {jack.name}. What do you need today? Tell me in plain words: I pick the best quality for
+              the price, get it done, and ask before anything important.
             </>
           )}
         </p>
@@ -87,12 +85,14 @@ export function JackHome({
             text={text}
             onTextChange={setText}
             placeholder={
-              isBusiness ? 'Tell Captain Jack what the business needs…' : 'Tell Jack what you need…'
+              isBusiness ? 'Tell Captain Jack what the business needs…' : `Tell ${jack.name} what you need…`
             }
-            label="Message Jack"
-            onSend={async (value) => {
+            label={`Message ${jack.name}`}
+            attachments
+            apps={{ off: appsOff, onChange: setAppsOff }}
+            onSend={async (value, files) => {
               setError('');
-              const r = await startChat(value, model);
+              const r = await startChat(value, model, files, undefined, appsOff);
               if ('error' in r) {
                 setError(r.error.message);
                 return false;
@@ -131,7 +131,7 @@ export function JackHome({
                 ))
               ) : (
                 <p className="jack-none">
-                  Nothing needs you right now. Jack asks here before anything important.
+                  Nothing needs you right now. {jack.name} asks here before anything important.
                 </p>
               )}
               {home.needsYouCount > home.needsYou.length && (
@@ -171,15 +171,13 @@ export function JackHome({
                   </Link>
                 ))
               ) : (
-                <p className="jack-none">
-                  Nothing running. Documents, images and team tasks show here while they work.
-                </p>
+                <p className="jack-none">Nothing running. Documents and images show here while they work.</p>
               )}
             </section>
 
             <section aria-labelledby="jack-suggests" className="jack-col">
               <h2 id="jack-suggests" className="jack-ov">
-                Jack suggests
+                {jack.name} suggests
               </h2>
               {home.suggestions.map((s) => (
                 <button
@@ -202,29 +200,7 @@ export function JackHome({
       </div>
 
       {isBusiness && (
-        <aside className="jack-aside" aria-label="Your team">
-          <div className="jack-aside-head">
-            <h2 className="jack-ov">Your team</h2>
-            <Link href="/team">{team ? 'Manage' : 'Set up'}</Link>
-          </div>
-          {agents.length ? (
-            agents.map((a) => (
-              <Link key={a.id} href={`/team?agent=${a.id}`} className="jack-agent">
-                <AgentAvatar icon={a.icon} size={32} />
-                <span className="jack-agent-text">
-                  <span className="jack-agent-name">{a.name}</span>
-                  <span className="jack-agent-role">{a.role}</span>
-                </span>
-                <AgentStatus status={a.status} />
-              </Link>
-            ))
-          ) : (
-            <p className="jack-none">
-              No team yet. Jack can set one up for {business.name}: lead replies, social posts, the CRM and
-              more.
-            </p>
-          )}
-          <div className="jack-rule" />
+        <aside className="jack-aside" aria-label="This space">
           <h2 className="jack-ov">This space</h2>
           <div className="jack-space-rows">
             <Link href="/memory">
@@ -238,11 +214,6 @@ export function JackHome({
               <Icon name="link" size={16} />
               <span>Apps</span>
               <span className="jack-muted">{home.apps.length ? home.apps.join(', ') : 'None yet'}</span>
-            </Link>
-            <Link href="/connections#models">
-              <Icon name="shield-check" size={16} />
-              <span>Models</span>
-              <span className="jack-muted">Choose providers</span>
             </Link>
           </div>
           <p className="jack-aside-foot">Credits come from your one plan.</p>

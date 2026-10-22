@@ -24,13 +24,16 @@ export function PublicDoc({ doc, token }: { doc: Schemas['PublicDocDto']; token:
           <Image src="/brand/jacks-ai-mark.png" alt="" width={23} height={28} />
           Jack&rsquo;s AI
         </Link>
-        <Badge icon="eye">View only</Badge>
+        <Badge icon="eye" className="pd-view">
+          View only
+        </Badge>
         <span className="grow" />
         <Button size="sm" variant="ghost" icon="download" onClick={() => setDownloading(true)}>
           Download
         </Button>
         <Link href="/signup" className="as-btn secondary sm">
-          Try Captain Jack&rsquo;s Bridge free
+          <span className="pd-cta-long">Try Captain Jack&rsquo;s Bridge free</span>
+          <span className="pd-cta-short">Try it free</span>
         </Link>
       </header>
       <main className="pd-main" id="main">

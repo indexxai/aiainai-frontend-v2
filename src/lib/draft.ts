@@ -1,3 +1,5 @@
+import type { Attachment } from '@/lib/files/files';
+
 /**
  * The first message of a new chat, carried from Home or the new-chat screen to the chat page,
  * which sends it. Kept in this tab's session storage only.
@@ -6,6 +8,8 @@ export interface Draft {
   chatId: string;
   text: string;
   model: string;
+  /** Files attached on Home, already uploaded. */
+  files?: Attachment[];
   at: number;
 }
 

@@ -66,7 +66,7 @@ export function ImageGallery({ items, nextCursor }: { items: ImageBatch[]; nextC
           <Icon name="plus" size={16} />
           New image
         </Link>
-        <Link href="/inbox" className="as-iconbtn" aria-label="Notifications" title="Notifications">
+        <Link href="/approvals" className="as-iconbtn" aria-label="Approvals" title="Approvals">
           <Icon name="bell" size={20} />
         </Link>
       </header>

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { ConnectionsPage } from '@/components/space/ConnectionsPage';
 import { ModelsCard } from '@/components/space/ModelsCard';
-import { getSpaces, serverApi } from '@/lib/session';
+import { getMe, getSpaces, serverApi } from '@/lib/session';
 
 export const metadata: Metadata = { title: 'Connections' };
 
@@ -14,10 +14,11 @@ export default async function Connections({
   searchParams: Promise<{ connected?: string }>;
 }) {
   const cookie = (await cookies()).toString();
-  const [spaces, { data }, params] = await Promise.all([
+  const [spaces, { data }, params, me] = await Promise.all([
     getSpaces(),
     serverApi().GET('/api/connections', { headers: { cookie }, cache: 'no-store' }),
     searchParams,
+    getMe(),
   ]);
   if (!spaces) redirect('/signin?expired=1');
   return (

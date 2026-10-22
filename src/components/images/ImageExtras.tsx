@@ -3,6 +3,7 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useSta
 import { Badge, Button, Chip, Dialog, Icon, IconButton, Tabs } from '@/ui';
 import type { Schemas } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
+import { VoiceField } from '@/components/voice/Voice';
 
 export type Reference = Schemas['ReferenceDto'] & { preview: string; use: 'style' | 'layout' | 'subject' };
 
@@ -16,8 +17,12 @@ const REF_USES = [
 
 /** Upload a reference image (design: ImageFlow reference / reference-error). */
 export async function uploadReference(file: File): Promise<{ ref?: Reference; error?: string }> {
-  const bad = `${file.name} isn’t an image. Use a JPG, PNG or WebP under 20 MB.`;
-  if (!REF_TYPES.includes(file.type) || file.size > MAX_REF) return { error: bad };
+  if (!REF_TYPES.includes(file.type))
+    return { error: `${file.name} isn’t a JPG, PNG or WebP image. Use one of those.` };
+  if (file.size > MAX_REF)
+    return {
+      error: `${file.name} is too large (${Math.ceil(file.size / 1024 / 1024)} MB). Use an image under 20 MB.`,
+    };
   try {
     const res = await fetch(`/api/images/references?name=${encodeURIComponent(file.name)}`, {
       method: 'POST',
@@ -145,14 +150,16 @@ export function EditPanel({
           What should be there?
         </label>
         <div className="is-prompt">
-          <textarea
-            id="is-edit-text"
-            rows={3}
-            maxLength={1000}
-            placeholder="e.g. Replace the laptop with an open notebook and a coffee mug"
-            value={text}
-            onChange={(e) => onText(e.target.value)}
-          />
+          <VoiceField value={text} onChange={onText} maxLength={1000}>
+            <textarea
+              id="is-edit-text"
+              rows={3}
+              maxLength={1000}
+              placeholder="e.g. Replace the laptop with an open notebook and a coffee mug"
+              value={text}
+              onChange={(e) => onText(e.target.value)}
+            />
+          </VoiceField>
         </div>
       </div>
       <div className="is-styles">

@@ -21,23 +21,49 @@ import { CrumbsContext, type CrumbState } from './crumbs';
 import { SpaceSwitch } from '@/components/space/SpaceSwitch';
 import { openInSpace, saveSpace, type Space } from '@/lib/space';
 import { SpaceContext } from '@/lib/space-context';
+import { AssistantContext } from '@/lib/assistant';
+import { usePendingApprovals } from '@/lib/approvals-count';
+import { NewProjectDialog } from '@/components/projects/NewProjectDialog';
 import './shell.css';
 import '@/components/space/space.css';
 
 const NextLink: LinkLike = ({ children, ...props }) => <Link {...props}>{children}</Link>;
+
+/** Nav labels that name the Personal assistant follow the name the person gave him. */
+export const labelFor = (s: Section, a: ShellSession['assistant'], active: Space = 'personal'): string =>
+  s.id === 'jack'
+    ? a.title
+    : active === 'business'
+      ? s.label
+      : s.id === 'home'
+        ? a.name
+        : s.id === 'browser'
+          ? `${a.name}’s browser`
+          : s.label;
 
 const toEntries = (
   sections: Section[],
   pathname: string,
   space: ShellSession['space'],
   openSpace: (target: Space) => void,
+  assistant: ShellSession['assistant'],
+  businessOpen = true,
 ): NavEntry[] =>
-  sections.map((s) => {
-    const entry = { id: s.id, icon: s.icon, label: s.label, active: isActive(s, pathname, space.active) };
-    // The other space's Jack is a button: it switches space (or opens Business set-up first).
-    if (s.space && s.space !== space.active) return { ...entry, onClick: () => openSpace(s.space!) };
-    return { ...entry, href: s.href };
-  });
+  sections
+    .filter((s) => businessOpen || s.id !== 'team')
+    .map((s) => {
+      const entry = {
+        id: s.id,
+        icon: s.icon,
+        label: labelFor(s, assistant, space.active),
+        active: isActive(s, pathname, space.active),
+      };
+      // Until Captain Jack launches, his item opens the "coming soon" page.
+      if (s.space === 'business' && !businessOpen) return { ...entry, href: '/captain-jack' };
+      // The other space's Jack is a button: it switches space (or opens Business set-up first).
+      if (s.space && s.space !== space.active) return { ...entry, onClick: () => openSpace(s.space!) };
+      return { ...entry, href: s.href };
+    });
 
 /**
  * The frame around every signed-in screen:
@@ -56,6 +82,8 @@ export function AppShell({
   const pathname = usePathname();
   const router = useRouter();
   const [moreOpen, setMoreOpen] = useState(false);
+  const [newProject, setNewProject] = useState(false);
+  const waiting = usePendingApprovals(session.inboxCount, pathname);
   // Desktop only: collapse the sidebar to the icon rail. Kept in a cookie so the server
   // renders the right layout on the next visit (no jump on load).
   const [collapsed, setCollapsed] = useState(initialCollapsed);
@@ -64,7 +92,10 @@ export function AppShell({
     document.cookie = `${SIDEBAR_COOKIE}=${v ? 'collapsed' : 'open'}; path=/; max-age=31536000; samesite=lax`;
   };
   const section = sectionFor(pathname);
-  const title = section?.label ?? "Captain Jack's Bridge";
+  // Business is Captain Jack's; Personal is named after the person's assistant (Jack, Kash…).
+  const bridge =
+    session.space.active === 'business' ? 'Captain Jack’s Bridge' : `${session.assistant.name}'s AI`;
+  const title = section ? labelFor(section, session.assistant, session.space.active) : bridge;
   const [crumbState, setCrumbs] = useState<CrumbState | null>(null);
   const crumbs = crumbState?.path === pathname ? crumbState : null;
 
@@ -74,8 +105,9 @@ export function AppShell({
   };
 
   const openSpace = (target: Space) => {
-    if (target === 'business' && !session.space.business) {
-      router.push('/business/setup');
+    // Without a Business space (there's no set-up yet), Business shows Captain Jack's "coming soon".
+    if (target === 'business' && (!session.businessOpen || !session.space.business)) {
+      router.push('/captain-jack');
       return;
     }
     saveSpace(target);
@@ -84,11 +116,19 @@ export function AppShell({
 
   const sidebarProps = {
     logoSrc: '/brand/jacks-ai-mark.png',
-    items: toEntries(MAIN_NAV, pathname, session.space, openSpace),
-    footerItems: toEntries(FOOTER_NAV, pathname, session.space, openSpace),
+    productName: bridge,
+    items: toEntries(MAIN_NAV, pathname, session.space, openSpace, session.assistant, session.businessOpen),
+    footerItems: toEntries(
+      FOOTER_NAV,
+      pathname,
+      session.space,
+      openSpace,
+      session.assistant,
+      session.businessOpen,
+    ),
     credits: { ...session.credits, topUpHref: '/settings/billing' },
     user: session.user,
-    onNew: () => router.push('/'),
+    onNew: () => setNewProject(true),
     linkAs: NextLink,
   };
 
@@ -117,7 +157,7 @@ export function AppShell({
                 <Icon name="arrow-left" size={22} />
               </Link>
             ) : (
-              <Link href="/" className="shell-phone-brand" aria-label="Captain Jack's Bridge home">
+              <Link href="/" className="shell-phone-brand" aria-label={`${bridge} home`}>
                 <Image src="/brand/jacks-ai-mark.png" alt="" width={23} height={28} priority />
               </Link>
             )}
@@ -148,18 +188,24 @@ export function AppShell({
             </nav>
             <SpaceSwitch
               space={session.space}
+              businessOpen={session.businessOpen}
+              comingSoon={pathname === '/captain-jack'}
               className={cx('shell-space', pathname !== '/' && 'shell-space-away')}
             />
             <div className="shell-header-actions">
               {crumbs?.actions}
               <Link
-                href="/inbox"
+                href="/approvals"
                 className="as-iconbtn shell-desktop-only"
-                aria-label="Notifications"
-                title="Notifications"
+                aria-label={waiting > 0 ? `Approvals, ${waiting} waiting for you` : 'Approvals'}
+                title="Approvals"
               >
                 <Icon name="bell" size={20} />
-                {session.inboxCount > 0 && <span className="shell-dot">{session.inboxCount}</span>}
+                {waiting > 0 && (
+                  <span className="shell-dot" aria-hidden>
+                    {waiting}
+                  </span>
+                )}
               </Link>
               <button
                 type="button"
@@ -174,7 +220,9 @@ export function AppShell({
 
           <main id="main" tabIndex={-1} className="shell-main">
             <SpaceContext.Provider value={session.space.active}>
-              <CrumbsContext.Provider value={setCrumbs}>{children}</CrumbsContext.Provider>
+              <AssistantContext.Provider value={session.assistant}>
+                <CrumbsContext.Provider value={setCrumbs}>{children}</CrumbsContext.Provider>
+              </AssistantContext.Provider>
             </SpaceContext.Provider>
           </main>
 
@@ -189,9 +237,14 @@ export function AppShell({
                   aria-current={on ? 'page' : undefined}
                 >
                   <Icon name={t.icon} size={22} />
-                  {t.label}
-                  {t.id === 'inbox' && session.inboxCount > 0 && (
-                    <span className="shell-dot">{session.inboxCount}</span>
+                  {labelFor(t, session.assistant, session.space.active)}
+                  {t.id === 'approvals' && waiting > 0 && (
+                    <>
+                      <span className="shell-dot" aria-hidden>
+                        {waiting}
+                      </span>
+                      <span className="sr-only">, {waiting} waiting for you</span>
+                    </>
                   )}
                 </Link>
               );
@@ -219,7 +272,7 @@ export function AppShell({
             </div>
           </div>
           <div className="shell-more-grid">
-            {PHONE_MORE.map((s) => (
+            {PHONE_MORE.filter((s) => session.businessOpen || s.id !== 'team').map((s) => (
               <Link key={s.id} href={s.href} className="shell-more-tile">
                 <Icon name={s.icon} size={20} />
                 {s.label}
@@ -248,6 +301,7 @@ export function AppShell({
           <SignOutButton className="shell-more-signout" />
         </div>
       </Dialog>
+      <NewProjectDialog open={newProject} onClose={() => setNewProject(false)} />
     </>
   );
 }

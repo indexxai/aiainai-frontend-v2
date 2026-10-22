@@ -825,3 +825,16 @@
     flex: none;
   }
 }
+
+/* Phones: the tool bar wraps, so the Download button can sit at the right edge. Show the menu
+   as a full-width panel above the tab bar instead of hanging off the button. */
+@media (max-width: 767px) {
+  .is-menu {
+    position: fixed;
+    top: auto;
+    left: 16px;
+    right: 16px;
+    bottom: calc(88px + env(safe-area-inset-bottom));
+    width: auto;
+  }
+}

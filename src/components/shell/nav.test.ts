@@ -15,7 +15,7 @@ describe('navigation', () => {
   });
 
   it('highlights the Jack of the current space in conversations and v1 tools that are now his', () => {
-    for (const path of ['/', '/chat/abc', '/research', '/files', '/business/setup']) {
+    for (const path of ['/', '/chat/abc', '/research']) {
       expect(MAIN_NAV.filter((s) => isActive(s, path, 'personal')).map((s) => s.id)).toEqual(['jack']);
       expect(MAIN_NAV.filter((s) => isActive(s, path, 'business')).map((s) => s.id)).toEqual(['captain']);
     }
@@ -24,13 +24,21 @@ describe('navigation', () => {
       'Captain Jack',
       'Activity',
       'Approvals',
+      'Projects',
       'Docs',
       'Image',
-      'AI Crews',
+      'Files',
       'Wallet',
       'Memory',
       'Connections',
     ]);
+  });
+
+  it('highlights Projects and Files on their own pages', () => {
+    expect(MAIN_NAV.filter((s) => isActive(s, '/projects/abc', 'personal')).map((s) => s.id)).toEqual([
+      'projects',
+    ]);
+    expect(MAIN_NAV.filter((s) => isActive(s, '/files', 'business')).map((s) => s.id)).toEqual(['files']);
   });
 
   it('keeps Settings highlighted on the billing page', () => {

@@ -5,6 +5,7 @@ import { SignOutButton } from '@/components/account/SignOutButton';
 import { getMe, getModelMenu } from '@/lib/session';
 import { DefaultModelSetting } from './DefaultModelSetting';
 import { AppearanceSetting } from './AppearanceSetting';
+import { AssistantNameSetting } from './AssistantNameSetting';
 import './settings.css';
 
 export const metadata: Metadata = { title: 'Settings' };
@@ -22,6 +23,22 @@ export default async function SettingsPage() {
             <p className="st-d">{me?.user.email}</p>
           </div>
           <SignOutButton />
+        </div>
+      </section>
+      <section className="st-card" aria-labelledby="st-assistant">
+        <div className="st-row">
+          <div className="st-l">
+            <h2 id="st-assistant" className="st-t">
+              Your assistant’s name
+            </h2>
+            <p className="st-d">
+              Give Jack a name of your own. He’ll use it in chats, approvals and everywhere he works for you
+              in your Personal space.
+            </p>
+          </div>
+          <AssistantNameSetting
+            initial={me?.assistant ?? { name: 'Jack', title: 'Jack of all trades', custom: false }}
+          />
         </div>
       </section>
       <section className="st-card" aria-labelledby="st-appearance">
@@ -59,7 +76,8 @@ export default async function SettingsPage() {
         </div>
       </section>
       <p className="st-note">
-        Profile, password, notifications, connected apps and privacy settings arrive in a later milestone.
+        Profile, password and notification settings are coming soon. To change your password now, use “Forgot
+        password” on the sign-in page. Apps you connect are in <Link href="/connections">Connections</Link>.
       </p>
     </Page>
   );

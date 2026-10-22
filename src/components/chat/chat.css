@@ -830,6 +830,15 @@ a.jp-card:focus-visible {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.jp-result {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 2px 4px;
+}
+.jp-result .jp-ov {
+  margin: 0;
+}
 .jp-detail {
   display: block;
   color: var(--ink-muted);
@@ -858,6 +867,77 @@ a.jp-card:focus-visible {
   flex-direction: column;
   gap: 14px;
   overflow: auto;
+}
+.jp-jack {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+  border-radius: 12px;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+}
+.jp-jack-art {
+  width: 76px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.jp-jack-img {
+  height: 100px;
+  width: auto;
+  display: block;
+  animation: jp-float 4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+.jp-jack-shadow {
+  width: 42px;
+  height: 5px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: #000000;
+  animation: jp-shadow 4s ease-in-out infinite;
+}
+.jp-jack-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.jp-jack-text .jp-muted {
+  margin: 0;
+}
+.jp-jack-name {
+  font: 600 16px/22px var(--font-sans);
+  overflow-wrap: anywhere;
+}
+@keyframes jp-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1.5deg);
+  }
+}
+@keyframes jp-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleX(0.82);
+    opacity: 0.28;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jp-jack-img,
+  .jp-jack-shadow {
+    animation: none;
+  }
 }
 .jp-ov {
   margin: 0;
@@ -937,4 +1017,32 @@ a.jp-card:focus-visible {
   font: inherit;
   cursor: pointer;
   text-decoration: underline;
+}
+
+/* Files on a person's message */
+.ch-files {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: min(600px, 85%);
+}
+.ch-files .as-file {
+  text-decoration: none;
+  background: var(--surface-raised);
+}
+.ch-files .as-file:hover {
+  border-color: var(--line-strong);
+}
+
+/* In a chat the note sits under the box, so the box's own hint line takes its place in the flow. */
+.ct-bottom .cp-hint {
+  position: static;
+  margin-top: 6px;
+}
+.ct-bottom .cp-hint:empty {
+  display: none;
 }

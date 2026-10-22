@@ -73,11 +73,16 @@ export function ShareDialog({
       setError('Enter a full email address, like name@company.com');
       return;
     }
+    if (list.length > 10) {
+      setError('Invite up to 10 people at a time.');
+      return;
+    }
+    const before = new Set((share?.invites ?? []).map((i) => i.email.toLowerCase()));
     setBusy(true);
     setError('');
     const { data, error: err } = await api.POST('/api/docs/{id}/share/invites', {
       params: { path: { id: docId } },
-      body: { emails: list.slice(0, 10) },
+      body: { emails: list },
     });
     setBusy(false);
     if (!data) {
@@ -86,7 +91,19 @@ export function ShareDialog({
     }
     apply(data);
     setEmail('');
-    onToast(list.length === 1 ? 'Invite sent' : `${list.length} invites sent`);
+    // Count only people who weren't invited before (the server skips repeats and you).
+    const added = data.invites.filter((i) => !before.has(i.email.toLowerCase())).length;
+    const skipped = list.length - added;
+    if (!added)
+      onToast(
+        list.some((e) => e.toLowerCase() === me.email.toLowerCase())
+          ? 'You already own this document'
+          : 'Already invited',
+      );
+    else
+      onToast(
+        `${added === 1 ? 'Invite sent' : `${added} invites sent`}${skipped ? ` · ${skipped} already had access` : ''}`,
+      );
   };
 
   const setLink = async (linkAccess: Share['linkAccess']) => {

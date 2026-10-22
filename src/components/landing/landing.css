@@ -1,0 +1,1561 @@
+/* The three public landing pages (main, Jack of all trades, Captain Jack): minimal and visual,
+   no separator lines. Designs: "Landing pages — minimal redesign" on the design canvas. */
+.ml {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+.ml a {
+  color: inherit;
+}
+
+/* Top bar */
+.ml-top {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding: 0 64px;
+}
+.ml-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 18px/24px var(--font-sans);
+  text-decoration: none;
+}
+.ml-nav {
+  display: flex;
+  gap: 28px;
+  font: 400 14px/20px var(--font-sans);
+}
+.ml-nav a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+.ml-nav a:hover,
+.ml-nav a[aria-current='page'] {
+  color: var(--ink);
+}
+.ml-nav a[aria-current='page'] {
+  font-weight: 600;
+}
+.ml-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ml-theme {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.ml-theme:hover {
+  background: var(--surface-hover);
+}
+.ml-theme:focus-visible {
+  outline: 2px solid var(--focus, var(--ink));
+  outline-offset: 2px;
+}
+
+/* Sections */
+.ml-sec {
+  padding: clamp(96px, 12vw, 176px) clamp(16px, 8vw, 120px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(36px, 4vw, 56px);
+}
+.ml-h2 {
+  margin: 0;
+  font: 800 clamp(34px, 4.2vw, 56px) / 1.08 var(--font-sans);
+  letter-spacing: -0.04em;
+  text-align: center;
+}
+.ml-h2 span,
+.ml-muted {
+  color: var(--ink-muted);
+}
+.ml-sub {
+  margin: 0;
+  font: 400 18px/28px var(--font-sans);
+  color: var(--ink-muted);
+  text-align: center;
+}
+.ml-sub b {
+  color: var(--ink);
+}
+.ml-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font: 600 12px/18px var(--font-sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.ml-pill i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.ml-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  font: 500 14px/20px var(--font-sans);
+  white-space: nowrap;
+}
+.ml-chip {
+  display: inline-flex;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  font: 600 12px/20px var(--font-sans);
+}
+.ml-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.ml-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 600 16px/24px var(--font-sans);
+  text-decoration: none;
+}
+.ml-link:hover {
+  text-decoration: underline;
+}
+
+/* Hero */
+.ml-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 680px);
+  align-items: center;
+  gap: 24px;
+  /* On wide screens the text and the ring stay together in the middle. */
+  max-width: 1440px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 32px 96px 72px 120px;
+}
+.ml-hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+}
+.ml-h1 {
+  margin: 0;
+  font: 800 clamp(44px, 5.6vw, 80px) / 1.03 var(--font-sans);
+  letter-spacing: -0.045em;
+}
+.ml-h1 span {
+  color: var(--ink-muted);
+}
+.ml-slogan {
+  margin: 0;
+  font: 700 clamp(22px, 2.4vw, 34px) / 1.18 var(--font-sans);
+  letter-spacing: -0.02em;
+}
+.ml-slogan span {
+  color: var(--ink-muted);
+}
+.ml-lead {
+  margin: 0;
+  max-width: 560px;
+  font: 400 19px/30px var(--font-sans);
+  color: var(--ink-muted);
+}
+
+/* The ring: AI companies (or Captain Jack's crew) on a tilted oval, in a 680 × 720 box.
+   Positions are percentages and sizes container units, so it scales with the width. */
+.lr {
+  position: relative;
+  width: min(100%, 680px);
+  aspect-ratio: 680 / 720;
+  container-type: inline-size;
+  justify-self: center;
+}
+.lr-line {
+  position: absolute;
+  left: 10.59%;
+  top: 29.86%;
+  width: 81.76%;
+  height: 56.94%;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+}
+.lr-logo {
+  position: absolute;
+  width: 14.12cqw;
+  height: 11.18cqw;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Same tilt as the big ring. */
+  transform: translate(-50%, -50%) rotate(-30deg);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+}
+.lr-logo img {
+  display: block;
+  height: auto;
+  /* The logo itself stays upright. */
+  transform: rotate(30deg);
+}
+.lr-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5cqw;
+}
+.lr-node > span:first-child {
+  width: 13.5cqw;
+  height: 13.5cqw;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.45);
+}
+.lr-node > span:first-child svg {
+  width: 4.1cqw;
+  height: 4.1cqw;
+}
+.lr-node > span:last-child {
+  padding: 0.4cqw 1.8cqw;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  font: 600 clamp(10px, 1.9cqw, 13px) / 1.4 var(--font-sans);
+  white-space: nowrap;
+}
+/* A mascot standing on the ring: placed at its feet, lifted by its own height. */
+.lr-stand {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lr-stand img {
+  display: block;
+  width: auto;
+}
+
+/* Mascots: each moves on its own, never in step. */
+.ml-shadow {
+  border-radius: 50%;
+  background: #000000;
+  margin-top: 2px;
+  animation: ml-shadow 4s ease-in-out infinite;
+}
+.ml-float {
+  animation: ml-float 4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+.ml-late {
+  animation-delay: -2s;
+  animation-duration: 4.6s;
+}
+.ml-bob {
+  animation: ml-bob 3.2s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+.ml-nod {
+  animation: ml-nod 2.6s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+.ml-peek {
+  animation: ml-peek 5s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+@keyframes ml-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1.5deg);
+  }
+}
+@keyframes ml-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleX(0.82);
+    opacity: 0.28;
+  }
+}
+@keyframes ml-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-3deg);
+  }
+}
+@keyframes ml-nod {
+  0%,
+  70%,
+  100% {
+    transform: rotate(0);
+  }
+  80% {
+    transform: rotate(-8deg);
+  }
+  90% {
+    transform: rotate(6deg);
+  }
+}
+@keyframes ml-peek {
+  0%,
+  100% {
+    transform: translateY(18px);
+  }
+  20%,
+  70% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  45% {
+    transform: translateY(0) rotate(4deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ml-float,
+  .ml-shadow,
+  .ml-bob,
+  .ml-nod,
+  .ml-peek {
+    animation: none;
+  }
+}
+.ml-stand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+}
+.ml-stand img {
+  display: block;
+  width: auto;
+}
+.ml-head {
+  display: block;
+  object-fit: contain;
+}
+/* A face peeking over the top edge of a card. */
+.ml-peeker {
+  position: absolute;
+  right: 28px;
+  top: -78px;
+  width: 84px;
+  height: 78px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.ml-peeker img {
+  width: 76px;
+  height: 76px;
+}
+
+/* "500+ AI apps → one Jack" */
+.ml-many {
+  display: flex;
+  align-items: center;
+  gap: 72px;
+}
+.ml-many-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.ml-tiles {
+  display: grid;
+  grid-template-columns: repeat(12, 30px);
+  gap: 10px;
+}
+.ml-tiles i {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--ink-faint);
+  display: block;
+}
+.ml-facts {
+  display: flex;
+  gap: 28px;
+  font: 400 15px/22px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-facts b {
+  color: var(--ink);
+}
+.ml-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--ink-muted);
+}
+.ml-arrow::before {
+  content: '';
+  width: 96px;
+  height: 2px;
+  background: var(--line-strong);
+}
+.ml-one {
+  width: 196px;
+  height: 196px;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* A flow of steps on a line */
+.ml-flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr));
+  width: min(100%, 1040px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ml-flow::before {
+  content: '';
+  position: absolute;
+  left: calc(50% / var(--n, 4));
+  right: calc(50% / var(--n, 4));
+  top: var(--line-top, 36px);
+  height: 1px;
+  background: var(--line-strong);
+}
+.ml-flow li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  padding: 0 8px;
+}
+.ml-flow b {
+  font: 700 19px/26px var(--font-sans);
+}
+.ml-flow li > span:last-child {
+  font: 400 15px/22px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-time {
+  font: 700 15px/20px var(--font-sans);
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+}
+.ml-node {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ml-node.done {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+/* Example conversation: a request and Jack's steps */
+.ml-example {
+  width: min(100%, 880px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ml-bubble {
+  align-self: flex-end;
+  max-width: 560px;
+  padding: 12px 18px;
+  border-radius: 18px 18px 4px 18px;
+  background: var(--surface-hover);
+  font: 400 16px/24px var(--font-sans);
+}
+.ml-answer {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.ml-answer > img,
+.ml-answer > .ml-avatar {
+  flex: none;
+}
+.ml-avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface-hover);
+  object-fit: cover;
+}
+.ml-card {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-raised);
+  padding: 10px 22px;
+}
+.ml-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+}
+.ml-row > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  font: 500 16px/24px var(--font-sans);
+}
+.ml-row .ml-cost {
+  width: 80px;
+  text-align: right;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0 6px;
+}
+.ml-card-head b {
+  flex: 1;
+  font: 700 16px/24px var(--font-sans);
+}
+.ml-card-head span {
+  font: 400 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+
+/* Quality for the price: three meters */
+.ml-meters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 64px;
+  width: min(100%, 1080px);
+}
+.ml-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ml-meter b {
+  font: 700 20px/28px var(--font-sans);
+}
+.ml-meter-row {
+  display: flex;
+  justify-content: space-between;
+  font: 400 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-meter-row strong {
+  color: var(--ink);
+}
+.ml-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  overflow: hidden;
+}
+.ml-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+/* Two Jacks */
+.ml-jacks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  width: min(100%, 1200px);
+}
+.ml-jack {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 40px 40px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.ml-jack-art {
+  position: relative;
+  align-self: stretch;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ml-jack-art .ml-pill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  font-size: 11px;
+  background: var(--bg);
+}
+.ml-jack-name {
+  font: 800 30px/36px var(--font-sans);
+  letter-spacing: -0.02em;
+}
+.ml-jack-line {
+  font: 400 17px/26px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* A card beside a heading and a short list */
+.ml-pair {
+  flex-direction: row;
+  justify-content: center;
+  gap: clamp(48px, 7vw, 96px);
+}
+.ml-pair-text {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: min(100%, 460px);
+}
+.ml-pair-text .ml-h2 {
+  text-align: left;
+  font-size: clamp(32px, 3.4vw, 48px);
+}
+.ml-points {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 500 18px/26px var(--font-sans);
+}
+.ml-points li {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.ml-points svg {
+  flex: none;
+}
+.ml-approve {
+  position: relative;
+  width: min(100%, 540px);
+  border: 1px solid var(--line-strong);
+  border-radius: 20px;
+  background: var(--surface-raised);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ml-approve-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ml-approve-head b {
+  flex: 1;
+  font: 700 18px/26px var(--font-sans);
+}
+.ml-kv {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 10px 16px;
+  margin: 0;
+  font: 400 15px/22px var(--font-sans);
+}
+.ml-kv dt {
+  color: var(--ink-muted);
+}
+.ml-kv dd {
+  margin: 0;
+}
+.ml-quote {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface-hover);
+  font: 400 15px/23px var(--font-sans);
+}
+
+/* Icon grid */
+.ml-feats {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 8), minmax(0, 1fr));
+  gap: 48px 24px;
+  width: min(100%, 1120px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ml-feat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  font: 600 16px/22px var(--font-sans);
+}
+.ml-feat > span:first-child {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: var(--surface-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ml-feat small {
+  font: 400 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-feat.soon {
+  color: var(--ink-muted);
+}
+.ml-heads {
+  display: flex;
+  align-items: flex-end;
+  gap: 36px;
+}
+.ml-heads .ml-h2 {
+  padding-bottom: 28px;
+}
+
+/* Pricing */
+.ml-plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+  width: min(100%, 1080px);
+}
+.ml-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 36px 32px;
+  border-radius: 24px;
+}
+.ml-plan.main {
+  background: var(--surface-raised);
+}
+.ml-plan-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 18px/24px var(--font-sans);
+}
+.ml-plan-name img {
+  width: 32px;
+  height: 32px;
+}
+.ml-price {
+  font: 800 56px/56px var(--font-sans);
+  letter-spacing: -0.04em;
+}
+.ml-price span {
+  font: 500 16px/24px var(--font-sans);
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+.ml-plan ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font: 400 15px/22px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-plan .as-btn {
+  align-self: flex-start;
+}
+.ml-cross {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font: 400 16px/24px var(--font-sans);
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+.ml-cross b {
+  color: var(--ink);
+}
+.ml-cross img {
+  width: 40px;
+  height: 40px;
+}
+.ml-cross:hover b {
+  text-decoration: underline;
+}
+
+/* Questions */
+.ml-faq {
+  width: min(100%, 840px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ml-faq details {
+  padding: 4px 0;
+}
+.ml-faq summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  cursor: pointer;
+  list-style: none;
+  font: 600 19px/26px var(--font-sans);
+}
+.ml-faq summary::-webkit-details-marker {
+  display: none;
+}
+.ml-faq summary svg {
+  margin-left: auto;
+  flex: none;
+  color: var(--ink-muted);
+  transition: transform 0.2s ease;
+}
+.ml-faq details[open] summary svg {
+  transform: rotate(45deg);
+}
+.ml-faq details p {
+  margin: 0 0 16px;
+  max-width: 720px;
+  font: 400 16px/26px var(--font-sans);
+  color: var(--ink-muted);
+}
+
+/* Closing call to action */
+.ml-end {
+  padding: clamp(96px, 12vw, 176px) clamp(16px, 8vw, 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 72px;
+}
+.ml-end-art {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.ml-end-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.ml-end-text .ml-h2 {
+  text-align: left;
+  font-size: clamp(38px, 4.4vw, 64px);
+}
+
+/* Footer */
+.ml-foot {
+  padding: 32px clamp(16px, 8vw, 120px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-foot a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+.ml-foot a:hover {
+  color: var(--ink);
+}
+.ml-foot .ml-brand {
+  color: var(--ink);
+  font-size: 15px;
+}
+.ml-foot > span:last-child {
+  margin-left: auto;
+}
+
+/* Jack of all trades: memory tags around Jack, and the Wallet card */
+.ml-mem {
+  position: relative;
+  width: min(100%, 900px);
+  height: 360px;
+}
+.ml-mem-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.ml-mem .ml-tag {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+.ml-wallet {
+  position: relative;
+  width: 420px;
+  height: 300px;
+  flex: none;
+}
+.ml-ccard {
+  position: absolute;
+  width: 340px;
+  height: 212px;
+  border-radius: 20px;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 24px 26px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.5);
+}
+.ml-ccard.back {
+  left: 0;
+  top: 40px;
+  opacity: 0.35;
+  transform: rotate(-8deg);
+}
+.ml-ccard.front {
+  left: 60px;
+  top: 60px;
+}
+.ml-ccard-top,
+.ml-ccard-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ml-ccard-top b {
+  font: 700 16px/22px var(--font-sans);
+}
+.ml-ccard-num {
+  font: 400 22px/28px var(--font-mono);
+  letter-spacing: 0.18em;
+}
+.ml-ccard-foot {
+  font: 400 13px/18px var(--font-sans);
+  opacity: 0.75;
+}
+.ml-wallet .ml-peeker {
+  right: -10px;
+  top: -30px;
+}
+
+/* Captain Jack: the problem drawings, approval modes and data switches */
+.ml-pains {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 64px;
+  width: min(100%, 1080px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ml-pains li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.ml-pains b {
+  font: 700 22px/28px var(--font-sans);
+}
+.ml-pains li > span:last-child {
+  font: 400 16px/24px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-pain-art {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ml-lead-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  text-align: left;
+}
+.ml-lead-card b {
+  display: block;
+  font: 700 15px/20px var(--font-sans);
+}
+.ml-lead-card small {
+  font: 400 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-cal {
+  display: grid;
+  grid-template-columns: repeat(7, 16px);
+  gap: 6px;
+}
+.ml-cal i {
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  background: var(--surface-hover);
+  display: block;
+}
+.ml-cal i.on {
+  background: var(--ink-faint);
+}
+.ml-pile {
+  position: relative;
+  width: 160px;
+  height: 120px;
+}
+.ml-pile span {
+  position: absolute;
+  left: 30px;
+  width: 100px;
+  height: 70px;
+  border-radius: 12px;
+}
+.ml-pile span:nth-child(1) {
+  top: 18px;
+  background: var(--surface-hover);
+  transform: rotate(-10deg);
+}
+.ml-pile span:nth-child(2) {
+  top: 26px;
+  left: 34px;
+  background: var(--surface-hover);
+  border: 1px solid var(--line);
+  transform: rotate(6deg);
+}
+.ml-pile span:nth-child(3) {
+  top: 34px;
+  background: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ml-modes {
+  display: flex;
+  gap: 8px;
+  width: min(100%, 900px);
+  padding: 8px;
+  border-radius: 22px;
+  background: var(--surface-raised);
+}
+.ml-mode {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.ml-mode b {
+  font: 700 17px/24px var(--font-sans);
+  color: var(--ink);
+}
+.ml-mode.on {
+  background: var(--ink);
+  color: var(--bg);
+}
+.ml-mode.on b {
+  color: var(--bg);
+}
+.ml-switches {
+  width: min(100%, 460px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 26px;
+  border-radius: 20px;
+  background: var(--surface-raised);
+  margin: 0;
+  list-style: none;
+}
+.ml-switches li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  font: 500 16px/22px var(--font-sans);
+}
+.ml-switches li > span:first-child {
+  flex: 1;
+}
+.ml-switches li.off {
+  color: var(--ink-muted);
+}
+.ml-sw {
+  width: 40px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  position: relative;
+  flex: none;
+}
+.ml-sw::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+}
+.ml-sw.on {
+  background: var(--ink);
+}
+.ml-sw.on::after {
+  left: 19px;
+  background: var(--bg);
+}
+
+/* Tablets */
+@media (max-width: 1100px) {
+  .ml-top {
+    padding: 0 24px;
+    gap: 20px;
+  }
+  .ml-nav {
+    display: none;
+  }
+  .ml-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 24px clamp(16px, 6vw, 64px) 56px;
+    gap: 16px;
+  }
+  .ml-many {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .ml-arrow {
+    transform: rotate(90deg);
+  }
+  .ml-arrow::before {
+    width: 48px;
+  }
+  .ml-meters,
+  .ml-pains {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+    max-width: 520px;
+  }
+  .ml-jacks,
+  .ml-plans {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 560px;
+  }
+  .ml-pair {
+    flex-direction: column;
+    align-items: center;
+  }
+  .ml-pair-text {
+    align-items: center;
+  }
+  .ml-pair-text .ml-h2 {
+    text-align: center;
+  }
+  .ml-feats {
+    --n: 4 !important;
+  }
+}
+
+/* Phones */
+@media (max-width: 767px) {
+  .ml-top {
+    padding: 0 16px;
+    gap: 8px;
+  }
+  .ml-actions .as-btn.ghost {
+    display: none;
+  }
+  .ml-theme {
+    width: 44px;
+    height: 44px;
+  }
+  .ml-hero-text {
+    gap: 20px;
+  }
+  .ml-lead {
+    font-size: 17px;
+    line-height: 27px;
+  }
+  .ml-tiles {
+    grid-template-columns: repeat(8, 24px);
+    gap: 8px;
+  }
+  .ml-tiles i {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+  }
+  .ml-tiles i:nth-child(n + 49) {
+    display: none;
+  }
+  .ml-facts {
+    gap: 16px;
+    font-size: 14px;
+  }
+  .ml-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 0;
+  }
+  .ml-flow::before {
+    display: none;
+  }
+  .ml-flow.day {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ml-flow.day li {
+    flex-direction: row;
+    text-align: left;
+    gap: 16px;
+  }
+  .ml-flow.day .ml-time {
+    width: 48px;
+  }
+  .ml-flow.day .ml-node {
+    width: 52px;
+    height: 52px;
+  }
+  .ml-row {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+  .ml-row > span:nth-child(2) {
+    flex-basis: calc(100% - 40px);
+  }
+  .ml-row .ml-cost {
+    width: auto;
+    margin-left: 32px;
+  }
+  .ml-card {
+    padding: 6px 16px;
+  }
+  .ml-answer > .ml-avatar {
+    display: none;
+  }
+  .ml-jack {
+    padding: 28px 24px;
+  }
+  .ml-jack-art {
+    height: 220px;
+  }
+  .ml-approve {
+    padding: 22px 20px;
+  }
+  .ml-kv {
+    grid-template-columns: 80px minmax(0, 1fr);
+  }
+  .ml-feats {
+    --n: 4 !important;
+    gap: 28px 8px;
+  }
+  .ml-feats.apps {
+    --n: 5 !important;
+    gap: 4px;
+  }
+  .ml-feat {
+    font-size: 13px;
+    line-height: 18px;
+  }
+  .ml-feat > span:first-child {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+  }
+  .ml-feat small {
+    display: none;
+  }
+  .ml-heads {
+    gap: 12px;
+  }
+  .ml-heads .ml-stand img {
+    height: 84px !important;
+  }
+  .ml-heads .ml-h2 {
+    padding-bottom: 12px;
+  }
+  .ml-plan {
+    padding: 28px 24px;
+  }
+  .ml-faq summary {
+    font-size: 17px;
+  }
+  .ml-end {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .ml-end-text {
+    align-items: center;
+  }
+  .ml-end-text .ml-h2 {
+    text-align: center;
+  }
+  .ml-end-art img {
+    height: 180px !important;
+  }
+  .ml-foot > span:last-child {
+    margin-left: 0;
+  }
+  .ml-mem {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .ml-mem-center {
+    position: static;
+    transform: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .ml-mem .ml-tag {
+    position: static;
+    transform: none;
+  }
+  .ml-wallet {
+    transform: scale(0.82);
+    margin: -24px 0;
+  }
+  .ml-modes {
+    flex-direction: column;
+  }
+  .ml-pair .ml-h2 {
+    font-size: 32px;
+  }
+}
+
+/* ── Motion: slide in on load and on scroll, small lifts on hover ── */
+@keyframes ml-in {
+  from {
+    opacity: 0;
+    translate: 0 28px;
+  }
+}
+@keyframes ml-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes ml-pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+@keyframes ml-ring {
+  from {
+    opacity: 0;
+    scale: 0.88;
+  }
+}
+/* "backwards" only: once in, hover transitions own scale and translate again. */
+.ml-top {
+  animation: ml-fade 0.6s ease backwards;
+}
+.ml-hero-text > * {
+  animation: ml-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+.ml-hero-text > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+.ml-hero-text > :nth-child(3) {
+  animation-delay: 0.16s;
+}
+.ml-hero-text > :nth-child(4) {
+  animation-delay: 0.24s;
+}
+.ml-hero-text > :nth-child(5) {
+  animation-delay: 0.32s;
+}
+.lr-line {
+  animation: ml-ring 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards;
+}
+.lr-logo,
+.lr-node {
+  animation: ml-pop 0.55s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
+  animation-delay: calc(0.5s + var(--i, 0) * 0.07s);
+}
+.lr-stand {
+  animation: ml-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s backwards;
+}
+
+/* Set by Reveal once JavaScript runs; nothing is hidden before that. */
+[data-reveal] {
+  opacity: 0;
+  translate: 0 40px;
+  transition:
+    opacity 0.7s ease,
+    translate 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+[data-reveal].is-in {
+  opacity: 1;
+  translate: none;
+}
+[data-reveal] [data-reveal-item] {
+  opacity: 0;
+  translate: 0 18px;
+  transition:
+    opacity 0.5s ease,
+    translate 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+  transition-delay: calc(0.15s + var(--ri, 0) * 0.06s);
+}
+[data-reveal].is-in [data-reveal-item] {
+  opacity: 1;
+  translate: none;
+}
+
+.lr-logo,
+.lr-node > span:first-child,
+.ml-feat > span:first-child,
+.ml-node,
+.ml-tag,
+.ml-plan,
+.ml-mode,
+.ml-pain-art,
+.ml-ccard,
+.ml-cross img,
+.ml-brand img,
+.ml-points svg,
+.ml-faq summary svg,
+.ml .as-btn svg {
+  transition:
+    translate 0.25s ease,
+    scale 0.25s ease,
+    rotate 0.3s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+@media (hover: hover) {
+  .lr-logo:hover {
+    scale: 1.12;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.34);
+  }
+  .lr-node:hover > span:first-child {
+    scale: 1.08;
+  }
+  .ml-feat:hover > span:first-child {
+    translate: 0 -4px;
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .ml-flow li:hover .ml-node {
+    scale: 1.08;
+  }
+  .ml-tag:hover {
+    translate: 0 -3px;
+    box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.4);
+  }
+  .ml-plan:hover {
+    translate: 0 -6px;
+  }
+  .ml-plan:not(.main):hover {
+    background: var(--surface-hover);
+  }
+  .ml-mode:not(.on):hover {
+    background: var(--surface-hover);
+    color: var(--ink);
+  }
+  .ml-pains li:hover .ml-pain-art {
+    translate: 0 -6px;
+  }
+  .ml-wallet:hover .ml-ccard.front {
+    translate: 0 -8px;
+    rotate: -2deg;
+  }
+  .ml-wallet:hover .ml-ccard.back {
+    rotate: -3deg;
+  }
+  .ml-cross:hover img,
+  .ml-brand:hover img {
+    rotate: -8deg;
+  }
+  .ml-points li:hover svg {
+    scale: 1.18;
+  }
+  .ml-faq summary:hover svg {
+    translate: 0 2px;
+  }
+  .ml .as-btn:hover svg:last-child {
+    translate: 3px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ml-top,
+  .ml-hero-text > *,
+  .lr-line,
+  .lr-logo,
+  .lr-node,
+  .lr-stand {
+    animation: none;
+  }
+}

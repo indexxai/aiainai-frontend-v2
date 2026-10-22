@@ -13,7 +13,7 @@ const HOME: Section = { id: 'home', label: 'Jack', href: '/', icon: 'compass' };
 
 /**
  * Main sidebar order, from the v2 designs: the two Jacks first (Jack of all trades opens the
- * Personal space, Captain Jack the Business space); Docs, Image and Team are their tools;
+ * Personal space, Captain Jack the Business space); Docs and Image are their tools;
  * then what keeps you in control (Activity, Approvals, Wallet) and what Jack knows and can use.
  */
 export const MAIN_NAV: Section[] = [
@@ -21,9 +21,10 @@ export const MAIN_NAV: Section[] = [
   { id: 'captain', label: 'Captain Jack', href: '/', icon: 'briefcase', space: 'business' },
   { id: 'activity', label: 'Activity', href: '/activity', icon: 'history' },
   { id: 'approvals', label: 'Approvals', href: '/approvals', icon: 'hand' },
+  { id: 'projects', label: 'Projects', href: '/projects', icon: 'folder' },
   { id: 'docs', label: 'Docs', href: '/docs', icon: 'file-text' },
   { id: 'image', label: 'Image', href: '/image', icon: 'image' },
-  { id: 'team', label: 'AI Crews', href: '/team', icon: 'users' },
+  { id: 'files', label: 'Files', href: '/files', icon: 'paperclip' },
   { id: 'wallet', label: 'Wallet', href: '/wallet', icon: 'credit-card' },
   { id: 'memory', label: 'Memory', href: '/memory', icon: 'brain' },
   { id: 'connections', label: 'Connections', href: '/connections', icon: 'link' },
@@ -42,9 +43,10 @@ export const PHONE_TABS: Section[] = [
 ];
 
 export const PHONE_MORE: Section[] = [
+  { id: 'projects', label: 'Projects', href: '/projects', icon: 'folder' },
   { id: 'docs', label: 'Docs', href: '/docs', icon: 'file-text' },
   { id: 'image', label: 'Image', href: '/image', icon: 'image' },
-  { id: 'team', label: 'AI Crews', href: '/team', icon: 'users' },
+  { id: 'files', label: 'Files', href: '/files', icon: 'paperclip' },
   { id: 'wallet', label: 'Wallet', href: '/wallet', icon: 'credit-card' },
   { id: 'memory', label: 'Memory', href: '/memory', icon: 'brain' },
   { id: 'connections', label: 'Connections', href: '/connections', icon: 'link' },
@@ -63,18 +65,18 @@ export const PHONE_MORE_ROWS: Section[] = [
 const JACK_PAGES: Section[] = [
   { id: 'chat', label: 'Conversation', href: '/chat', icon: 'message-square' },
   { id: 'research', label: 'Research', href: '/research', icon: 'globe' },
-  { id: 'files', label: 'Files', href: '/files', icon: 'folder' },
   { id: 'browser', label: 'Jack’s browser', href: '/browser', icon: 'globe' },
 ];
 
-const JACK_IDS = new Set([...JACK_PAGES.map((p) => p.id), 'business']);
+const JACK_IDS = new Set(JACK_PAGES.map((p) => p.id));
 
 const ALL: Section[] = [
   HOME,
   ...MAIN_NAV.filter((s) => !s.space),
   ...JACK_PAGES,
   ...FOOTER_NAV,
-  { id: 'business', label: 'Business set-up', href: '/business', icon: 'briefcase' },
+  /** Shown instead of the Business space until Captain Jack launches. */
+  { id: 'captain-soon', label: 'Captain Jack', href: '/captain-jack', icon: 'briefcase' },
   { id: 'inbox', label: 'Inbox', href: '/inbox', icon: 'bell' },
   { id: 'billing', label: 'Plan and billing', href: '/settings/billing', icon: 'receipt' },
 ];
@@ -89,11 +91,13 @@ export function sectionFor(pathname: string): Section | undefined {
 export function isActive(section: Section, pathname: string, space?: 'personal' | 'business'): boolean {
   const current = sectionFor(pathname);
   if (!current) return false;
+  // Captain Jack's "coming soon" page lights up Captain Jack.
+  if (current.id === 'captain-soon') return section.space === 'business';
   // The two Jacks: Jack's pages, in their own space.
   if (section.space) return section.space === space && (current.id === 'home' || JACK_IDS.has(current.id));
   // Billing lives under Settings in the sidebar.
   if (section.id === 'settings' && current.id === 'billing') return true;
-  // Conversations, Research, Files and Business set-up belong to Jack.
+  // Conversations, Research and Jack's browser belong to Jack.
   if (section.id === 'home' && JACK_IDS.has(current.id)) return true;
   return current.id === section.id;
 }

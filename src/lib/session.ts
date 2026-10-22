@@ -9,9 +9,14 @@ export type Me = Schemas['MeDto'];
 export interface ShellSession {
   user: { initials: string; name: string; detail: string };
   credits: { remaining: string; percent: number; plan: string };
+  /** Approvals waiting for you, in both spaces (Jack's purchases, emails and messages). */
   inboxCount: number;
   /** The space this page was rendered in, and the Business space if one is set up. */
   space: Me['space'];
+  /** The Personal assistant's name (Jack until renamed). */
+  assistant: Me['assistant'];
+  /** False until the Business space (Captain Jack) launches: it shows "coming soon" instead. */
+  businessOpen: boolean;
 }
 
 /**
@@ -25,6 +30,17 @@ export async function getMe(): Promise<Me | null> {
   if (response.status === 401) return null;
   if (!data) throw new Error(`Could not load the account (status ${response.status})`);
   return data;
+}
+
+/** How many approvals are waiting, for the bell. 0 if the backend can't say (never breaks the page). */
+export async function getPendingApprovals(): Promise<number> {
+  const cookie = (await cookies()).toString();
+  try {
+    const { data } = await serverApi().GET('/api/approvals', { headers: { cookie }, cache: 'no-store' });
+    return data ? data.jackPending.length : 0;
+  } catch {
+    return 0;
+  }
 }
 
 /** Backend client for server components; pass this request's cookies in `headers`. */
@@ -70,7 +86,7 @@ export function initialsOf(name: string, email: string): string {
   return email.slice(0, 2).toUpperCase();
 }
 
-export function toShellSession(me: Me): ShellSession {
+export function toShellSession(me: Me, pendingApprovals = 0): ShellSession {
   const { credits, workspace, user } = me;
   // Sidebar meter shows how much of this period's plan credits are used.
   const used =
@@ -84,8 +100,10 @@ export function toShellSession(me: Me): ShellSession {
       percent: Math.max(0, Math.min(100, used)),
       plan: workspace.plan === 'pro' ? 'Jack Personal' : 'Jack Free',
     },
-    inboxCount: 0,
+    inboxCount: pendingApprovals,
     space: me.space,
+    assistant: me.assistant ?? { name: 'Jack', title: 'Jack of all trades', custom: false },
+    businessOpen: me.businessOpen !== false,
   };
 }
 
@@ -144,15 +162,4 @@ export async function getImageCaps(): Promise<Schemas['ImageCapabilitiesDto']> {
     removeBackgroundCredits: 1,
     variationCount: 4,
   };
-}
-
-/** The AI Crews in the current space (null before set-up or if it can't be loaded). */
-export async function getTeam(): Promise<Schemas['TeamDto'] | null> {
-  const cookie = (await cookies()).toString();
-  try {
-    const { data } = await serverApi().GET('/api/team', { headers: { cookie }, cache: 'no-store' });
-    return data?.team ?? null;
-  } catch {
-    return null;
-  }
 }

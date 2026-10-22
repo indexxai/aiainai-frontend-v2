@@ -1,4 +1,111 @@
-/* v2 Approvals page: the team approvals view, full page and across both spaces. */
+/* v2 Approvals page: what Jack is waiting for your OK on, full page. */
+/* List and detail layout (moved from the removed AI Crews styles). */
+.tm-sm {
+  font-size: 13px;
+  line-height: 20px;
+}
+.tm-ov {
+  font: 600 11px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.tw-aps {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+.tw-aps-list {
+  width: 400px;
+  flex: none;
+  overflow: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-right: 1px solid var(--line);
+}
+.tw-aps-h {
+  padding: 6px 8px;
+}
+.tw-aps-h ~ .tw-aps-h {
+  padding-top: 14px;
+}
+.tw-aps-none {
+  padding: 8px;
+}
+.tw-aprow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.tw-aprow:hover,
+.tw-aprow.on {
+  background: var(--surface-hover);
+}
+.tw-aprow .grow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tw-aprow .nm {
+  font: 500 14px/20px var(--font-sans);
+}
+.tw-aps-main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.tw-caught-up {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+.tw-caught-up .ok {
+  display: inline-flex;
+  color: var(--success);
+}
+.tw-caught-up .tm-sm {
+  max-width: 360px;
+}
+@media (max-width: 1023px) {
+  .tw-aps {
+    flex-direction: column;
+  }
+  .tw-aps-list {
+    width: auto;
+    max-height: 40vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+@media (max-width: 767px) {
+  .tw-aps-main {
+    padding: 16px;
+    gap: 16px;
+  }
+  .tw-aps-main .title {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
 .aps-page {
   height: 100%;
   min-height: 0;

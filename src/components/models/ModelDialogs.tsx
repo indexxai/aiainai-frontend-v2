@@ -35,7 +35,7 @@ export function UpgradeDialog({
           <Button variant="ghost" onClick={onUseAuto}>
             Use Auto instead
           </Button>
-          <Link href="/settings/billing" className="as-btn primary" onClick={onClose}>
+          <Link href="/settings/billing/plans" className="as-btn primary" onClick={onClose}>
             <Icon name="zap" size={16} />
             Upgrade to Jack Personal
           </Link>

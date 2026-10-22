@@ -31,6 +31,24 @@
 .dk-composer .as-composer textarea {
   min-height: 56px;
 }
+.dk-project {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: -8px 0 0;
+  color: var(--ink-muted);
+  font: 400 14px/22px var(--font-sans);
+}
+.dk-project svg {
+  flex: none;
+  margin-top: 3px;
+}
+.dk-project a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .dk-busy {
   margin: -8px 0 0;
   display: flex;
@@ -1426,6 +1444,9 @@
 .pd-top .as-btn {
   text-decoration: none;
 }
+.pd-cta-short {
+  display: none;
+}
 .pd-main {
   max-width: 768px;
   margin: 0 auto;
@@ -1435,6 +1456,17 @@
   margin: 0;
 }
 @media (max-width: 767px) {
+  .pd-top {
+    padding: 0 16px;
+    gap: 8px;
+  }
+  .pd-view,
+  .pd-cta-long {
+    display: none;
+  }
+  .pd-cta-short {
+    display: inline;
+  }
   .pd-main {
     padding: 0 0 40px;
   }

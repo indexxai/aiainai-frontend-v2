@@ -334,66 +334,55 @@
   }
 }
 
-/* "God's Perspective AI Gateway" home: Jack in the middle of every AI. */
+/* "God's Perspective AI Gateway": Jack on a tilted oval of AI company logos (Brian's design). */
 .god-ring {
   position: relative;
   flex: none;
-  width: 600px;
+  width: 420px;
   max-width: 100%;
-  aspect-ratio: 600 / 330;
+  aspect-ratio: 680 / 600;
+  container-type: inline-size;
 }
-.god-glow {
+.god-oval {
   position: absolute;
-  left: -4%;
-  top: -29%;
-  width: 108%;
-  height: 158%;
+  left: 10.59%;
+  top: 15.83%;
+  width: 81.76%;
+  height: 68.33%;
+  border: 1.5px solid var(--line-strong);
   border-radius: 50%;
-  background: radial-gradient(closest-side, var(--surface-hover), transparent);
-  pointer-events: none;
+  transform: rotate(-30deg);
 }
-.god-orbit {
+.god-logo {
   position: absolute;
-  left: 6.7%;
-  top: 7.6%;
-  width: 86.6%;
-  height: 84.8%;
-  border: 1px dashed var(--line-strong);
-  border-radius: 50%;
-  opacity: 0.55;
-}
-.god-chip {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  display: inline-flex;
+  width: 14.12%;
+  aspect-ratio: 96 / 76;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: var(--surface-raised);
-  border: 1px solid var(--line);
-  font: 500 13px/18px var(--font-sans);
-  color: var(--ink-muted);
-  white-space: nowrap;
-}
-.god-chip i {
-  width: 6px;
-  height: 6px;
+  justify-content: center;
   border-radius: 50%;
-  background: var(--ink-faint);
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+}
+.god-logo img {
   display: block;
+  height: auto;
+  max-height: 72%;
+  object-fit: contain;
+  transform: rotate(18deg);
 }
 .god-jack {
   position: absolute;
-  left: 50%;
-  top: 22.4%;
-  transform: translateX(-50%);
+  left: 31.47%;
+  top: 22.33%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .god-jack-img {
-  height: clamp(110px, 28vw, 170px);
+  height: 36.8cqw;
   width: auto;
   display: block;
   animation: god-float 4s ease-in-out infinite;
@@ -401,7 +390,7 @@
 }
 .god-jack-shadow {
   width: 40%;
-  height: 8px;
+  height: 1.6cqw;
   margin-top: 2px;
   border-radius: 50%;
   background: #000000;
@@ -451,27 +440,7 @@
 }
 @media (max-width: 767px) {
   .god-ring {
-    width: 350px;
-    aspect-ratio: 350 / 230;
-  }
-  .god-chip {
-    font-size: 11px;
-    line-height: 16px;
-    padding: 2px 9px;
-    gap: 5px;
-  }
-  .god-chip i {
-    width: 5px;
-    height: 5px;
-  }
-  .god-chip-extra {
-    display: none;
-  }
-  .god-jack {
-    top: 19%;
-  }
-  .god-jack-img {
-    height: 128px;
+    width: 300px;
   }
   .god-title {
     font-size: 36px;

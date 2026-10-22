@@ -86,7 +86,14 @@
   flex: none;
   margin-top: 2px;
 }
+.brw-safety a,
 .brw-back {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.brw-back {
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -103,23 +110,51 @@
   overflow-y: auto;
 }
 .brw-frame {
-  flex: 1;
-  min-height: 420px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
+  flex: none;
+  /* The hosted browser is 1280 × 800: keep that shape so it scales evenly and stays sharp. */
+  width: min(100%, calc((100dvh - 250px) * 1.6 + 2px));
+  min-width: min(100%, 480px);
+  align-self: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   background: var(--surface-raised);
+  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.35);
 }
 .brw-bar {
   height: 44px;
   flex: none;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 14px;
+  gap: 12px;
+  padding: 0 10px 0 14px;
   border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.brw-dots {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+.brw-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.brw-addr {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken, var(--surface-hover));
+  color: var(--ink-muted);
 }
 .brw-url {
   flex: 1;
@@ -127,25 +162,38 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font: 400 13px/20px var(--font-mono);
+  font: 400 13px/20px var(--font-sans);
   color: var(--ink-muted);
+}
+.brw-url b {
+  font-weight: 600;
+  color: var(--ink);
+}
+.brw-screen {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  display: flex;
+  background: var(--bg);
 }
 .brw-live {
   flex: 1;
   width: 100%;
+  height: 100%;
   border: 0;
-  background: #fff;
+  display: block;
+  background: var(--bg);
 }
-/* A drawing of the page Jack is on (sample mode). Sites are white whatever the app theme. */
+/* A drawing of the page Jack is on (sample mode), in the app's theme. */
 .brw-site {
   flex: 1;
   padding: 32px 48px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  background: #ffffff;
-  color: #1f2933;
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-sans);
+  overflow: hidden;
 }
 .brw-site-top {
   display: flex;
@@ -155,8 +203,8 @@
 .brw-site-logo {
   width: 28px;
   height: 28px;
-  border-radius: 6px;
-  background: #1f2933;
+  border-radius: 8px;
+  background: var(--ink);
 }
 .brw-site-name {
   font-size: 18px;
@@ -179,30 +227,30 @@
   gap: 6px;
   font-size: 13px;
   line-height: 18px;
-  color: #52606d;
+  color: var(--ink-muted);
   font-weight: 500;
 }
 .brw-fld {
   height: 40px;
   box-sizing: border-box;
-  border: 1px solid #cbd2d9;
-  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
   padding: 0 12px;
   display: flex;
   align-items: center;
   font-size: 15px;
-  color: #1f2933;
-  background: #ffffff;
+  color: var(--ink);
+  background: var(--surface-raised);
   white-space: nowrap;
   overflow: hidden;
 }
 .brw-fld.on {
-  border-color: #1f2933;
-  box-shadow: 0 0 0 3px rgba(31, 41, 51, 0.18);
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px var(--surface-hover);
 }
 .brw-caret {
   display: inline-block;
-  border-left: 2px solid #1f2933;
+  border-left: 2px solid var(--ink);
   height: 18px;
   margin-left: 1px;
   animation: brw-blink 1s steps(1) infinite;
@@ -221,16 +269,16 @@
 .brw-site-btn {
   height: 44px;
   padding: 0 24px;
-  border-radius: 6px;
-  background: #1f2933;
-  color: #ffffff;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--bg);
   display: inline-flex;
   align-items: center;
   font-weight: 600;
 }
 .brw-site-note {
   font-size: 13px;
-  color: #52606d;
+  color: var(--ink-muted);
 }
 .brw-empty {
   flex: 1;
@@ -275,7 +323,11 @@
     padding: 16px;
   }
   .brw-frame {
-    min-height: 360px;
+    width: 100%;
+    min-width: 0;
+  }
+  .brw-dots {
+    display: none;
   }
   .brw-site {
     padding: 20px;

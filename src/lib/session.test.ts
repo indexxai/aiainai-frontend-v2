@@ -20,8 +20,13 @@ describe('session helpers', () => {
       preferences: { textModel: 'auto' },
       space: { active: 'personal', business: null },
       onboarding: { askUse: false, use: 'personal', goals: [], note: '' },
+      assistant: { name: 'Max', title: 'Max', custom: true },
+      waitlist: [],
+      businessOpen: false,
     });
     expect(s.credits).toEqual({ remaining: '1,240', percent: 40, plan: 'Jack Free' });
     expect(s.user.initials).toBe('SM');
+    expect(s.assistant.name).toBe('Max');
+    expect(s.businessOpen).toBe(false);
   });
 });

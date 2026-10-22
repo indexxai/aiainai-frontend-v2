@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import { Banner, Icon, IconButton, cx, type IconName } from '@/ui';
 import { Markdown } from '@/components/chat/Markdown';
 import { Composer } from '@/components/composer/Composer';
@@ -10,7 +10,7 @@ import type { ModelMenu } from '@/lib/models';
 import { useAbortOnLeave } from '@/lib/useAbortOnLeave';
 import type { useAiEditing } from './AiEdit';
 
-interface Turn {
+export interface Turn {
   role: 'user' | 'assistant';
   content: string;
   error?: boolean;
@@ -37,6 +37,9 @@ export function AssistantPanel({
   onCharged,
   outOfCredits,
   onClose,
+  thread: keptThread,
+  onThreadChange,
+  onProposed,
 }: {
   docId: string;
   getMarkdown: () => string;
@@ -47,8 +50,15 @@ export function AssistantPanel({
   onCharged: () => void;
   outOfCredits: boolean;
   onClose?: () => void;
+  /** Kept by the editor, so the conversation survives closing the panel or opening Versions. */
+  thread?: Turn[];
+  onThreadChange?: Dispatch<SetStateAction<Turn[]>>;
+  /** A drafted section was put into the document to add or discard. */
+  onProposed?: () => void;
 }) {
-  const [thread, setThread] = useState<Turn[]>([]);
+  const [ownThread, setOwnThread] = useState<Turn[]>([]);
+  const thread = keptThread ?? ownThread;
+  const setThread = onThreadChange ?? setOwnThread;
   const [text, setText] = useState('');
   const [running, setRunning] = useState(false);
   const [truncated, setTruncated] = useState(false);
@@ -93,13 +103,14 @@ export function AssistantPanel({
     onCharged();
     setTruncated(data.truncated);
     if (!retry) setThread((t) => [...t, { role: 'assistant', content: data.reply }]);
-    if (data.insert)
+    if (data.insert) {
       ai.propose(
         data.insert,
         { credits: data.credits, modelName: data.modelName },
         () => void ask(message, history, true),
       );
-    else if (retry) ai.close();
+      onProposed?.();
+    } else if (retry) ai.close();
   };
 
   const send = (raw: string) => {
@@ -181,8 +192,6 @@ export function AssistantPanel({
           }}
           placeholder="Ask or tell the assistant what to change"
           label="Message the assistant"
-          connectors={false}
-          modeChip={false}
           rows={1}
           disabled={blocked}
           text={text}

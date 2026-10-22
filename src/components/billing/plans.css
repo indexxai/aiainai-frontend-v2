@@ -1,0 +1,201 @@
+/* Upgrade your plan: Personal / Business tabs and plan cards. */
+.pl {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 48px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.pl-title {
+  margin: 0;
+  font: 650 32px/40px var(--font-sans);
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+/* A wide pill switch, like the reference. */
+.as-tabs.segmented.pl-tabs {
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-hover);
+  border-color: transparent;
+}
+.as-tabs.segmented.pl-tabs .as-tab {
+  min-width: 160px;
+  height: 38px;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+}
+.as-tabs.segmented.pl-tabs .as-tab.active {
+  background: var(--surface-raised);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+.pl-cards {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 3), minmax(0, 380px));
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+.pl-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 24px 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface-raised);
+  animation: pl-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 0.06s);
+  transition:
+    border-color 0.2s ease,
+    translate 0.2s ease;
+}
+.pl-card.main {
+  border: 1.5px solid var(--ink);
+}
+@media (hover: hover) {
+  .pl-card:hover {
+    translate: 0 -3px;
+    border-color: var(--line-strong);
+  }
+  .pl-card.main:hover {
+    border-color: var(--ink);
+  }
+}
+@keyframes pl-in {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+
+.pl-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 24px;
+}
+.pl-name h2 {
+  margin: 0;
+  font: 600 16px/24px var(--font-sans);
+}
+.pl-tagline {
+  margin-top: 18px;
+  font: 600 24px/32px var(--font-sans);
+  letter-spacing: -0.01em;
+}
+.pl-blurb {
+  margin: 8px 0 0;
+  min-height: 44px;
+  font: 400 15px/22px var(--font-sans);
+  color: var(--ink-muted);
+}
+.pl-cta {
+  margin-top: 20px;
+  width: 100%;
+  height: 42px;
+  border-radius: var(--radius-pill);
+  justify-content: center;
+}
+.pl-price {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 24px;
+}
+.pl-price sup {
+  font: 500 16px/24px var(--font-sans);
+  top: 0;
+}
+.pl-price b {
+  font: 500 44px/48px var(--font-sans);
+  letter-spacing: -0.03em;
+}
+.pl-price span {
+  align-self: flex-end;
+  margin: 0 0 6px 6px;
+  font: 400 15px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.pl-feats {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font: 400 15px/22px var(--font-sans);
+}
+.pl-feats li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.pl-feats svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--ink-muted);
+}
+.pl-foot {
+  margin: 4px 0 0;
+  text-align: center;
+  font: 400 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.pl-banner {
+  width: min(100%, 640px);
+}
+.pl-paid {
+  margin-top: 4px;
+  font: 500 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.pl-foot svg {
+  vertical-align: -2px;
+}
+.pl-foot a {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-card {
+    animation: none;
+  }
+}
+@media (max-width: 1100px) {
+  .pl {
+    padding: 32px 24px 48px;
+  }
+  .pl-cards {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 380px));
+  }
+}
+@media (max-width: 767px) {
+  .pl {
+    padding: 16px 16px 32px;
+    gap: 20px;
+  }
+  .pl-title {
+    font-size: 26px;
+    line-height: 32px;
+  }
+  .as-tabs.segmented.pl-tabs {
+    width: 100%;
+  }
+  .as-tabs.segmented.pl-tabs .as-tab {
+    flex: 1;
+    min-width: 0;
+  }
+  .pl-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pl-blurb {
+    min-height: 0;
+  }
+}

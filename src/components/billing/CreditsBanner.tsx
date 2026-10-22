@@ -21,7 +21,7 @@ export function CreditsBanner({
       tone={warning.tone}
       className={className}
       actionLabel={plan === 'pro' ? 'Top up' : 'Upgrade'}
-      onAction={() => router.push('/settings/billing')}
+      onAction={() => router.push(plan === 'pro' ? '/settings/billing' : '/settings/billing/plans')}
     >
       {warning.text}
     </Banner>

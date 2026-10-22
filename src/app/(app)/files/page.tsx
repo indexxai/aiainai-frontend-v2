@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-import { EmptyState, Page } from '@/components/page/Page';
+import { cookies } from 'next/headers';
+import { FilesPage } from '@/components/files/FilesPage';
+import { serverApi } from '@/lib/session';
 
 export const metadata: Metadata = { title: 'Files' };
 
-export default function FilesPage() {
-  return (
-    <Page title="Files" description="PDF, Word, text and Markdown. Ask questions about anything you upload.">
-      <EmptyState icon="folder" title="No files yet">
-        Files you upload, and files you attach in chats, will appear here.
-      </EmptyState>
-    </Page>
-  );
+export default async function Files() {
+  const cookie = (await cookies()).toString();
+  const { data } = await serverApi().GET('/api/files', { headers: { cookie }, cache: 'no-store' });
+  return <FilesPage initial={data ?? { items: [], nextCursor: null }} />;
 }

@@ -12,6 +12,12 @@ describe('auth error messages', () => {
   it('never shows raw server messages', () => {
     expect(authErrorMessage({ code: 'SOMETHING_NEW', message: 'stack trace…' })).not.toContain('stack');
   });
+  it('names the field a request check rejected', () => {
+    const v = (message: string) => authErrorMessage({ code: 'VALIDATION_ERROR', message });
+    expect(v('[body.email] Invalid email address')).toMatch(/valid email/);
+    expect(v('[body.name] Required')).toMatch(/your name/);
+    expect(v('[body.other] Bad')).toMatch(/went wrong/);
+  });
   it('detects unverified accounts', () => {
     expect(isUnverified({ code: 'EMAIL_NOT_VERIFIED' })).toBe(true);
   });

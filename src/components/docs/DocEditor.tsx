@@ -17,7 +17,7 @@ import { useMediaQuery } from '@/lib/useMediaQuery';
 import { useShellCrumbs } from '@/components/shell/crumbs';
 import { createAiMarks } from './ai-decorations';
 import { AiWidget, useAiEditing } from './AiEdit';
-import { AssistantPanel } from './AssistantPanel';
+import { AssistantPanel, type Turn } from './AssistantPanel';
 import { EditorToolbar, RichEditor, type EditorChange } from './RichEditor';
 import { ExportDialog } from './ExportDialog';
 import { ShareDialog } from './ShareDialog';
@@ -72,6 +72,8 @@ export function DocEditor({
   const wide = useMediaQuery('(min-width: 1280px)', true);
   const phone = useMediaQuery('(max-width: 767px)', false);
   const [panelPref, setPanelPref] = useState<boolean | null>(null);
+  // The assistant conversation lives here, so closing the panel or opening Versions keeps it.
+  const [assistThread, setAssistThread] = useState<Turn[]>([]);
   const panelOpen = panelPref ?? wide;
   const [sharing, setSharing] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -115,8 +117,14 @@ export function DocEditor({
   const pathname = usePathname();
   useShellCrumbs({
     path: pathname,
-    items: [{ label: 'Docs', href: '/docs/all' }, { label: title || 'Untitled document' }],
-    back: '/docs/all',
+    items: doc.project
+      ? [
+          { label: 'Projects', href: '/projects' },
+          { label: doc.project.name, href: `/projects/${doc.project.id}` },
+          { label: title || 'Untitled document' },
+        ]
+      : [{ label: 'Docs', href: '/docs/all' }, { label: title || 'Untitled document' }],
+    back: doc.project ? `/projects/${doc.project.id}` : '/docs/all',
   });
 
   const writing = live !== null || doc.status === 'writing';
@@ -335,7 +343,13 @@ export function DocEditor({
   const startedCount = Math.min(total, started(liveText));
   const doneCount = writing ? Math.max(0, startedCount - 1) : doc.sectionsDone;
   const typeLabel = TYPE_INFO[doc.type].label;
-  const outline = writing ? doc.sections.map((s) => s.heading) : headings;
+  // While a saved version is shown, the outline and word count describe that version.
+  const outline = writing
+    ? doc.sections.map((s) => s.heading)
+    : preview
+      ? versionHeadings(preview)
+      : headings;
+  const shownWords = preview ? preview.wordCount : wordTotal;
   const canContinue = (doc.status === 'stopped' || doc.status === 'failed') && !doc.content && total > 0;
   const editable = !writing && !viewer;
   const outOfCredits = credits <= 0;
@@ -412,7 +426,7 @@ export function DocEditor({
             </Button>
           </div>
         )}
-        <Link href="/inbox" className="as-iconbtn" aria-label="Notifications" title="Notifications">
+        <Link href="/approvals" className="as-iconbtn" aria-label="Approvals" title="Approvals">
           <Icon name="bell" size={20} />
         </Link>
       </header>
@@ -437,7 +451,9 @@ export function DocEditor({
           <div className="de-count">
             {writing
               ? `${words(liveText).toLocaleString('en-US')} words so far`
-              : `${wordTotal.toLocaleString('en-US')} words · ${readMinutes(wordTotal)} min read`}
+              : shownWords
+                ? `${shownWords.toLocaleString('en-US')} words · ${readMinutes(shownWords)} min read`
+                : 'No words yet'}
           </div>
         </aside>
 
@@ -540,26 +556,29 @@ export function DocEditor({
                 </div>
               )}
 
-              {!writing && doc.status === 'failed' && doc.error?.code === 'insufficient_credits' && (
-                <div className="de-card">
-                  <span className="de-card-ic">
-                    <Icon name="zap" size={16} />
-                  </span>
-                  <div className="de-card-body">
-                    <div className="de-card-title">
-                      Not enough credits <Badge icon={false}>Usage limit reached</Badge>
+              {!writing &&
+                !viewer &&
+                doc.status === 'failed' &&
+                doc.error?.code === 'insufficient_credits' && (
+                  <div className="de-card">
+                    <span className="de-card-ic">
+                      <Icon name="zap" size={16} />
+                    </span>
+                    <div className="de-card-body">
+                      <div className="de-card-title">
+                        Not enough credits <Badge icon={false}>Usage limit reached</Badge>
+                      </div>
+                      <p className="de-card-txt">
+                        Writing this document needs more credits than you have. You can still write and format
+                        by hand.
+                      </p>
                     </div>
-                    <p className="de-card-txt">
-                      Writing this document needs more credits than you have. You can still write and format
-                      by hand.
-                    </p>
+                    <Link href="/settings/billing" className="as-btn primary sm">
+                      Top up
+                    </Link>
                   </div>
-                  <Link href="/settings/billing" className="as-btn primary sm">
-                    Top up
-                  </Link>
-                </div>
-              )}
-              {!writing && canContinue && doc.error?.code !== 'insufficient_credits' && (
+                )}
+              {!writing && !viewer && canContinue && doc.error?.code !== 'insufficient_credits' && (
                 <div className="de-card">
                   <span className={doc.status === 'failed' || doc.error ? 'de-card-ic danger' : 'de-card-ic'}>
                     <Icon name={doc.error ? 'circle-alert' : 'circle-pause'} size={16} />
@@ -717,6 +736,12 @@ export function DocEditor({
             ai={ai}
             onCharged={() => router.refresh()}
             outOfCredits={outOfCredits}
+            thread={assistThread}
+            onThreadChange={setAssistThread}
+            // On phones the panel covers the page: close it so the drafted section can be seen.
+            onProposed={() => {
+              if (phone) setPanelPref(false);
+            }}
             onClose={() => setPanelPref(false)}
           />
         )}
@@ -774,4 +799,26 @@ export function DocEditor({
       )}
     </div>
   );
+}
+
+/** The section headings of a saved version (from its editor JSON, or its Markdown). */
+function versionHeadings(v: { content?: unknown; markdown?: string | null }): string[] {
+  const out: string[] = [];
+  const walk = (nodes: unknown) => {
+    if (!Array.isArray(nodes)) return;
+    for (const n of nodes) {
+      if (!n || typeof n !== 'object') continue;
+      const node = n as { type?: string; content?: unknown; text?: string };
+      if (node.type === 'heading') {
+        const text = (Array.isArray(node.content) ? node.content : [])
+          .map((c) => (c && typeof c === 'object' ? ((c as { text?: string }).text ?? '') : ''))
+          .join('')
+          .trim();
+        if (text) out.push(text);
+      } else walk(node.content);
+    }
+  };
+  if (v.content && typeof v.content === 'object') walk((v.content as { content?: unknown }).content);
+  else for (const m of (v.markdown ?? '').matchAll(/^#{1,3}\s+(.+)$/gm)) out.push(m[1]!.trim());
+  return out;
 }

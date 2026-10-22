@@ -1,4 +1,5 @@
 'use client';
+import { useJack } from '@/lib/assistant';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Badge, Button, Icon, IconButton, cx } from '@/ui';
@@ -6,7 +7,10 @@ import type { ChatMessage } from '@/lib/chat/client';
 import type { Live } from '@/lib/chat/useChatThread';
 import { Markdown } from './Markdown';
 import { PlanCards } from './JackPlan';
-import { AgentAvatar } from '@/components/team/AgentAvatar';
+import { AgentAvatar } from '@/components/jack/AgentAvatar';
+import { KIND_ICON, fileUrl } from '@/lib/files/files';
+import { JACKS } from '@/lib/jack';
+import { useSpace } from '@/lib/space-context';
 
 export interface AnswerActions {
   latest: boolean;
@@ -45,7 +49,25 @@ function CopyButton({ text, label = 'Copy' }: { text: string; label?: string }) 
 export function UserMessage({ m }: { m: ChatMessage }) {
   return (
     <div className="ch-user">
-      <div className="ch-bubble">{m.content}</div>
+      {m.attachments.length > 0 && (
+        <ul className="ch-files" aria-label="Attached files">
+          {m.attachments.map((f) => (
+            <li key={f.id}>
+              <a
+                className="as-file"
+                href={fileUrl(f.id)}
+                target="_blank"
+                rel="noreferrer"
+                title={`Open ${f.name}`}
+              >
+                <Icon name={KIND_ICON[f.kind]} size={16} />
+                <span className="name">{f.name}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      {m.content && <div className="ch-bubble">{m.content}</div>}
       <div className="ch-actions end">
         <CopyButton text={m.content} label="Copy message" />
       </div>
@@ -53,11 +75,13 @@ export function UserMessage({ m }: { m: ChatMessage }) {
   );
 }
 
-/** Answer header (v2): Captain Jack, the model that wrote it, whether Auto chose, and what it cost. */
+/** Answer header (v2): this space's Jack, the model that wrote it, whether Auto chose, and what it cost. */
 function AnswerHead({ m, live }: { m: ChatMessage; live: Live | null }) {
   const name = live?.modelName ?? m.modelName;
   const auto = live ? live.auto : m.auto;
   const streaming = m.status === 'streaming';
+  const space = useSpace();
+  const jack = useJack(space);
   const lead = streaming
     ? name
       ? `Writing with ${name}`
@@ -74,10 +98,14 @@ function AnswerHead({ m, live }: { m: ChatMessage; live: Live | null }) {
   return (
     <div className="ch-head">
       <AgentAvatar captain size={24} className="ch-jack" />
-      <b>Captain Jack</b>
+      <b>{jack.title}</b>
       {lead && <span className="dot">{lead}</span>}
       {name && auto && <span className="dot">chosen by Auto</span>}
-      {m.status === 'complete' && m.credits > 0 && <span className="dot">{m.credits}× credits</span>}
+      {m.status === 'complete' && m.credits > 0 && (
+        <span className="dot">
+          {m.credits} {m.credits === 1 ? 'credit' : 'credits'}
+        </span>
+      )}
     </div>
   );
 }
@@ -91,6 +119,7 @@ export function AnswerMessage({
   live: Live | null;
   actions: AnswerActions;
 }) {
+  const jack = useJack();
   const streaming = m.status === 'streaming';
   return (
     <div className={cx('ch-answer', streaming && 'streaming')} aria-busy={streaming || undefined}>
@@ -112,7 +141,7 @@ export function AnswerMessage({
         <div className="ch-learned">
           <Icon name="brain" size={14} />
           <span>
-            Jack remembered:{' '}
+            {jack.name} remembered:{' '}
             {m.learned.map((l, i) => (
               <span key={l.id}>
                 {i > 0 && ' · '}
@@ -236,7 +265,7 @@ function FailedCard({ m, actions }: { m: ChatMessage; actions: AnswerActions }) 
               Use Auto
             </Button>
           )}
-          <Link href="/settings/billing" className="as-btn primary sm">
+          <Link href="/settings/billing/plans" className="as-btn primary sm">
             Upgrade
           </Link>
         </span>

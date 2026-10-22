@@ -24,7 +24,7 @@ const OPTIONS: { value: Space; who: string; text: string }[] = [
  * Sign-up step 1 of 2, "What will you use Jack for?" (design "Sign-up — Personal or Business").
  * One tap saves the answer, then "What should Jack help with first?" follows.
  */
-export function WelcomeChoice({ next }: { next: string }) {
+export function WelcomeChoice({ next, businessOpen = true }: { next: string; businessOpen?: boolean }) {
   const [busy, setBusy] = useState<Space | null>(null);
   const [error, setError] = useState('');
 
@@ -50,38 +50,47 @@ export function WelcomeChoice({ next }: { next: string }) {
       </div>
       {error && <Banner tone="danger">{error}</Banner>}
       <div className="au-choices" role="group" aria-label="What will you use Jack for?">
-        {OPTIONS.map((o) => (
-          <button
-            key={o.value}
-            type="button"
-            className={cx('au-choice', busy === o.value && 'on')}
-            onClick={() => void choose(o.value)}
-            disabled={!!busy}
-            aria-busy={busy === o.value || undefined}
-          >
-            <span className="au-choice-av" aria-hidden>
-              <JackImg space={o.value} part="full" />
-            </span>
-            <span className="au-choice-body">
-              <span className="au-choice-who">
-                {JACKS[o.value].name} <span>{o.who}</span>
+        {OPTIONS.map((o) => {
+          const soon = o.value === 'business' && !businessOpen;
+          return (
+            <button
+              key={o.value}
+              type="button"
+              className={cx('au-choice', busy === o.value && 'on', soon && 'soon')}
+              onClick={() => void choose(o.value)}
+              disabled={!!busy || soon}
+              aria-busy={busy === o.value || undefined}
+            >
+              <span className="au-choice-av" aria-hidden>
+                <JackImg space={o.value} part="full" />
               </span>
-              <span className="au-choice-text">{o.text}</span>
-            </span>
-            <span className="au-choice-go" aria-hidden>
-              <Icon
-                name={busy === o.value ? 'loader-circle' : 'arrow-right'}
-                size={18}
-                className={busy === o.value ? 'as-spin' : undefined}
-              />
-            </span>
-          </button>
-        ))}
+              <span className="au-choice-body">
+                <span className="au-choice-who">
+                  {JACKS[o.value].name} <span>{soon ? 'Coming soon' : o.who}</span>
+                </span>
+                <span className="au-choice-text">{o.text}</span>
+              </span>
+              <span className="au-choice-go" aria-hidden hidden={soon}>
+                <Icon
+                  name={busy === o.value ? 'loader-circle' : 'arrow-right'}
+                  size={18}
+                  className={busy === o.value ? 'as-spin' : undefined}
+                />
+              </span>
+            </button>
+          );
+        })}
       </div>
-      <p className="au-note">
-        Not sure? Pick either. You can switch any time from the top bar or the sidebar. Business opens a short
-        set-up next: the business name, apps and team.
-      </p>
+      {businessOpen ? (
+        <p className="au-note">
+          Not sure? Pick either. You can switch any time from the top bar or the sidebar. Business opens a
+          short set-up next: the business name, apps and team.
+        </p>
+      ) : (
+        <p className="au-note">
+          Captain Jack, for business, is coming soon. Start with Jack of all trades today.
+        </p>
+      )}
     </>
   );
 }

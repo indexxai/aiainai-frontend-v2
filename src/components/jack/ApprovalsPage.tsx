@@ -1,65 +1,49 @@
 'use client';
 import { useState } from 'react';
-import { Banner } from '@/ui';
-import { ApprovalDetail, ApprovalRow, useApprovalActions, type Approval } from '@/components/team/Approvals';
+import { Banner, Icon } from '@/ui';
 import { api, type Schemas } from '@/lib/api/client';
 import { JackActionDetail, JackActionRow, useJackActionCalls, type JackAction } from './JackAction';
-import '@/components/team/team.css';
 import './approvals.css';
 
 type List = Schemas['AllApprovalsDto'];
-type Item = { type: 'jack'; a: JackAction; at: string } | { type: 'team'; a: Approval; at: string };
-
-const byNewest = (x: Item, y: Item) => y.at.localeCompare(x.at);
 
 /**
- * Approvals (v2 design): Jack's purchases, emails and events plus the team's approvals, waiting and
- * decided on the left, exactly what will happen on the right. Covers both spaces.
+ * Approvals (v2 design): Jack's purchases, emails, Slack messages and events, waiting and decided
+ * on the left, exactly what will happen on the right.
  */
 export function ApprovalsPage({ initial }: { initial: List }) {
   const [list, setList] = useState(initial);
-  const [selKey, setSelKey] = useState<string | null>(null);
+  const [selId, setSelId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null);
   const reload = async () => {
     const { data } = await api.GET('/api/approvals');
     if (data) setList(data);
   };
-  const done = (msg: string) => {
-    setToast({ tone: 'success', text: msg });
-    void reload();
-  };
-  const failed = (msg: string) => {
-    setToast({ tone: 'danger', text: msg });
-    void reload();
-  };
-  const teamActions = useApprovalActions(done, failed);
-  const jackCalls = useJackActionCalls((_a, msg) => done(msg), failed);
+  const calls = useJackActionCalls(
+    (_a, msg) => {
+      setToast({ tone: 'success', text: msg });
+      void reload();
+    },
+    (msg) => {
+      setToast({ tone: 'danger', text: msg });
+      void reload();
+    },
+  );
 
-  const team = (a: Approval): Item => ({ type: 'team', a, at: a.createdAt });
-  const jack = (a: JackAction): Item => ({ type: 'jack', a, at: a.decidedAt ?? a.createdAt });
-  const pending = [...list.jackPending.map(jack), ...list.pending.map(team)].sort(byNewest);
-  const decided = [...list.jackDecided.map(jack), ...list.decided.map(team)].sort(byNewest);
-  const key = (i: Item) => `${i.type}:${i.a.id}`;
-  const sel = [...pending, ...decided].find((i) => key(i) === selKey) ?? pending[0] ?? null;
-
-  const row = (i: Item) =>
-    i.type === 'jack' ? (
-      <JackActionRow key={key(i)} a={i.a} on={sel === i} pick={() => setSelKey(key(i))} />
-    ) : (
-      <ApprovalRow
-        key={key(i)}
-        a={i.a}
-        on={sel === i}
-        pick={() => setSelKey(key(i))}
-        decided={i.a.status !== 'pending'}
-      />
-    );
+  const at = (a: JackAction) => a.decidedAt ?? a.createdAt;
+  const byNewest = (x: JackAction, y: JackAction) => at(y).localeCompare(at(x));
+  const pending = [...list.jackPending].sort(byNewest);
+  const decided = [...list.jackDecided].sort(byNewest);
+  const sel = [...pending, ...decided].find((a) => a.id === selId) ?? pending[0] ?? null;
+  const row = (a: JackAction) => (
+    <JackActionRow key={a.id} a={a} on={sel === a} pick={() => setSelId(a.id)} />
+  );
 
   return (
     <div className="aps-page">
       <div className="aps-head">
         <h1 className="title-lg">Approvals</h1>
-        <p>Purchases, emails and team actions waiting for your OK, from your Personal and Business spaces.</p>
+        <p>Purchases, emails and messages Jack is waiting for your OK on.</p>
       </div>
       {toast && (
         <div className="aps-toast">
@@ -68,7 +52,7 @@ export function ApprovalsPage({ initial }: { initial: List }) {
           </Banner>
         </div>
       )}
-      <div className={sel ? 'tw-aps' : 'tw-aps idle'}>
+      <div className="tw-aps">
         <div className="tw-aps-list">
           <div className="tm-ov tw-aps-h">Waiting for you · {pending.length}</div>
           {pending.map(row)}
@@ -76,15 +60,22 @@ export function ApprovalsPage({ initial }: { initial: List }) {
           {decided.length > 0 && <div className="tm-ov tw-aps-h">Decided</div>}
           {decided.map(row)}
         </div>
-        <main className="tw-aps-main">
-          {sel?.type === 'jack' ? (
-            <JackActionDetail key={sel.a.id} a={sel.a} calls={jackCalls} />
+        <div className="tw-aps-main">
+          {sel ? (
+            <JackActionDetail key={sel.id} a={sel} calls={calls} />
           ) : (
-            <ApprovalDetail sel={sel?.a ?? null} mode="important" actions={teamActions} />
+            <div className="tw-caught-up">
+              <span className="ok">
+                <Icon name="circle-check" size={40} />
+              </span>
+              <div className="title">You&apos;re all caught up</div>
+              <div className="muted tm-sm">
+                When Jack needs your OK to pay or send something, it shows up here.
+              </div>
+            </div>
           )}
-        </main>
+        </div>
       </div>
-      {teamActions.dialogs}
     </div>
   );
 }

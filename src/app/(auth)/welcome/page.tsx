@@ -15,5 +15,5 @@ export default async function WelcomePage({ searchParams }: { searchParams: Prom
   const me = await getMe();
   if (!me) redirect('/signin?expired=1');
   if (!me.onboarding.askUse) redirect(next);
-  return <WelcomeChoice next={next} />;
+  return <WelcomeChoice next={next} businessOpen={me.businessOpen !== false} />;
 }

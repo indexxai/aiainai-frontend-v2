@@ -14,6 +14,7 @@ const MESSAGES: Record<string, string> = {
   OTP_EXPIRED: 'This code has expired. Send a new one.',
   TOO_MANY_ATTEMPTS: 'Too many tries with this code. Send a new one.',
   TOO_MANY_REQUESTS: 'Too many tries. Wait a minute, then try again.',
+  NAME_REQUIRED: 'Enter your name.',
 };
 
 const FALLBACK = 'Something went wrong on our side. Please try again.';
@@ -23,6 +24,12 @@ export function authErrorMessage(
 ): string {
   if (!error) return FALLBACK;
   if (error.status === 429) return MESSAGES.TOO_MANY_REQUESTS!;
+  // Request checks name the field that failed, e.g. "[body.email] Invalid email address".
+  if (error.code === 'VALIDATION_ERROR') {
+    if (/email/i.test(error.message ?? '')) return MESSAGES.INVALID_EMAIL!;
+    if (/name/i.test(error.message ?? '')) return MESSAGES.NAME_REQUIRED!;
+    if (/password/i.test(error.message ?? '')) return MESSAGES.PASSWORD_TOO_WEAK!;
+  }
   return (error.code && MESSAGES[error.code]) || FALLBACK;
 }
 

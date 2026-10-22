@@ -1,15 +1,6 @@
-import type { Metadata } from 'next';
-import { EmptyState, Page } from '@/components/page/Page';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = { title: 'Inbox' };
-
+/** Everything that needs you lives in Approvals; old Inbox links land there. */
 export default function InboxPage() {
-  return (
-    <Page title="Inbox">
-      <EmptyState icon="circle-check" title="You’re all caught up">
-        Your agents will ask here when they need your approval. Finished reports and shared documents show up
-        here too.
-      </EmptyState>
-    </Page>
-  );
+  redirect('/approvals');
 }

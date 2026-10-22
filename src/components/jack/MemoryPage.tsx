@@ -1,10 +1,12 @@
 'use client';
+import { useJack } from '@/lib/assistant';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Banner, Button, Chip, Dialog, Icon, IconButton, Switch, type IconName } from '@/ui';
 import { api, type Schemas } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import './memory.css';
+import { VoiceButton, VoiceField } from '@/components/voice/Voice';
 
 type List = Schemas['MemoryListDto'];
 type Item = Schemas['MemoryDto'];
@@ -29,6 +31,7 @@ export function MemoryPage({
   space: 'personal' | 'business';
   business: string | null;
 }) {
+  const jack = useJack();
   const [list, setList] = useState(initial);
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
@@ -82,8 +85,8 @@ export function MemoryPage({
         <div>
           <h1 className="title-lg">Memory</h1>
           <p>
-            What Jack knows {isBiz ? `about ${business ?? 'your business'}` : 'about you'}, so you don’t have
-            to repeat yourself. {isBiz ? 'Business' : 'Personal'} memories are kept apart from{' '}
+            What {jack.name} knows {isBiz ? `about ${business ?? 'your business'}` : 'about you'}, so you
+            don’t have to repeat yourself. {isBiz ? 'Business' : 'Personal'} memories are kept apart from{' '}
             {isBiz ? 'Personal' : 'Business'}.
           </p>
         </div>
@@ -91,7 +94,7 @@ export function MemoryPage({
           <Switch
             checked={list.enabled}
             onChange={(v) => void toggle(v)}
-            label="Let Jack remember new things"
+            label={`Let ${jack.name} remember new things`}
           />
           <Button variant="primary" size="sm" icon="plus" onClick={() => setAdding(true)}>
             Add a memory
@@ -102,7 +105,7 @@ export function MemoryPage({
       <div className="mem-safe">
         <Icon name="shield-check" size={16} />
         <span>
-          Jack only uses these to help you. Edit or forget anything, and it’s gone from every answer.
+          {jack.name} only uses these to help you. Edit or forget anything, and it’s gone from every answer.
           {list.enabled
             ? ' He may remember lasting things you tell him in conversations, and shows what he remembered.'
             : ' He won’t remember anything new until you switch this back on.'}
@@ -156,6 +159,7 @@ export function MemoryPage({
                             onChange={(e) => setDraft(e.target.value)}
                             onKeyDown={(e) => e.key === 'Escape' && setEditing(null)}
                           />
+                          <VoiceButton value={draft} onChange={setDraft} maxLength={300} />
                           <Button size="sm" type="submit" variant="secondary">
                             Save
                           </Button>
@@ -175,7 +179,7 @@ export function MemoryPage({
                                   'Learned in a conversation'
                                 )
                               ) : (
-                                'You told Jack'
+                                `You told ${jack.name}`
                               )}{' '}
                               · {date(m.createdAt)}
                             </div>
@@ -232,12 +236,13 @@ function AddDialog({
   onClose: () => void;
   onAdded: (m: Item) => void;
 }) {
+  const jack = useJack();
   const [text, setText] = useState('');
   const [group, setGroup] = useState<Group>('about');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const add = async () => {
-    if (!text.trim()) return setError('Write what Jack should remember.');
+    if (!text.trim()) return setError(`Write what ${jack.name} should remember.`);
     setSaving(true);
     const { data, error: err } = await api.POST('/api/memory', { body: { text: text.trim(), group } });
     setSaving(false);
@@ -250,7 +255,7 @@ function AddDialog({
     <Dialog
       open={open}
       title="Add a memory"
-      description="Something Jack should know next time, in a short sentence."
+      description={`Something ${jack.name} should know next time, in a short sentence.`}
       width={520}
       onClose={onClose}
       footer={
@@ -266,22 +271,31 @@ function AddDialog({
     >
       <div className="mem-add">
         <label htmlFor="mem-new" className="as-field-label">
-          What should Jack remember?
+          What should {jack.name} remember?
         </label>
-        <textarea
-          id="mem-new"
-          className="mem-textarea"
-          rows={3}
-          maxLength={300}
+        <VoiceField
           value={text}
-          placeholder={
-            business ? 'We quote within 24 hours and never on Sundays' : 'I prefer aisle seats on flights'
-          }
-          onChange={(e) => {
-            setText(e.target.value);
+          onChange={(v) => {
+            setText(v);
             if (error) setError('');
           }}
-        />
+          maxLength={300}
+        >
+          <textarea
+            id="mem-new"
+            className="mem-textarea"
+            rows={3}
+            maxLength={300}
+            value={text}
+            placeholder={
+              business ? 'We quote within 24 hours and never on Sundays' : 'I prefer aisle seats on flights'
+            }
+            onChange={(e) => {
+              setText(e.target.value);
+              if (error) setError('');
+            }}
+          />
+        </VoiceField>
         <div className="mem-groups" role="group" aria-label="Kind">
           {GROUPS.map((g) => (
             <Chip key={g.id} icon={g.icon} selected={group === g.id} onClick={() => setGroup(g.id)}>

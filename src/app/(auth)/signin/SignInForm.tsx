@@ -33,9 +33,13 @@ export function SignInForm() {
       setBusy(false);
       if (isUnverified(err)) {
         // Send a fresh code and finish verification first.
-        await authClient.emailOtp.sendVerificationOtp({ email: email.trim(), type: 'email-verification' });
+        const sent = await authClient.emailOtp.sendVerificationOtp({
+          email: email.trim(),
+          type: 'email-verification',
+        });
+        // Only promise a new code if one went out (it can be rate-limited); the code screen can resend.
         router.push(
-          `/verify?email=${encodeURIComponent(email.trim())}&next=${encodeURIComponent(next)}&resent=1`,
+          `/verify?email=${encodeURIComponent(email.trim())}&next=${encodeURIComponent(next)}${sent.error ? '' : '&resent=1'}`,
         );
         return;
       }

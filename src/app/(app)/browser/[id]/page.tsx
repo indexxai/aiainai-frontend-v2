@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { BrowserPage } from '@/components/jack/BrowserPage';
 import { serverApi } from '@/lib/session';
 
-export const metadata: Metadata = { title: 'Jack’s browser' };
+export const metadata: Metadata = { title: 'Browser' };
 
 /** v2 Jack's browser, live: one browsing task Jack is doing. */
 export default async function Browser({ params }: { params: Promise<{ id: string }> }) {

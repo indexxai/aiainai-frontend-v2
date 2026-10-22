@@ -1,7 +1,8 @@
 'use client';
+import { useJack } from '@/lib/assistant';
 import Link from 'next/link';
 import { useState } from 'react';
-import { AgentAvatar } from '@/components/team/AgentAvatar';
+import { AgentAvatar } from '@/components/jack/AgentAvatar';
 import { Chip, Icon, type IconName } from '@/ui';
 import { api, type Schemas } from '@/lib/api/client';
 import './activity.css';
@@ -10,7 +11,7 @@ type Activity = Schemas['ActivityDto'];
 type Item = Schemas['ActivityItemDto'];
 type Filter = {
   space: 'all' | 'personal' | 'business';
-  kind: 'all' | 'conversation' | 'doc' | 'image' | 'team' | 'purchases';
+  kind: 'all' | 'conversation' | 'doc' | 'image' | 'purchases';
 };
 
 const FILTERS: { label: string; icon?: IconName; filter: Filter }[] = [
@@ -20,7 +21,6 @@ const FILTERS: { label: string; icon?: IconName; filter: Filter }[] = [
   { label: 'Conversations', icon: 'message-square', filter: { space: 'all', kind: 'conversation' } },
   { label: 'Documents', icon: 'file-text', filter: { space: 'all', kind: 'doc' } },
   { label: 'Images', icon: 'image', filter: { space: 'all', kind: 'image' } },
-  { label: 'Team', icon: 'users', filter: { space: 'all', kind: 'team' } },
   { label: 'Purchases', icon: 'credit-card', filter: { space: 'all', kind: 'purchases' } },
 ];
 
@@ -40,6 +40,7 @@ const time = (iso: string) =>
 
 /** Activity (v2 design): one timeline for both spaces, with filters and what's coming up. */
 export function ActivityPage({ initial }: { initial: Activity }) {
+  const jack = useJack();
   const [data, setData] = useState(initial);
   const [filter, setFilter] = useState<Filter>({ space: 'all', kind: 'all' });
   const [loading, setLoading] = useState(false);
@@ -62,10 +63,10 @@ export function ActivityPage({ initial }: { initial: Activity }) {
 
   return (
     <div className="act">
-      <main className="act-main" aria-busy={loading || undefined}>
+      <div className="act-main" aria-busy={loading || undefined}>
         <div className="act-head">
           <h1 className="title-lg">Activity</h1>
-          <p>Everything you, Jack and your team did in the last 30 days, and what’s planned.</p>
+          <p>Everything you and {jack.name} did in the last 30 days, and what’s planned.</p>
         </div>
         <div className="act-filters" role="group" aria-label="Show">
           {FILTERS.map((f) => (
@@ -113,11 +114,11 @@ export function ActivityPage({ initial }: { initial: Activity }) {
         ) : (
           <p className="act-empty">
             {same(filter, { space: 'all', kind: 'all' })
-              ? 'Nothing yet. Ask Jack for something on the Jack page and it shows up here.'
+              ? `Nothing yet. Ask ${jack.name} for something on the ${jack.name} page and it shows up here.`
               : 'Nothing here for this filter in the last 30 days.'}
           </p>
         )}
-      </main>
+      </div>
       <aside className="act-aside" aria-label="Coming up">
         <h2 className="act-ov">Coming up</h2>
         {data.comingUp.length ? (
@@ -133,7 +134,7 @@ export function ActivityPage({ initial }: { initial: Activity }) {
             ))}
           </ul>
         ) : (
-          <p className="act-detail">Nothing planned. Your team’s next tasks and reminders will show here.</p>
+          <p className="act-detail">Nothing planned. Reminders and scheduled work will show here.</p>
         )}
       </aside>
     </div>
@@ -141,8 +142,7 @@ export function ActivityPage({ initial }: { initial: Activity }) {
 }
 
 function Who({ item }: { item: Item }) {
-  if (item.who === 'jack') return <AgentAvatar captain size={36} name="Captain Jack" />;
-  if (item.who === 'agent') return <AgentAvatar icon={item.icon} size={36} name={item.whoName} />;
+  if (item.who === 'jack') return <AgentAvatar captain jack={item.space} size={36} name={item.whoName} />;
   return (
     <span className="act-ic" aria-hidden>
       <Icon name={(item.icon as IconName) ?? 'circle'} size={16} />

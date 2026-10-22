@@ -17,8 +17,8 @@
   --brand-text: #f4f4f5;
   --brand-soft: #2e2e32;
   --focus: #a9a9b0;
-  --success: #4ade80;
-  --success-soft: #0f2a1a;
+  --success: var(--ink);
+  --success-soft: var(--surface-hover);
   --warning: var(--ink);
   --warning-soft: var(--surface-hover);
   --danger: var(--ink);
@@ -55,8 +55,8 @@
   --brand-text: #18181b;
   --brand-soft: #e4e4e7;
   --focus: #18181b;
-  --success: #15803d;
-  --success-soft: #e8f7ee;
+  --success: var(--ink);
+  --success-soft: var(--surface-hover);
   --warning: var(--ink);
   --warning-soft: var(--surface-hover);
   --danger: var(--ink);

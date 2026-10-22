@@ -1,0 +1,124 @@
+/* Voice typing for text boxes (same look as the chat composer's mic). */
+.vf {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.vf-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.vf-box > textarea,
+.vf-box > input {
+  padding-right: 48px;
+}
+.vf-box > textarea {
+  padding-bottom: 44px;
+}
+.vf-mic {
+  position: absolute;
+  right: 18px;
+  bottom: 8px;
+  display: flex;
+}
+.vf-box:has(> input) .vf-mic {
+  right: 6px;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.vb-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.vb-mic {
+  color: var(--ink-muted);
+}
+.vb-mic:hover {
+  color: var(--ink);
+}
+.vb-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 2px 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: 500 13px/20px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.vb-rec {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  animation: vb-pulse 1.2s ease-in-out infinite;
+}
+@keyframes vb-pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+.vb-max {
+  color: var(--ink-muted);
+}
+.vb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.vb-btn:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+.vb-btn.done {
+  background: var(--ink);
+  color: var(--bg);
+}
+.vb-btn:focus-visible {
+  outline: 2px solid var(--focus, var(--ink));
+  outline-offset: 2px;
+}
+.vb-spin {
+  animation: vb-spin 0.9s linear infinite;
+}
+@keyframes vb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.vb-error {
+  font: 400 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .vb-rec,
+  .vb-spin {
+    animation: none;
+  }
+}
+@media (max-width: 767px) {
+  .vb-wide,
+  .vb-max {
+    display: none;
+  }
+  .vb-mic {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

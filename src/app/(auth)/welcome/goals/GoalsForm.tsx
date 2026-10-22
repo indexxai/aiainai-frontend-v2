@@ -6,6 +6,7 @@ import { toApiError } from '@/lib/api/errors';
 import { JackImg } from '@/components/jack/JackImg';
 import { JACKS } from '@/lib/jack';
 import { openInSpace, saveSpace, type Space } from '@/lib/space';
+import { VoiceButton } from '@/components/voice/Voice';
 
 const GOALS: Record<Space, { label: string; icon: IconName }[]> = {
   personal: [
@@ -49,13 +50,16 @@ export function GoalsForm({
   const short = use === 'business' ? 'Captain Jack' : 'Jack';
   const [picked, setPicked] = useState<string[]>(initial.goals);
   const [note, setNote] = useState(initial.note);
+  // Personal only: an optional name of their own for Jack (Settings can change it later).
+  const [name, setName] = useState('');
   const [busy, setBusy] = useState<'save' | 'skip' | null>(null);
   const [error, setError] = useState('');
 
   const go = () => {
     // A full load, so the app renders in the chosen space from the first screen.
+    // No Business set-up yet: Captain Jack's "coming soon" page.
     if (use === 'business' && !hasBusiness) {
-      openInSpace('/business/setup');
+      openInSpace('/captain-jack');
       return;
     }
     saveSpace(use);
@@ -66,6 +70,15 @@ export function GoalsForm({
     if (busy) return;
     setBusy('save');
     setError('');
+    if (use === 'personal' && name.trim()) {
+      const r = await api.PATCH('/api/me/assistant', { body: { name: name.trim() } });
+      if (!r.data) {
+        setBusy(null);
+        setError(toApiError(r.error).message);
+        return;
+      }
+    }
+    if (!picked.length && !note.trim()) return go();
     const { data, error: err } = await api.PATCH('/api/me/onboarding', {
       body: { goals: picked, note: note.trim() },
     });
@@ -125,14 +138,28 @@ export function GoalsForm({
           placeholder={`Or tell ${short} in your own words…`}
           aria-label={`Or tell ${short} in your own words`}
         />
+        <VoiceButton value={note} onChange={setNote} maxLength={300} />
       </label>
+      {use === 'personal' && (
+        <label className="au-goal-note au-name">
+          <Icon name="pencil" size={18} />
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={20}
+            placeholder="Give Jack a name of your own (optional)"
+            aria-label="Give Jack a name of your own (optional)"
+            autoComplete="off"
+          />
+        </label>
+      )}
       <div className="au-goal-actions">
         <Button
           variant="primary"
           iconRight="arrow-right"
           loading={busy === 'save'}
           onClick={() => void save()}
-          disabled={!!busy || (!picked.length && !note.trim())}
+          disabled={!!busy || (!picked.length && !note.trim() && !name.trim())}
         >
           Continue
         </Button>
@@ -147,7 +174,7 @@ export function GoalsForm({
           Skip for now
         </Button>
       </div>
-      <p className="au-note">You can change this any time in Settings.</p>
+      <p className="au-note">This is just a start. Tell Jack more any time in a chat.</p>
     </>
   );
 }

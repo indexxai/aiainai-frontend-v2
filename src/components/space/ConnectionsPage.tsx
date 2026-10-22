@@ -1,4 +1,5 @@
 'use client';
+import { useJack } from '@/lib/assistant';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Badge, Banner, Button, Icon, cx, type IconName } from '@/ui';
@@ -9,13 +10,13 @@ import './connections.css';
 type List = Schemas['ConnectionsDto'];
 type App = Schemas['ConnectionDto'];
 type Level = App['level'];
-type AppId = 'gmail' | 'google-calendar';
+type AppId = 'gmail' | 'google-calendar' | 'google-drive' | 'slack';
 
 const LEVELS: { id: Level; label: string; hint: string }[] = [
-  { id: 'read', label: 'Read', hint: 'Jack only reads' },
-  { id: 'draft', label: 'Draft', hint: 'Jack reads and writes drafts; you send' },
-  { id: 'ask', label: 'Ask first', hint: 'Jack acts after you approve' },
-  { id: 'auto', label: 'On its own', hint: 'Jack acts and tells you in Activity' },
+  { id: 'read', label: 'Read', hint: 'Only reads' },
+  { id: 'draft', label: 'Draft', hint: 'Reads and writes drafts; you send' },
+  { id: 'ask', label: 'Ask first', hint: 'Acts after you approve' },
+  { id: 'auto', label: 'On its own', hint: 'Acts and tells you in Activity' },
 ];
 
 const STATUS: Record<
@@ -42,6 +43,7 @@ export function ConnectionsPage({
   returned: string | null;
   aside: ReactNode;
 }) {
+  const jack = useJack();
   const router = useRouter();
   const [list, setList] = useState(initial);
   const [busy, setBusy] = useState<string | null>(null);
@@ -90,15 +92,15 @@ export function ConnectionsPage({
 
   return (
     <div className="cx">
-      <main className="cx-main">
+      <div className="cx-main">
         <div className="cx-head">
           <h1 className="title-lg">Connections</h1>
-          <p>Apps Jack can use in this space, and how much he can do in each.</p>
+          <p>Apps {jack.name} can use in this space, and how much he can do in each.</p>
         </div>
         {list.demo && (
           <Banner tone="neutral" icon="info">
-            Sample mode: the server has no connector key yet, so connecting works at once and Jack sees sample
-            events and email.
+            Sample mode: the server has no connector key yet, so connecting works at once and {jack.name} sees
+            sample events, email, files and Slack messages.
           </Banner>
         )}
         {error && (
@@ -126,9 +128,13 @@ export function ConnectionsPage({
                     {on && a.account ? `${a.account} · ` : ''}
                     {a.what}
                   </div>
-                  {on && (
-                    <div className="cx-levels" role="radiogroup" aria-label={`What Jack may do in ${a.name}`}>
-                      {LEVELS.map((l) => (
+                  {on && a.levels.length > 1 && (
+                    <div
+                      className="cx-levels"
+                      role="radiogroup"
+                      aria-label={`What ${jack.name} may do in ${a.name}`}
+                    >
+                      {LEVELS.filter((l) => a.levels.includes(l.id)).map((l) => (
                         <button
                           key={l.id}
                           type="button"
@@ -189,7 +195,7 @@ export function ConnectionsPage({
             </span>
             <div className="cx-info">
               <div className="cx-name">
-                <span>Jack’s browser</span>
+                <span>{jack.name}’s browser</span>
                 {list.browser === 'live' ? (
                   <Badge tone="success" icon="circle-check">
                     Built in
@@ -213,10 +219,10 @@ export function ConnectionsPage({
           </div>
         </section>
         <p className="cx-note">
-          <Icon name="lock" size={14} /> Sending email and paying always ask you first, whatever the level.
-          Jack never sees your passwords.
+          <Icon name="lock" size={14} /> Paying always asks you first. Email and Slack messages wait for your
+          OK unless you set the app to On its own. {jack.name} never sees your passwords.
         </p>
-      </main>
+      </div>
       <div className="cx-aside">{aside}</div>
     </div>
   );

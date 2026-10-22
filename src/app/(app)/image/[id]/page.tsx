@@ -4,13 +4,14 @@ import { notFound } from 'next/navigation';
 import { ImageStudio } from '@/components/images/ImageStudio';
 import { getImageCaps, getMe, getModelMenu, serverApi } from '@/lib/session';
 
-type Params = { params: Promise<{ id: string }>; searchParams: Promise<{ i?: string }> };
+type Params = { params: Promise<{ id: string }>; searchParams: Promise<{ i?: string; saved?: string }> };
 
 export const metadata: Metadata = { title: 'Image' };
 
 export default async function ImageBatchPage({ params, searchParams }: Params) {
   const { id } = await params;
-  const i = Number((await searchParams).i ?? 0);
+  const sp = await searchParams;
+  const i = Number(sp.i ?? 0);
   const cookie = (await cookies()).toString();
   const [res, menu, me, caps] = await Promise.all([
     serverApi().GET('/api/images/{id}', { params: { path: { id } }, headers: { cookie }, cache: 'no-store' }),
@@ -28,6 +29,7 @@ export default async function ImageBatchPage({ params, searchParams }: Params) {
       caps={caps}
       initial={res.data}
       initialIndex={Number.isInteger(i) && i >= 0 && i < res.data.count ? i : 0}
+      saved={sp.saved}
     />
   );
 }

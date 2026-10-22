@@ -84,7 +84,7 @@ describe('ModelPicker', () => {
     expect(onChange).not.toHaveBeenCalled();
     expect(screen.getByRole('dialog', { name: 'GPT is on Jack Personal' })).toBeTruthy();
     expect(screen.getByRole('link', { name: /Upgrade to Jack Personal/ }).getAttribute('href')).toBe(
-      '/settings/billing',
+      '/settings/billing/plans',
     );
     fireEvent.click(screen.getByRole('button', { name: 'Use Auto instead' }));
     expect(onChange).toHaveBeenCalledWith('auto');

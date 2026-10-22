@@ -1,15 +1,18 @@
 'use client';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { Badge, Button, Dialog, Icon, Tabs, cx, type IconName } from '@/ui';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Badge, Banner, Button, Dialog, Icon, Tabs, cx, type IconName } from '@/ui';
 import { api, type Schemas } from '@/lib/api/client';
 import { formatDay } from '@/lib/credits';
 import { useShellCrumbs } from '@/components/shell/crumbs';
 import { CreditsBanner } from './CreditsBanner';
+import { PACKS, startCheckout } from './checkout';
 import './billing.css';
 
 type Summary = Schemas['BillingSummaryDto'];
 type History = Schemas['HistoryDto'];
+type Payments = Schemas['PaymentsDto'];
 type Item = Schemas['HistoryItemDto'];
 
 const TOOL_ICONS: Record<string, IconName> = {
@@ -47,7 +50,18 @@ function when(iso: string) {
 }
 
 /** Billing and usage (design: BillingFlow overview). Payments arrive with Stripe in milestone 2. */
-export function BillingView({ summary, history }: { summary: Summary; history: History }) {
+export function BillingView({
+  summary,
+  history,
+  payments,
+  checkout,
+}: {
+  summary: Summary;
+  history: History;
+  payments: Payments;
+  /** Back from Stripe: the checkout id, or "cancelled". */
+  checkout?: string;
+}) {
   const pathname = usePathname();
   useShellCrumbs({
     path: pathname,
@@ -58,7 +72,59 @@ export function BillingView({ summary, history }: { summary: Summary; history: H
   const [cursor, setCursor] = useState(history.nextCursor);
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState('usage');
-  const [dialog, setDialog] = useState<'plans' | 'topup' | null>(null);
+  const [dialog, setDialog] = useState<'topup' | null>(null);
+  const [pack, setPack] = useState<(typeof PACKS)[number]['id']>('1200');
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
+  const [paid, setPaid] = useState<{ tone: 'success' | 'neutral' | 'warning'; text: string } | null>(
+    checkout === 'cancelled'
+      ? { tone: 'neutral', text: 'Payment cancelled. Nothing was charged.' }
+      : checkout
+        ? { tone: 'neutral', text: 'Checking your payment…' }
+        : null,
+  );
+  const router = useRouter();
+
+  // Back from Stripe: confirm the payment (the webhook may not have arrived yet) and say so.
+  useEffect(() => {
+    if (!checkout) return;
+    window.history.replaceState(null, '', pathname);
+    if (checkout === 'cancelled') return;
+    void api
+      .POST('/api/billing/checkout/{id}/confirm', { params: { path: { id: checkout } } })
+      .then(({ data }) => {
+        if (!data)
+          return setPaid({
+            tone: 'warning',
+            text: 'We couldn’t check that payment. Please refresh in a moment.',
+          });
+        if (data.status === 'paid') {
+          setPaid({
+            tone: 'success',
+            text:
+              data.kind === 'topup'
+                ? `Payment received. ${n(data.credits)} credits added.`
+                : `Payment received. You’re on Jack Personal${data.paidUntil ? ` until ${formatDay(data.paidUntil)}` : ''}.`,
+          });
+          router.refresh();
+        } else if (data.status === 'pending')
+          setPaid({
+            tone: 'neutral',
+            text: 'Your payment is processing. Credits appear as soon as it clears.',
+          });
+        else setPaid({ tone: 'warning', text: 'The payment didn’t go through. Nothing was charged.' });
+      });
+  }, [checkout, pathname, router]);
+
+  const buy = async () => {
+    setPaying(true);
+    setPayError(null);
+    const err = await startCheckout({ kind: 'topup', pack });
+    if (err) {
+      setPayError(err);
+      setPaying(false);
+    }
+  };
 
   const { plan, credits, storage } = summary;
   const reset = formatDay(plan.periodEnd);
@@ -92,15 +158,23 @@ export function BillingView({ summary, history }: { summary: Summary; history: H
 
   return (
     <div className="bl">
-      <CreditsBanner credits={credits} plan={plan.key} />
+      {paid ? (
+        <Banner tone={paid.tone} onDismiss={() => setPaid(null)}>
+          {paid.text}
+        </Banner>
+      ) : (
+        <CreditsBanner credits={credits} plan={plan.key} />
+      )}
 
       <div className="bl-head">
         <div>
           <h1 className="title-lg bl-title">Billing and usage</h1>
-          <p className="bl-sub">Your plan, credits, storage and invoices. Plan credits reset on {reset}.</p>
+          <p className="bl-sub">Your plan, credits, storage and payments. Plan credits reset on {reset}.</p>
         </div>
         <div className="bl-actions">
-          <Button onClick={() => setDialog('plans')}>Compare plans</Button>
+          <Link href="/settings/billing/plans" className="as-btn secondary">
+            Compare plans
+          </Link>
           <Button variant="primary" icon="zap" onClick={() => setDialog('topup')}>
             Top up credits
           </Button>
@@ -118,16 +192,19 @@ export function BillingView({ summary, history }: { summary: Summary; history: H
           <div>
             <div className="bl-plan-name">{plan.label}</div>
             <div className="bl-muted">
-              {/* The Pro price isn't set yet (OPEN_DECISIONS D12); show it here once it is. */}
-              {plan.key === 'free' && 'No charge · '}
+              {plan.key === 'free' ? 'No charge · ' : '$20 a month · '}
               {n(plan.monthlyCredits)} credits a month
             </div>
           </div>
-          <div className="bl-muted sm">Credits renew on {reset}</div>
+          <div className="bl-muted sm">
+            {plan.paidUntil
+              ? `Paid until ${formatDay(plan.paidUntil)} · doesn’t renew automatically`
+              : `Credits renew on ${reset}`}
+          </div>
           <div className="bl-card-btns">
-            <Button size="sm" onClick={() => setDialog('plans')}>
+            <Link href="/settings/billing/plans" className="as-btn secondary sm">
               {plan.key === 'free' ? 'Upgrade' : 'Change plan'}
-            </Button>
+            </Link>
           </div>
         </section>
 
@@ -228,10 +305,13 @@ export function BillingView({ summary, history }: { summary: Summary; history: H
               <Icon name="credit-card" size={18} />
             </span>
             <div>
-              <div className="bl-strong">No card yet</div>
+              <div className="bl-strong">
+                {payments.mode === 'off' ? 'Payments aren’t set up yet' : 'Pay as you go, by Stripe'}
+              </div>
               <div className="bl-muted sm">
-                Paying for Jack Personal and buying credits arrive in the next update. Payments will be
-                handled securely by Stripe.
+                {payments.mode === 'off'
+                  ? 'Paying for Jack Personal and buying credits will be handled securely by Stripe.'
+                  : 'Each payment is one-time: nothing renews automatically. Card details stay with Stripe; receipts go to your email.'}
               </div>
             </div>
           </div>
@@ -250,7 +330,7 @@ export function BillingView({ summary, history }: { summary: Summary; history: H
             onChange={setTab}
             items={[
               { value: 'usage', label: 'Usage' },
-              { value: 'invoices', label: 'Invoices' },
+              { value: 'invoices', label: 'Payments' },
             ]}
           />
           {tab === 'usage' && items.length > 0 && (
@@ -260,7 +340,41 @@ export function BillingView({ summary, history }: { summary: Summary; history: H
           )}
         </div>
         {tab === 'invoices' ? (
-          <p className="bl-muted sm bl-empty">Invoices appear here after your first payment.</p>
+          payments.items.length === 0 ? (
+            <p className="bl-muted sm bl-empty">Payments appear here after your first one.</p>
+          ) : (
+            <div className="bl-table-wrap">
+              <table className="bl-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" className="num">
+                      Amount
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {payments.items.map((p) => (
+                    <tr key={p.id}>
+                      <td className="muted">{when(p.at)}</td>
+                      <td>{p.item}</td>
+                      <td>
+                        <Badge tone="success">Paid</Badge>
+                      </td>
+                      <td className="num">
+                        {(p.amountCents / 100).toLocaleString('en-US', {
+                          style: 'currency',
+                          currency: p.currency.toUpperCase(),
+                        })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
         ) : items.length === 0 ? (
           <p className="bl-muted sm bl-empty">No credit activity yet.</p>
         ) : (
@@ -307,104 +421,53 @@ export function BillingView({ summary, history }: { summary: Summary; history: H
       </section>
 
       <Dialog
-        open={dialog === 'plans'}
-        title="Compare plans"
-        description="Pay Jack once and he picks the best quality for the price from every AI. Credits pay for AI work: a quick answer uses about 1, a long document about 6."
-        width={960}
-        onClose={() => setDialog(null)}
+        open={dialog === 'topup'}
+        title="Top up credits"
+        description="One-time payment. Top-up credits never expire and are used after your plan credits."
+        width={480}
+        onClose={() => {
+          setDialog(null);
+          setPayError(null);
+        }}
         footer={
           <>
-            <span className="bl-muted sm bl-grow">Upgrading arrives with payments in the next update.</span>
-            <Button variant="primary" onClick={() => setDialog(null)}>
-              Done
+            <Button variant="ghost" onClick={() => setDialog(null)} disabled={paying}>
+              Cancel
+            </Button>
+            <Button variant="primary" iconRight="arrow-right" loading={paying} onClick={() => void buy()}>
+              Continue to payment
             </Button>
           </>
         }
       >
-        <div className="bl-plans">
-          {[
-            {
-              key: 'free',
-              name: 'Jack Free',
-              price: '$0',
-              per: '',
-              credits: '100 credits a month',
-              rows: ['Auto and the fast models', '1 GB storage', 'Chat, Docs, Images, Research'],
-            },
-            {
-              key: 'pro',
-              name: 'Jack Personal',
-              price: '$20',
-              per: 'a month',
-              credits: '2,000 credits a month',
-              rows: [
-                'Every model, incl. GPT, Claude Opus, Gemini Pro',
-                '20 GB storage',
-                'Top-ups that roll over',
-              ],
-            },
-            {
-              key: 'plus',
-              name: 'Jack Plus',
-              price: '$50',
-              per: 'a month',
-              credits: 'Higher limits and more credit',
-              rows: ['Priority workflows and advanced tools', 'Early access to new models'],
-              soon: true,
-            },
-            {
-              key: 'team',
-              name: 'Captain Jack Team',
-              price: '$100',
-              per: 'per workspace a month',
-              credits: 'For teams and small businesses',
-              rows: ['Shared workspace for your team', 'Central billing and usage controls'],
-              soon: true,
-            },
-            {
-              key: 'enterprise',
-              name: 'Captain Jack Enterprise',
-              price: 'Custom',
-              per: 'by agreement',
-              credits: 'For organisations at scale',
-              rows: ['Governance, security and compliance', 'Dedicated support and SLA'],
-              soon: true,
-            },
-          ].map((p) => (
-            <div key={p.key} className={cx('bl-plan', plan.key === p.key && 'current')}>
-              <div className="bl-plan-tag">
-                {plan.key === p.key && <Badge icon={false}>Current plan</Badge>}
-                {'soon' in p && <Badge icon={false}>Coming soon</Badge>}
-              </div>
-              <b>{p.name}</b>
-              <div className="bl-plan-price">
-                {p.price} {p.per && <span>{p.per}</span>}
-              </div>
-              <div className="bl-muted">{p.credits}</div>
-              <ul>
-                {p.rows.map((r) => (
-                  <li key={r}>
-                    <Icon name="check" size={16} />
-                    {r}
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div className="bl-packs" role="radiogroup" aria-label="Credit pack">
+          {PACKS.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              role="radio"
+              aria-checked={pack === p.id}
+              className={cx('bl-pack', pack === p.id && 'on')}
+              onClick={() => setPack(p.id)}
+            >
+              <span className="bl-pack-dot" aria-hidden />
+              <span className="bl-pack-credits">
+                <b>{n(p.credits)} credits</b>
+                {'note' in p && <small>{p.note}</small>}
+              </span>
+              <span className="bl-pack-price">{p.price}</span>
+            </button>
           ))}
         </div>
+        {payError && (
+          <Banner tone="warning" className="bl-pay-err">
+            {payError}
+          </Banner>
+        )}
+        <p className="bl-muted sm bl-secure">
+          <Icon name="lock" size={14} /> Secure payment by Stripe. You’ll come back here when it’s done.
+        </p>
       </Dialog>
-      <Dialog
-        open={dialog === 'topup'}
-        title="Top up credits"
-        description="Buying extra credits arrives with payments in the next update. Top-up credits never expire and are used after your plan credits."
-        width={480}
-        onClose={() => setDialog(null)}
-        footer={
-          <Button variant="primary" onClick={() => setDialog(null)}>
-            OK
-          </Button>
-        }
-      />
     </div>
   );
 }

@@ -94,6 +94,7 @@
 .mem-text {
   flex: 1;
   min-width: 0;
+  overflow-wrap: anywhere;
   font: 400 14px/20px var(--font-sans);
 }
 .mem-meta {

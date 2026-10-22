@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { Banner, Button, Field } from '@/ui';
 import { authClient } from '@/lib/auth/client';
-import { authErrorMessage } from '@/lib/auth/messages';
+import { authErrorMessage, isUnverified } from '@/lib/auth/messages';
 import { safeNext } from '@/lib/auth/redirect';
 import { passwordOk } from '@/lib/auth/password';
 import { GoogleButton } from '../GoogleButton';
@@ -26,18 +26,38 @@ export function SignUpForm() {
     e.preventDefault();
     setError('');
     setTaken(false);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
+      return setError('Enter a valid email address, like you@company.com.');
     if (!passwordOk(password))
       return setError('Your password needs at least 8 characters, a letter, and a number or symbol.');
     setBusy(true);
-    const { error: err } = await authClient.signUp.email({
+    const { data, error: err } = await authClient.signUp.email({
       name: name.trim(),
       email: email.trim(),
       password,
     });
+    if (err && isUnverified(err)) {
+      // This email signed up before but never entered its code: send a fresh one and go there.
+      const sent = await authClient.emailOtp.sendVerificationOtp({
+        email: email.trim(),
+        type: 'email-verification',
+      });
+      // Only promise a new code if one went out (it can be rate-limited); the code screen can resend.
+      router.push(
+        `/verify?email=${encodeURIComponent(email.trim())}&next=${encodeURIComponent(next)}${sent.error ? '' : '&resent=1'}`,
+      );
+      return;
+    }
     setBusy(false);
     if (err) {
       setTaken(err.code === 'USER_ALREADY_EXISTS' || err.code === 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL');
       return setError(authErrorMessage(err));
+    }
+    if (data?.token) {
+      // Email codes are off (no email service yet): the account is signed in already.
+      router.replace(next);
+      router.refresh();
+      return;
     }
     router.push(`/verify?email=${encodeURIComponent(email.trim())}&next=${encodeURIComponent(next)}`);
   }

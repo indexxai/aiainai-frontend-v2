@@ -57,3 +57,180 @@
     height: 36px;
   }
 }
+
+/* Voice typing */
+.cp-voice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 4px 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-hover);
+  color: var(--ink);
+  font: 500 13px/20px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.cp-rec {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  animation: cp-pulse 1.2s ease-in-out infinite;
+}
+@keyframes cp-pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+.cp-voice-max {
+  color: var(--ink-muted);
+}
+.cp-voice-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.cp-voice-btn:hover {
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+.cp-voice-btn.done {
+  background: var(--ink);
+  color: var(--bg);
+}
+.cp-voice-btn:focus-visible {
+  outline: 2px solid var(--focus, var(--ink));
+  outline-offset: 2px;
+}
+.cp-spin {
+  animation: cp-spin 0.9s linear infinite;
+}
+@keyframes cp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.cp-listening {
+  border-color: var(--line-strong);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cp-rec,
+  .cp-spin {
+    animation: none;
+  }
+}
+@media (max-width: 767px) {
+  .cp-desktop-inline,
+  .cp-voice-max {
+    display: none;
+  }
+}
+
+/* Attached files */
+.cp-files {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--space-2);
+}
+.cp-files .as-file {
+  padding-right: 4px;
+}
+.cp-file-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.cp-file-x:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+.cp-file-bad {
+  border-style: dashed;
+  color: var(--ink-muted);
+}
+.cp-drop {
+  border-color: var(--ink);
+  border-style: dashed;
+}
+@media (max-width: 767px) {
+  .cp-files .as-file {
+    max-width: 100%;
+  }
+}
+
+/* Connectors chip and its menu */
+.cp-apps-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cp-apps-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.cp-apps-list li:last-child {
+  border-bottom: 0;
+}
+.cp-apps-ic {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+.cp-apps-tx {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font: 400 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.cp-apps-tx b {
+  color: var(--ink);
+  font: 500 14px/20px var(--font-sans);
+}
+.cp-apps-none,
+.cp-apps-foot {
+  margin: 8px 0 0;
+  color: var(--ink-muted);
+  font: 400 14px/20px var(--font-sans);
+}
+.cp-apps-none a,
+.cp-apps-foot a {
+  color: var(--ink);
+}
+@media (max-width: 767px) {
+  /* Phone: the chip shows just its icon. */
+  .cp-apps-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+}

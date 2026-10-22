@@ -1,4 +1,5 @@
 'use client';
+import { useJack } from '@/lib/assistant';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Banner } from '@/ui';
@@ -10,6 +11,7 @@ import { takeDraft } from '@/lib/draft';
 import { AUTO, nameOf, type ModelMenu } from '@/lib/models';
 import { PlanPanel } from './JackPlan';
 import { AnswerMessage, UserMessage } from './MessageView';
+import { api } from '@/lib/api/client';
 import './chat.css';
 
 const NEAR_BOTTOM_PX = 160;
@@ -24,6 +26,7 @@ export function ChatThread({
   menu: ModelMenu;
   resetsOn?: string;
 }) {
+  const jack = useJack();
   const router = useRouter();
   const pathname = usePathname();
   const thread = useChatThread(detail, () => router.refresh());
@@ -31,12 +34,22 @@ export function ChatThread({
   const usable = (key: string) => key === AUTO || menu.models.some((m) => m.key === key && !m.locked);
   const [model, setModel] = useState(usable(detail.chat.model) ? detail.chat.model : menu.selected);
   const scroller = useRef<HTMLDivElement>(null);
+  // Apps Jack may use in this chat (Connectors chip); saved on the chat.
+  const [appsOff, setAppsOff] = useState<string[]>(detail.chat.appsOff ?? []);
   const stick = useRef(true);
 
+  // In a project: Projects / the project / this chat, and back goes to the project.
+  const project = detail.project;
   useShellCrumbs({
     path: pathname,
-    items: [{ label: 'Jack', href: '/' }, { label: state.chat.title }],
-    back: '/',
+    items: project
+      ? [
+          { label: 'Projects', href: '/projects' },
+          { label: project.name, href: `/projects/${project.id}` },
+          { label: state.chat.title },
+        ]
+      : [{ label: `${jack.name}`, href: '/' }, { label: state.chat.title }],
+    back: project ? `/projects/${project.id}` : '/',
   });
 
   // A first message handed over from Home or the new-chat screen.
@@ -45,7 +58,7 @@ export function ChatThread({
     if (started.current) return;
     started.current = true;
     const draft = takeDraft(detail.chat.id);
-    if (draft) void thread.send(draft.text, draft.model);
+    if (draft) void thread.send(draft.text, draft.model, draft.files ?? []);
     // run once for this chat
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -73,7 +86,7 @@ export function ChatThread({
         >
           <div className="ct-col ct-messages" role="log" aria-live="polite" aria-relevant="additions">
             {state.messages.length === 0 && !running && (
-              <p className="ct-empty">Tell Jack what you need to start this conversation.</p>
+              <p className="ct-empty">Tell {jack.name} what you need to start this conversation.</p>
             )}
             {state.messages.map((m) =>
               m.role === 'user' ? (
@@ -117,18 +130,32 @@ export function ChatThread({
               menu={menu}
               model={model}
               onModelChange={setModel}
-              connectors={false}
               rows={1}
               placeholder={
-                outOfCredits ? 'You’re out of credits' : running ? 'Jack is answering…' : 'Reply to Jack…'
+                outOfCredits
+                  ? 'You’re out of credits'
+                  : running
+                    ? `${jack.name} is answering…`
+                    : `Reply to ${jack.name}…`
               }
               label="Message"
               running={running}
               onStop={thread.stop}
-              onSend={(text) => {
+              attachments
+              apps={{
+                off: appsOff,
+                onChange: (off) => {
+                  setAppsOff(off);
+                  void api.PATCH('/api/chats/{id}', {
+                    params: { path: { id: detail.chat.id } },
+                    body: { appsOff: off },
+                  });
+                },
+              }}
+              onSend={(text, files) => {
                 if (running) return false;
                 stick.current = true;
-                void thread.send(text, model);
+                void thread.send(text, model, files);
               }}
             />
             <p className="ct-note">

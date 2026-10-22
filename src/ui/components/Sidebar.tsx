@@ -69,7 +69,7 @@ function NavItem({ entry, rail, Link }: { entry: NavEntry; rail?: boolean; Link:
 export function Sidebar({
   rail,
   logoSrc,
-  productName = "Jack's Bridge",
+  productName = "Captain Jack's Bridge",
   items,
   footerItems = [],
   credits,

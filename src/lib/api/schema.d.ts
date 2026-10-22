@@ -38,6 +38,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/me/waitlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask to hear when something launches (e.g. Captain Jack) */
+        post: operations["MeController_joinWaitlist"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/me/assistant": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Rename the Personal assistant (an empty name goes back to Jack) */
+        patch: operations["MeController_renameAssistant"];
+        trace?: never;
+    };
     "/api/me/preferences": {
         parameters: {
             query?: never;
@@ -730,306 +764,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/team": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** The AI Crews (null before set-up; status "setup" while talking to Captain Jack) */
-        get: operations["TeamController_get"];
-        put?: never;
-        /**
-         * Set-up step 3: create the team with the agents kept
-         * @description Then call POST /api/team/agents/:id/prepare for each agent to write its instructions.
-         */
-        post: operations["TeamController_create"];
-        /** Delete the team and its agents (their documents and images stay) */
-        delete: operations["TeamController_deleteTeam"];
-        options?: never;
-        head?: never;
-        /** Team settings: approval mode, "always ask me before", model, daily credit limit */
-        patch: operations["TeamController_settings"];
-        trace?: never;
-    };
-    "/api/team/setup/analyze": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Set-up step 1: Jack reads the business and prepares his questions (free) */
-        post: operations["TeamController_analyze"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/setup/proposal": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Set-up step 2: the agents Jack proposes from the answers (1 credit) */
-        post: operations["TeamController_propose"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/setup": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Start the set-up over */
-        delete: operations["TeamController_discard"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/agents/{id}/prepare": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Captain Jack writes an agent’s instructions and first tasks (free) */
-        post: operations["TeamController_prepare"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/room": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** The team room: messages, the tasks they mention and agent statuses (poll while busy) */
-        get: operations["TeamController_getRoom"];
-        put?: never;
-        /**
-         * Write to Captain Jack: he answers and hands out tasks (one message’s credits)
-         * @description Agents then work in the background; each task is charged for its own work.
-         */
-        post: operations["TeamController_send"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/pause": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Pause the team: no agent starts new work until resumed */
-        post: operations["TeamController_pause"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/resume": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Resume the team */
-        post: operations["TeamController_resume"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/approvals": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Actions waiting for your OK, and recent decisions */
-        get: operations["TeamController_approvals"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/approvals/{id}/approve": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Approve (optionally with an edited draft, or always allow this kind of action) */
-        post: operations["TeamController_approve"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/approvals/{id}/reject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Reject: the agent makes a new version, or the task is dropped. Nothing was sent. */
-        post: operations["TeamController_reject"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/tasks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** The task board: the latest 100 tasks */
-        get: operations["TeamController_tasks"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/agents/draft": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Add an agent, step 1: Jack drafts it from a description (free) */
-        post: operations["TeamController_draftAgent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/agents": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Add an agent, step 2: it joins the team (then prepare it) */
-        post: operations["TeamController_addAgent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/agents/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Edit, pause or resume an agent */
-        patch: operations["TeamController_updateAgent"];
-        trace?: never;
-    };
-    "/api/team/agents/{id}/remove": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Remove an agent; its open tasks are reassigned or cancelled */
-        post: operations["TeamController_removeAgent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/team/agents/{id}/chat": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** The direct chat with one agent */
-        get: operations["TeamController_agentChat"];
-        put?: never;
-        /** Message one agent directly: it does what you ask (one message’s credits) */
-        post: operations["TeamController_sendToAgent"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/connections": {
         parameters: {
             query?: never;
@@ -1110,6 +844,23 @@ export interface paths {
         get: operations["BrowserController_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/browser/{id}/appearance/{scheme}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Show sites in the browser dark or light, to match the app theme */
+        post: operations["BrowserController_appearance"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1255,6 +1006,62 @@ export interface paths {
         patch: operations["MemoryController_update"];
         trace?: never;
     };
+    "/api/files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Files in this space, newest first */
+        get: operations["FilesController_list"];
+        put?: never;
+        /**
+         * Upload a file for Jack to read (raw body, up to 20 MB)
+         * @description Send the file bytes as the body with the file’s content type, and its name in ?name=. PDF, Word (.docx), Excel (.xlsx), CSV, text, Markdown, JSON and images. Attach it to a message with its id.
+         */
+        post: operations["FilesController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/files/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One file’s details */
+        get: operations["FilesController_get"];
+        put?: never;
+        post?: never;
+        /** Delete a file for good */
+        delete: operations["FilesController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/files/{id}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The file itself (open, or ?download=1 to save it) */
+        get: operations["FilesController_content"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/billing/summary": {
         parameters: {
             query?: never;
@@ -1289,6 +1096,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/billing/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Payments made (top-ups and paid months), newest first */
+        get: operations["BillingController_paymentsList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start a one-time payment (credit top-up or a month of a plan); returns the Stripe page */
+        post: operations["BillingController_checkout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/checkout/{id}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** After paying: check the payment with Stripe and apply it if needed */
+        post: operations["BillingController_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/spaces": {
         parameters: {
             query?: never;
@@ -1304,40 +1162,6 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never;
-    };
-    "/api/spaces/business": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /** Set up the Business space, or update what Jack knows about the business */
-        put: operations["SpacesController_saveBusiness"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/spaces/business/models": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Switch model makers off (or back on) for the Business space */
-        patch: operations["SpacesController_models"];
         trace?: never;
     };
     "/api/home": {
@@ -1364,7 +1188,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** What you, Jack and your team did (last 30 days), and what’s coming up */
+        /** What you and Jack did (last 30 days), and what’s coming up */
         get: operations["ActivityController_list"];
         put?: never;
         post?: never;
@@ -1381,13 +1205,101 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Everything waiting for your OK, from both spaces
-         * @description Approve or reject with POST /api/team/approvals/{id}/approve|reject, sending the approval’s space in the x-aiainai-space header.
-         */
+        /** What Jack is waiting for your OK on, and what you decided */
         get: operations["ActivityController_approvals"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/voice/transcribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Voice typing: turn a short recording into text for the prompt box
+         * @description Send the raw audio as the body with its audio/* content type (webm, ogg, mp4, mpeg, wav), up to 180 seconds and 10 MB. 1 credit per started minute; nothing is stored.
+         */
+        post: operations["VoiceController_transcribe"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Projects in this space, most recently used first */
+        get: operations["ProjectsController_list"];
+        put?: never;
+        /** Start a project */
+        post: operations["ProjectsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/projects/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A project with its chats, documents and files */
+        get: operations["ProjectsController_detail"];
+        put?: never;
+        post?: never;
+        /** Delete a project (its chats, documents and files are kept) */
+        delete: operations["ProjectsController_remove"];
+        options?: never;
+        head?: never;
+        /** Rename a project or change its instructions */
+        patch: operations["ProjectsController_update"];
+        trace?: never;
+    };
+    "/api/projects/{id}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add a chat, document or file to the project (moving it from another one) */
+        post: operations["ProjectsController_addItem"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/projects/{id}/items/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Take a chat, document or file out of the project (it is kept) */
+        post: operations["ProjectsController_removeItem"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1472,6 +1384,20 @@ export interface components {
             /** @description The same, in their own words (empty if none) */
             note: string;
         };
+        MeAssistantDto: {
+            /**
+             * @description What the Personal assistant is called in sentences
+             * @example Jack
+             */
+            name: string;
+            /**
+             * @description His title where he is named on his own
+             * @example Jack of all trades
+             */
+            title: string;
+            /** @description True when the person picked the name */
+            custom: boolean;
+        };
         MeDto: {
             user: components["schemas"]["MeUserDto"];
             workspace: components["schemas"]["MeWorkspaceDto"];
@@ -1479,10 +1405,16 @@ export interface components {
             preferences: components["schemas"]["MePreferencesDto"];
             space: components["schemas"]["MeSpaceDto"];
             onboarding: components["schemas"]["MeOnboardingDto"];
+            /** @description The Personal assistant and his name */
+            assistant: components["schemas"]["MeAssistantDto"];
+            /** @description Launches the person asked to hear about */
+            waitlist: string[];
+            /** @description False until the Business space (Captain Jack) launches */
+            businessOpen: boolean;
         };
         ApiErrorBody: {
             /** @enum {string} */
-            code: "bad_request" | "validation_failed" | "unauthorized" | "forbidden" | "not_found" | "conflict" | "payload_too_large" | "rate_limited" | "insufficient_credits" | "upgrade_required" | "model_unavailable" | "provider_off" | "service_unavailable" | "internal_error";
+            code: "bad_request" | "validation_failed" | "unauthorized" | "forbidden" | "not_found" | "conflict" | "payload_too_large" | "rate_limited" | "insufficient_credits" | "upgrade_required" | "model_unavailable" | "service_unavailable" | "internal_error";
             /** @description Plain-language message that can be shown to the user */
             message: string;
             /** @description Quote this when reporting a problem */
@@ -1494,6 +1426,14 @@ export interface components {
         };
         ApiErrorResponse: {
             error: components["schemas"]["ApiErrorBody"];
+        };
+        JoinWaitlistDto: {
+            /** @enum {string} */
+            list: "captain-jack";
+        };
+        UpdateAssistantDto: {
+            /** @description The new name; empty (or "Jack") goes back to Jack */
+            name: string;
         };
         UpdatePreferencesDto: {
             /**
@@ -1551,6 +1491,12 @@ export interface components {
             code: string;
             message: string;
         };
+        AttachmentDto: {
+            id: string;
+            name: string;
+            /** @enum {string} */
+            kind: "pdf" | "word" | "sheet" | "text" | "image";
+        };
         DetailDto: {
             /** @example Pay */
             label: string;
@@ -1566,7 +1512,7 @@ export interface components {
         JackActionDto: {
             id: string;
             /** @enum {string} */
-            kind: "purchase" | "send_email" | "calendar_event";
+            kind: "purchase" | "send_email" | "calendar_event" | "slack_message";
             /** @example Pay for 2 flight seats */
             title: string;
             /** @enum {string} */
@@ -1594,7 +1540,7 @@ export interface components {
         };
         PlanStepDto: {
             /** @enum {string} */
-            tool: "doc" | "image" | "team" | "calendar" | "email" | "browse" | "send_email" | "add_event";
+            tool: "doc" | "image" | "calendar" | "email" | "browse" | "send_email" | "add_event" | "drive" | "slack" | "send_slack";
             /** @example Trip checklist — Dubai */
             title: string;
             /**
@@ -1608,6 +1554,8 @@ export interface components {
             href: string | null;
             /** @description Waiting for your OK (approve here) */
             action?: components["schemas"]["JackActionDto"] | null;
+            /** @description What a finished step found (Jack’s browser), in Markdown */
+            result?: string;
         };
         LearnedDto: {
             /** @description Memory id (forget with DELETE /api/memory/{id}) */
@@ -1633,6 +1581,8 @@ export interface components {
             feedback: "up" | "down" | null;
             error: components["schemas"]["MessageErrorDto"] | null;
             createdAt: string;
+            /** @description Files attached to a person’s message */
+            attachments: components["schemas"]["AttachmentDto"][];
             /** @description What Jack started with his tools for this answer */
             plan: components["schemas"]["PlanStepDto"][];
             /** @description What Jack remembered from the message before this answer */
@@ -1648,6 +1598,10 @@ export interface components {
             lastMessageAt: string;
             /** @description Model for the next message: a model key or "auto" */
             model: string;
+            /** @description The project it is in */
+            projectId: string | null;
+            /** @description Connected apps (and "browser") Jack won’t use in this chat */
+            appsOff: string[];
         };
         StreamReadyEvent: {
             /** @description The person’s new message (not sent for regenerate/continue) */
@@ -1682,15 +1636,27 @@ export interface components {
         CreateChatDto: {
             /** @example auto */
             model?: string;
+            /** @description Start the chat in this project */
+            projectId?: string;
+            /** @description Apps Jack won’t use in this chat */
+            appsOff?: string[];
+        };
+        ChatProjectDto: {
+            id: string;
+            name: string;
         };
         ChatDetailDto: {
             chat: components["schemas"]["ChatSummaryDto"];
+            /** @description The project it is in */
+            project: components["schemas"]["ChatProjectDto"] | null;
             /** @description Oldest first */
             messages: components["schemas"]["MessageDto"][];
         };
         UpdateChatDto: {
             title?: string;
             pinned?: boolean;
+            /** @description Apps Jack won’t use in this chat */
+            appsOff?: string[];
         };
         StopResultDto: {
             /** @description True when an answer or document was being written and is now stopping */
@@ -1701,13 +1667,20 @@ export interface components {
             value: "up" | "down" | null;
         };
         SendMessageDto: {
+            /** @description Can be empty when files are attached */
             text: string;
+            /** @description Uploaded file ids to attach (up to 5) */
+            fileIds?: string[];
             /** @description A model key or "auto"; defaults to the chat’s model */
             model?: string;
         };
         RunOptionsDto: {
             /** @description A model key or "auto"; defaults to the original request */
             model?: string;
+        };
+        DocProjectDto: {
+            id: string;
+            name: string;
         };
         SectionDto: {
             heading: string;
@@ -1733,6 +1706,8 @@ export interface components {
             linkAccess?: "off" | "view";
             /** @description Someone else’s document shared with me: who shared it (null for mine) */
             sharedBy?: string | null;
+            /** @description The project it is in */
+            project: components["schemas"]["DocProjectDto"] | null;
             brief: string;
             sections: components["schemas"]["SectionDto"][];
             /** @enum {string} */
@@ -1771,6 +1746,8 @@ export interface components {
             type: "proposal" | "report" | "plan" | "meeting-notes" | "letter" | "article" | "other";
             /** @description A model key or "auto" */
             model?: string;
+            /** @description Put the document in this project */
+            projectId?: string;
         };
         OutlineDto: {
             title: string;
@@ -1820,6 +1797,8 @@ export interface components {
             tone?: "professional" | "friendly" | "persuasive";
             /** @description A model key or "auto" */
             model?: string;
+            /** @description Put the document in this project */
+            projectId?: string;
         };
         UpdateDocDto: {
             title?: string;
@@ -2085,278 +2064,6 @@ export interface components {
             /** @description An image model key or "auto" */
             model?: string;
         };
-        ToolTagDto: {
-            label: string;
-            icon: string;
-            /** @description An outside tool that isn’t connected yet */
-            needsSetup: boolean;
-        };
-        AgentDto: {
-            id: string;
-            key: string;
-            name: string;
-            icon: string;
-            /** @description What it does */
-            role: string;
-            tools: components["schemas"]["ToolTagDto"][];
-            /** @description Outside tool it needs before it can act */
-            needs: string | null;
-            /** @enum {string} */
-            status: "working" | "idle" | "waiting" | "blocked" | "error" | "paused" | "done" | "setup";
-            /** @description Captain Jack has written its instructions */
-            ready: boolean;
-            instructions: string;
-            firstTasks: string[];
-            /** @enum {string} */
-            addedBy: "jack" | "user";
-            duties: string[];
-            /** @description A model key, or "auto" for the team default */
-            model: string;
-            /**
-             * @description Before acting
-             * @enum {string}
-             */
-            rule: "team" | "ask" | "auto";
-            paused: boolean;
-        };
-        SafetyDto: {
-            send_email: boolean;
-            publish_post: boolean;
-            change_crm: boolean;
-            share_externally: boolean;
-        };
-        TeamDto: {
-            id: string;
-            name: string;
-            /** @enum {string} */
-            status: "setup" | "active" | "paused";
-            business: string;
-            businessType: string | null;
-            goals: string[];
-            tools: string[];
-            /** @enum {string} */
-            mode: "important" | "all" | "auto";
-            agents: components["schemas"]["AgentDto"][];
-            /** @description Most agents this plan allows (besides Captain Jack) */
-            limit: number;
-            /** @description "Always ask me before" (mode important) */
-            safety: components["schemas"]["SafetyDto"];
-            defaultModel: string;
-            dailyLimit: number | null;
-        };
-        TeamStateDto: {
-            /** @description Null before the first set-up */
-            team: components["schemas"]["TeamDto"] | null;
-        };
-        AnalyzeRequestDto: {
-            /** @description What the owner told Captain Jack */
-            business: string;
-        };
-        AnalysisDto: {
-            /** @description False: too little to go on; ask for more */
-            clear: boolean;
-            /** @description The kind of business, e.g. "Roofing" */
-            label: string;
-            /** @description Things the team could take on (question 1) */
-            goals: string[];
-            /** @description Tools they probably use (question 2) */
-            tools: string[];
-        };
-        ProposeRequestDto: {
-            goals: string[];
-            tools: string[];
-            /** @enum {string} */
-            mode: "important" | "all" | "auto";
-        };
-        ProposedAgentDto: {
-            key: string;
-            name: string;
-            icon: string;
-            does: string;
-            tools: components["schemas"]["ToolTagDto"][];
-        };
-        ProposalDto: {
-            agents: components["schemas"]["ProposedAgentDto"][];
-            extra: components["schemas"]["ProposedAgentDto"] | null;
-            /** @description Most agents this plan allows (besides Captain Jack) */
-            limit: number;
-            credits: number;
-        };
-        NewAgentDto: {
-            name: string;
-            icon: string;
-            does: string;
-            tools: string[];
-        };
-        CreateTeamDto: {
-            /** @description The agents kept from the proposal (may be empty) */
-            agents: components["schemas"]["NewAgentDto"][];
-            /** @enum {string} */
-            mode?: "important" | "all" | "auto";
-        };
-        RoomResultDto: {
-            /** @enum {string} */
-            type: "document" | "image";
-            id: string | null;
-            title: string | null;
-            /** @description Where to open it in the app */
-            url: string;
-            /** @description Image preview */
-            thumbUrl: string | null;
-        };
-        ApprovalDto: {
-            id: string;
-            agentId: string;
-            agentName: string;
-            agentIcon: string;
-            taskId: string;
-            /** @enum {string} */
-            action: "send_email" | "publish_post" | "change_crm" | "share_externally";
-            /** @description e.g. "Sending emails" */
-            kindLabel: string;
-            title: string;
-            /** @description Who or what it affects, e.g. "Goes to 3 customers" */
-            impact: string;
-            /** @description Exactly what will happen */
-            preview: string[];
-            /** @description The full text, editable before approving */
-            draft: string;
-            /** @description Outside tool that carries it out */
-            tool: string | null;
-            /** @enum {string} */
-            status: "pending" | "approved" | "rejected";
-            /** @enum {string|null} */
-            outcome: "approved" | "edited" | "revise" | "dropped" | "auto" | null;
-            /** @description Why it was rejected */
-            note: string | null;
-            createdAt: string;
-            decidedAt: string | null;
-        };
-        RoomMessageDto: {
-            id: string;
-            /** @enum {string} */
-            from: "user" | "jack" | "agent";
-            agentId: string | null;
-            agentName: string | null;
-            agentIcon: string | null;
-            /** @description Hand-off to another agent */
-            toName: string | null;
-            /** @enum {string} */
-            kind: "text" | "plan" | "result" | "error" | "approval";
-            /** @description Markdown */
-            text: string;
-            taskIds: string[];
-            result: components["schemas"]["RoomResultDto"] | null;
-            approval: components["schemas"]["ApprovalDto"] | null;
-            credits: number;
-            createdAt: string;
-        };
-        TaskDto: {
-            id: string;
-            agentId: string;
-            title: string;
-            brief: string;
-            /** @enum {string} */
-            status: "queued" | "running" | "waiting_approval" | "done" | "failed" | "cancelled";
-            progress: number;
-            error: string | null;
-            credits: number;
-            createdAt: string;
-        };
-        RoomDto: {
-            /** @description Oldest first (the latest 100) */
-            messages: components["schemas"]["RoomMessageDto"][];
-            tasks: components["schemas"]["TaskDto"][];
-            agents: components["schemas"]["AgentDto"][];
-            /** @description Tasks are queued or running (keep checking) */
-            busy: boolean;
-            pendingApprovals: number;
-            paused: boolean;
-            /** @description Credits the team used today */
-            spentToday: number;
-            /** @description Daily credit limit (null: none) */
-            dailyLimit: number | null;
-        };
-        RoomSendDto: {
-            text: string;
-            /** @description A model key or "auto" for Captain Jack */
-            model?: string;
-        };
-        ApprovalListDto: {
-            pending: components["schemas"]["ApprovalDto"][];
-            /** @description The latest 30 decided */
-            decided: components["schemas"]["ApprovalDto"][];
-            /** @enum {string} */
-            mode: "important" | "all" | "auto";
-        };
-        ApproveDto: {
-            /** @description Edited draft (Edit first) */
-            draft?: string;
-            /** @description Always allow this kind of action from this agent */
-            always?: boolean;
-        };
-        RejectDto: {
-            reason: string;
-            /** @enum {string} */
-            next: "revise" | "drop";
-        };
-        TeamSettingsDto: {
-            name?: string;
-            /** @enum {string} */
-            mode?: "important" | "all" | "auto";
-            safety?: components["schemas"]["SafetyDto"];
-            defaultModel?: string;
-            /** @description 200, 500, 1000 or null */
-            dailyLimit?: number | null;
-        };
-        TaskListDto: {
-            tasks: components["schemas"]["TaskDto"][];
-        };
-        DraftAgentRequestDto: {
-            /** @description What the agent should do */
-            description: string;
-        };
-        DuplicateDto: {
-            id: string;
-            name: string;
-        };
-        DraftAgentDto: {
-            name: string;
-            icon: string;
-            does: string;
-            duties: string[];
-            tools: components["schemas"]["ToolTagDto"][];
-            /** @description An agent that already does this */
-            duplicateOf: components["schemas"]["DuplicateDto"] | null;
-        };
-        AddAgentDto: {
-            name: string;
-            icon: string;
-            does: string;
-            duties: string[];
-            tools: string[];
-            model?: string;
-            /** @enum {string} */
-            rule?: "team" | "ask" | "auto";
-        };
-        UpdateAgentDto: {
-            name?: string;
-            role?: string;
-            instructions?: string;
-            model?: string;
-            /** @enum {string} */
-            rule?: "team" | "ask" | "auto";
-            paused?: boolean;
-        };
-        RemoveAgentDto: {
-            /**
-             * @description What happens to its open tasks
-             * @enum {string}
-             */
-            openTasks: "jack" | "agent" | "cancel";
-            /** @description With openTasks "agent": who gets them */
-            to?: string;
-        };
         ConnectionDto: {
             /** @example gmail */
             id: string;
@@ -2371,6 +2078,8 @@ export interface components {
             status: "connected" | "pending" | "failed" | "not_connected" | "coming";
             /** @enum {string} */
             level: "read" | "draft" | "ask" | "auto";
+            /** @description The levels this app can be set to */
+            levels: ("read" | "draft" | "ask" | "auto")[];
             /** @description The connected account, e.g. an email address */
             account: string | null;
             connectedAt: string | null;
@@ -2519,6 +2228,34 @@ export interface components {
             /** @enum {string} */
             group?: "about" | "people" | "habits" | "preferences";
         };
+        FileDto: {
+            id: string;
+            /** @example Q3 report.pdf */
+            name: string;
+            /** @enum {string} */
+            kind: "pdf" | "word" | "sheet" | "text" | "image";
+            contentType: string;
+            /** @description Size in bytes */
+            bytes: number;
+            pages?: number;
+            /** @description Characters of text Jack can read */
+            chars: number;
+            /** @description The text was cut to fit */
+            truncated: boolean;
+            /** @description Why Jack can’t read it, if so */
+            note: string | null;
+            /** @description The chat it was attached in */
+            chatId: string | null;
+            /** @description The project it belongs to */
+            projectId: string | null;
+            /** @description Credits used to read it (images) */
+            credits: number;
+            createdAt: string;
+        };
+        FileListDto: {
+            items: components["schemas"]["FileDto"][];
+            nextCursor: string | null;
+        };
         PlanInfoDto: {
             /** @enum {string} */
             key: "free" | "pro";
@@ -2528,6 +2265,8 @@ export interface components {
             periodStart: string;
             /** @description When plan credits reset */
             periodEnd: string;
+            /** @description Paid plans: paid up to this moment (one-time payments, no automatic renewal) */
+            paidUntil: string | null;
         };
         CreditsInfoDto: {
             spendable: number;
@@ -2570,6 +2309,49 @@ export interface components {
             items: components["schemas"]["HistoryItemDto"][];
             nextCursor: string | null;
         };
+        PaymentItemDto: {
+            id: string;
+            at: string;
+            /** @example 1,200 credits */
+            item: string;
+            /** @description US cents */
+            amountCents: number;
+            currency: string;
+        };
+        PaymentsDto: {
+            items: components["schemas"]["PaymentItemDto"][];
+            /**
+             * @description Stripe, the local stand-in, or off
+             * @enum {string}
+             */
+            mode: "live" | "sample" | "off";
+        };
+        CheckoutRequestDto: {
+            /** @enum {string} */
+            kind: "topup" | "plan";
+            /**
+             * @description Top-ups: the credit pack
+             * @enum {string}
+             */
+            pack?: "500" | "1200" | "3000";
+            /**
+             * @description Plans: the plan to pay a month of
+             * @enum {string}
+             */
+            plan?: "pro";
+        };
+        CheckoutStartDto: {
+            /** @description Stripe Checkout page to send the person to */
+            url: string;
+        };
+        CheckoutResultDto: {
+            /** @enum {string} */
+            status: "paid" | "pending" | "unpaid";
+            /** @enum {string} */
+            kind: "topup" | "plan";
+            credits: number;
+            paidUntil: string | null;
+        };
         SpacePersonalDto: {
             id: string;
             name: string;
@@ -2583,8 +2365,6 @@ export interface components {
             about?: string;
             /** @description What Jack should help with first */
             helpWith: string[];
-            /** @description Model makers never sent this space’s data */
-            excludedProviders: ("openai" | "anthropic" | "google" | "deepseek" | "moonshot" | "qwen")[];
         };
         ProviderDto: {
             /** @enum {string} */
@@ -2600,21 +2380,12 @@ export interface components {
             active: "personal" | "business";
             personal: components["schemas"]["SpacePersonalDto"];
             business?: components["schemas"]["SpaceBusinessDto"] | null;
-            /** @description Model makers that can be switched off for Business */
+            /** @description The model makers behind Jack */
             providers: components["schemas"]["ProviderDto"][];
-        };
-        SaveBusinessDto: {
-            name: string;
-            website?: string;
-            about?: string;
-            helpWith?: string[];
-        };
-        UpdateSpaceModelsDto: {
-            excludedProviders: ("openai" | "anthropic" | "google" | "deepseek" | "moonshot" | "qwen")[];
         };
         HomeItemDto: {
             /** @enum {string} */
-            kind: "approval" | "action" | "doc" | "image" | "task";
+            kind: "action" | "doc" | "image";
             id: string;
             title: string;
             /** @description Who or what, in one line */
@@ -2654,12 +2425,12 @@ export interface components {
             /** @enum {string} */
             space: "personal" | "business";
             /** @enum {string} */
-            kind: "conversation" | "doc" | "image" | "approval" | "task" | "action";
+            kind: "conversation" | "doc" | "image" | "action";
             /** @enum {string} */
-            who: "you" | "jack" | "agent" | "team";
-            /** @example Captain Jack */
+            who: "you" | "jack" | "team";
+            /** @example Jack of all trades */
             whoName: string;
-            /** @description Icon for the row (agent icon, or the kind of thing) */
+            /** @description Icon for the row (the kind of thing) */
             icon: string;
             /** @example made the document “Trip checklist — Dubai” */
             text: string;
@@ -2683,46 +2454,55 @@ export interface components {
             items: components["schemas"]["ActivityItemDto"][];
             comingUp: components["schemas"]["ComingUpDto"][];
         };
-        SpaceApprovalDto: {
-            id: string;
-            agentId: string;
-            agentName: string;
-            agentIcon: string;
-            taskId: string;
-            /** @enum {string} */
-            action: "send_email" | "publish_post" | "change_crm" | "share_externally";
-            /** @description e.g. "Sending emails" */
-            kindLabel: string;
-            title: string;
-            /** @description Who or what it affects, e.g. "Goes to 3 customers" */
-            impact: string;
-            /** @description Exactly what will happen */
-            preview: string[];
-            /** @description The full text, editable before approving */
-            draft: string;
-            /** @description Outside tool that carries it out */
-            tool: string | null;
-            /** @enum {string} */
-            status: "pending" | "approved" | "rejected";
-            /** @enum {string|null} */
-            outcome: "approved" | "edited" | "revise" | "dropped" | "auto" | null;
-            /** @description Why it was rejected */
-            note: string | null;
-            createdAt: string;
-            decidedAt: string | null;
-            /** @enum {string} */
-            space: "personal" | "business";
-        };
         AllApprovalsDto: {
-            /** @description What Jack wants to do (pay, send, add), both spaces */
+            /** @description What Jack wants to do (pay, send, add) */
             jackPending: components["schemas"]["JackActionDto"][];
             jackDecided: components["schemas"]["JackActionDto"][];
-            /** @description Waiting for the person, both spaces, newest first */
-            pending: components["schemas"]["SpaceApprovalDto"][];
-            /** @description The latest decided, both spaces */
-            decided: components["schemas"]["SpaceApprovalDto"][];
-            /** @description Each space’s team setting for what needs approval */
-            modes?: Record<string, never>;
+        };
+        TranscriptDto: {
+            /** @example Find me three good hotels in Dubai for next weekend. */
+            text: string;
+            /**
+             * @description Credits charged (1 per started minute)
+             * @example 1
+             */
+            credits: number;
+        };
+        ProjectDto: {
+            id: string;
+            /** @example Dubai trip */
+            name: string;
+            /** @description What Jack should know in every chat of this project */
+            instructions: string;
+            chatCount: number;
+            docCount: number;
+            fileCount: number;
+            updatedAt: string;
+        };
+        CreateProjectDto: {
+            name: string;
+            instructions?: string;
+        };
+        ProjectDocDto: {
+            id: string;
+            title: string;
+            status: string;
+            updatedAt: string;
+        };
+        ProjectDetailDto: {
+            project: components["schemas"]["ProjectDto"];
+            chats: components["schemas"]["ChatSummaryDto"][];
+            docs: components["schemas"]["ProjectDocDto"][];
+            files: components["schemas"]["FileDto"][];
+        };
+        UpdateProjectDto: {
+            name?: string;
+            instructions?: string;
+        };
+        ProjectItemDto: {
+            /** @enum {string} */
+            kind: "chat" | "doc" | "file";
+            id: string;
         };
     };
     responses: never;
@@ -2779,6 +2559,66 @@ export interface operations {
                 };
             };
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    MeController_joinWaitlist: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JoinWaitlistDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    MeController_renameAssistant: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAssistantDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeAssistantDto"];
+                };
+            };
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -4441,717 +4281,6 @@ export interface operations {
             };
         };
     };
-    TeamController_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TeamStateDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateTeamDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TeamDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            /** @description More agents than the plan allows */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_deleteTeam: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_settings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TeamSettingsDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TeamDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_analyze: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AnalyzeRequestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AnalysisDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            /** @description The team is already set up */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_propose: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProposeRequestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProposalDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            402: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_discard: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_prepare: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AgentDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_getRoom: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_send: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RoomSendDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            402: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_pause: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_resume: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_approvals: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApprovalListDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_approve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ApproveDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApprovalDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            /** @description Already decided */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_reject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RejectDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApprovalDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            /** @description Already decided */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_tasks: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TaskListDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_draftAgent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DraftAgentRequestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DraftAgentDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_addAgent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AddAgentDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AgentDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            /** @description The team is full on this plan */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_updateAgent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateAgentDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AgentDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_removeAgent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RemoveAgentDto"];
-            };
-        };
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_agentChat: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    TeamController_sendToAgent: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RoomSendDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
     ConnectionsController_list: {
         parameters: {
             query?: never;
@@ -5317,6 +4446,34 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["BrowserTaskDto"];
                 };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    BrowserController_appearance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                scheme: "light" | "dark";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             401: {
                 headers: {
@@ -5658,6 +4815,152 @@ export interface operations {
             };
         };
     };
+    FilesController_list: {
+        parameters: {
+            query?: {
+                /** @description nextCursor from the previous page */
+                cursor?: unknown;
+                /** @description Search by name */
+                q?: unknown;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileListDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    FilesController_upload: {
+        parameters: {
+            query: {
+                /** @description Add it straight to this project */
+                projectId?: unknown;
+                name: unknown;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    FilesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    FilesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    FilesController_content: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
     BillingController_summary: {
         parameters: {
             query?: never;
@@ -5714,6 +5017,93 @@ export interface operations {
             };
         };
     };
+    BillingController_paymentsList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentsDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    BillingController_checkout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckoutRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutStartDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    BillingController_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutResultDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
     SpacesController_get: {
         parameters: {
             query?: never;
@@ -5732,93 +5122,6 @@ export interface operations {
                 };
             };
             401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    SpacesController_saveBusiness: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SaveBusinessDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SpaceBusinessDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-        };
-    };
-    SpacesController_models: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateSpaceModelsDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SpaceBusinessDto"];
-                };
-            };
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            /** @description No Business space yet */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiErrorResponse"];
-                };
-            };
-            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -5858,7 +5161,7 @@ export interface operations {
     ActivityController_list: {
         parameters: {
             query?: {
-                kind?: "all" | "conversation" | "doc" | "image" | "team" | "purchases";
+                kind?: "all" | "conversation" | "doc" | "image" | "purchases";
                 space?: "all" | "personal" | "business";
             };
             header?: never;
@@ -5901,6 +5204,245 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["AllApprovalsDto"];
                 };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    VoiceController_transcribe: {
+        parameters: {
+            query?: {
+                /** @description How long the recording is, in seconds */
+                seconds?: unknown;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    ProjectsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDto"][];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    ProjectsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProjectDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    ProjectsController_detail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetailDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    ProjectsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    ProjectsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    ProjectsController_addItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectItemDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiErrorResponse"];
+                };
+            };
+        };
+    };
+    ProjectsController_removeItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectItemDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             401: {
                 headers: {

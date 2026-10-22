@@ -12,6 +12,7 @@ import { toApiError, type ApiError } from '@/lib/api/errors';
 import { toMarkdown, type PmNode } from '@/lib/docs/markdown';
 import type { ModelMenu } from '@/lib/models';
 import { afterBlock, aiMarks, sectionRange, setAiMarks } from './ai-decorations';
+import { VoiceButton } from '@/components/voice/Voice';
 
 type Action = NonNullable<Schemas['EditRequestDto']['action']>;
 type Insert = Schemas['InsertSuggestionDto'];
@@ -402,6 +403,7 @@ function AskPopover({
                 }
               }}
             />
+            <VoiceButton value={text} onChange={setText} maxLength={500} />
             <ModelPicker menu={menu} value={model} onChange={onModelChange} align="end" />
             <IconButton
               icon="arrow-up"

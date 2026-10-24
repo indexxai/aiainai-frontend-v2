@@ -164,12 +164,3 @@
   line-height: 20px;
   font-weight: 400;
 }
-
-/*
- * Theme-paired images (the Jack mascots): show only the one that matches the nearest theme.
- * The :not() keeps a nested scope (e.g. the always-dark landing page inside a light app) in charge.
- */
-[data-theme='dark'] .jack-on-light:not([data-theme='dark'] [data-theme='light'] *),
-[data-theme='light'] .jack-on-dark:not([data-theme='light'] [data-theme='dark'] *) {
-  display: none !important;
-}

@@ -11,28 +11,20 @@
   overflow-x: hidden;
 }
 
-/* Hand-drawn tools faintly behind the page (main and Jack of all trades). */
+/* Hand-drawn tools illustration behind the page (main, Jack of all trades, Captain Jack). */
 .ml-art {
   position: absolute;
   inset: 0;
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
+  background: url('/art/backdrop.webp') center top / 100% auto repeat-y;
+  opacity: 0.2;
 }
-.ml-art img {
-  position: absolute;
-  height: auto;
-  display: block;
-  filter: grayscale(1);
-  opacity: 0.05;
-}
-[data-theme='light'] .ml-art img {
-  opacity: 0.045;
-}
-@media (max-width: 767px) {
-  /* Half as many on phones, so it stays calm. */
-  .ml-art img:nth-child(2n) {
-    display: none;
+@media (max-width: 1023px) {
+  /* Keep the drawings a readable size on narrow screens (the centre of the picture shows). */
+  .ml-art {
+    background-size: 960px auto;
   }
 }
 .ml a {

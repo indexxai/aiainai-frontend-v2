@@ -14,7 +14,6 @@ import {
   Stand,
 } from '@/components/landing/parts';
 import { ArtBackdrop } from '@/components/landing/ArtBackdrop';
-import { LANDING_ART } from '@/components/landing/art';
 import { Badge, Icon, type IconName } from '@/ui';
 
 export const metadata: Metadata = {
@@ -90,7 +89,7 @@ const FAQ: [string, string][] = [
 export default function LandingPage() {
   return (
     <div className="ml">
-      <ArtBackdrop pieces={LANDING_ART} />
+      <ArtBackdrop />
       <SiteHeader
         current="home"
         links={[

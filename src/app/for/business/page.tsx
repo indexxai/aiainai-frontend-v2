@@ -12,6 +12,8 @@ import {
   SiteFooter,
   SiteHeader,
 } from '@/components/landing/parts';
+import { ArtBackdrop } from '@/components/landing/ArtBackdrop';
+import { BUSINESS_ART } from '@/components/landing/art';
 import { Badge, Icon, type IconName } from '@/ui';
 
 export const metadata: Metadata = {
@@ -68,6 +70,7 @@ const FAQ: [string, string][] = [
 export default function BusinessPage() {
   return (
     <div className="ml">
+      <ArtBackdrop pieces={BUSINESS_ART} />
       <SiteHeader
         current="business"
         links={[

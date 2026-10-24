@@ -1,12 +1,12 @@
 import type { Space } from './space';
 
-/** One mascot picture in both themes: `dark` shows on the dark theme, `light` on the light one. */
+/** One mascot picture: the white `dark` figure and the coloured `light` one (used on both themes). */
 export type JackArt = { dark: string; light: string };
 
 /**
  * The two Jacks: Jack of all trades (Personal) and Captain Jack (Business).
- * Each has a white figure for the dark theme and a coloured one for the light theme
- * (Jack is blue, Captain Jack is green). Render them with <JackImg>, which swaps on theme.
+ * Each is shown in colour (Jack is blue, Captain Jack is green) on both themes; the white
+ * figures are kept for reference. Render them with <JackImg>.
  */
 export const JACKS = {
   personal: {

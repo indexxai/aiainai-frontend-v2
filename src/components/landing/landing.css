@@ -1,11 +1,39 @@
 /* The three public landing pages (main, Jack of all trades, Captain Jack): minimal and visual,
    no separator lines. Designs: "Landing pages — minimal redesign" on the design canvas. */
 .ml {
+  position: relative;
+  /* Its own stacking layer, so the artwork (z-index -1) sits above the page colour and below everything else. */
+  isolation: isolate;
   min-height: 100vh;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+/* Hand-drawn tools faintly behind the page (main and Jack of all trades). */
+.ml-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ml-art img {
+  position: absolute;
+  height: auto;
+  display: block;
+  filter: grayscale(1);
+  opacity: 0.11;
+}
+[data-theme='light'] .ml-art img {
+  opacity: 0.09;
+}
+@media (max-width: 767px) {
+  /* Half as many on phones, so it stays calm. */
+  .ml-art img:nth-child(2n) {
+    display: none;
+  }
 }
 .ml a {
   color: inherit;

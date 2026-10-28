@@ -26,10 +26,10 @@ const FEATURES: { icon: IconName; title: string; text: string }[] = [
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="au-page">
-      <aside className="au-brandpanel" aria-label="About Captain Jack's Bridge">
+      <aside className="au-brandpanel" aria-label="About Jack of all trades">
         <Link href="/" className="au-brand">
           <Image src="/brand/jacks-ai-mark.png" alt="" width={40} height={48} priority />
-          <span>Captain Jack&rsquo;s Bridge</span>
+          <span>Jack of all trades</span>
         </Link>
         <div className="au-pitch">
           <h2 className="au-pitch-title">One workspace to chat, research, create and run your AI Crews.</h2>
@@ -51,9 +51,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </aside>
 
       <div className="au-side">
-        <Link href="/" className="au-brand au-brand-compact" aria-label="Captain Jack's Bridge">
+        <Link href="/" className="au-brand au-brand-compact" aria-label="Jack of all trades">
           <Image src="/brand/jacks-ai-mark.png" alt="" width={27} height={32} />
-          <span>Captain Jack&rsquo;s Bridge</span>
+          <span>Jack of all trades</span>
         </Link>
         <main id="main" className="au-main">
           <div className="au-card">{children}</div>

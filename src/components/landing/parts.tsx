@@ -6,6 +6,7 @@ import type { Space } from '@/lib/space';
 import { Icon, cx, type IconName } from '@/ui';
 import { Reveal } from './Reveal';
 import { ThemeToggle } from './ThemeToggle';
+import { NavLauncher } from './product-launcher/NavLauncher';
 import './landing.css';
 
 /* Building blocks for the three public landing pages (designs: "Landing pages — minimal redesign"). */
@@ -44,6 +45,7 @@ export function SiteHeader({
         <Link href={cta.href} className="as-btn primary">
           {cta.label}
         </Link>
+        <NavLauncher />
       </div>
     </header>
   );

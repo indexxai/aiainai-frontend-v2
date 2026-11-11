@@ -14,7 +14,6 @@ import {
   SiteHeader,
 } from '@/components/landing/parts';
 import { ArtBackdrop } from '@/components/landing/ArtBackdrop';
-import { PERSONAL_ART } from '@/components/landing/art';
 import { Badge, Icon, type IconName } from '@/ui';
 
 export const metadata: Metadata = {
@@ -83,7 +82,7 @@ const FAQ: [string, string][] = [
 export default function PersonalPage() {
   return (
     <div className="ml">
-      <ArtBackdrop pieces={PERSONAL_ART} />
+      <ArtBackdrop />
       <SiteHeader
         current="personal"
         links={[

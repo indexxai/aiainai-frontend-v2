@@ -13,6 +13,7 @@ export type LauncherProduct = {
 
 export const LAUNCHER_PRODUCTS: LauncherProduct[] = [
   { id: "bitcoin-yay", name: "Bitcoin Yay", url: () => "https://bitcoinyay.com", dark: A + "bitcoinyayLogo.webp", light: A + "bitcoinyayLogo.webp" },
+  { id: "captain-jack", name: "Captain Jack", url: () => "http://jacksai.si/", dark: A + "captainJackLogo.png", light: A + "captainJackLogo.png" },
   { id: "crypto-treasury", name: "Crypto Treasury", url: () => "https://cex.indexx.ai/crypto-treasury", dark: A + "CryptoTreasuryLogo.webp", light: A + "CryptoTreasuryLogo.webp" },
   { id: "emmm", name: "Eeny Meeny Miny Moe", url: () => "https://eenymeenyminymoe.io/", dark: A + "EmmmLogo.webp", light: A + "EmmmLogo.webp" },
   { id: "exchange", name: "Exchange", url: () => "https://cex.indexx.ai/update/home", dark: A + "ExchangeLogo.webp", light: A + "ExchangeLogo.webp" },

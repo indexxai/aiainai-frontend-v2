@@ -87,6 +87,7 @@ const applyDrop = (
 
   // Swap the two products between the sections.
   const displaced = dst[to.index];
+  if (displaced === undefined) return { fav, rest };
   dst[to.index] = id;
   src[from.index] = displaced;
   return { fav, rest };
@@ -238,8 +239,9 @@ export const ProductLauncher: React.FC<Props> = ({ icon, theme }) => {
       ArrowDown: COLS,
     };
     let next: Layout | null = null;
-    if (delta[e.key] !== undefined) {
-      const to = index + delta[e.key];
+    const step = delta[e.key];
+    if (step !== undefined) {
+      const to = index + step;
       if (to >= 0 && to < len) next = applyDrop(layout, { list, index }, { list, index: to });
     } else if (e.key === "Enter" || e.key === " ") {
       const other: ListName = list === "fav" ? "rest" : "fav";

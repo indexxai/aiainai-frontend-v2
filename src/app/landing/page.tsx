@@ -24,13 +24,13 @@ export const metadata: Metadata = {
 
 /** Ring positions: Jack and the seven logos, evenly spaced (same layout as the Jack of all trades page). */
 const RING_LOGOS = [
-  { x: 270, y: 230 },
-  { x: 455, y: 197 },
-  { x: 602, y: 304 },
-  { x: 572, y: 486 },
-  { x: 430, y: 610 },
-  { x: 245, y: 643 },
-  { x: 98, y: 536 },
+  { x: 346, y: 242 },
+  { x: 488, y: 253 },
+  { x: 565, y: 368 },
+  { x: 513, y: 500 },
+  { x: 396, y: 584 },
+  { x: 253, y: 601 },
+  { x: 144, y: 515 },
 ];
 
 /** 72 app tiles in uneven greys: "a lot of separate AI apps". */
@@ -88,7 +88,7 @@ const FAQ: [string, string][] = [
 /** The Jack’s AI landing page for signed-out visitors (design "40 · Main landing page — minimal"). */
 export default function LandingPage() {
   return (
-    <div className="ml">
+    <div className="ml ml-solo">
       <ArtBackdrop />
       <SiteHeader
         current="home"
@@ -105,11 +105,9 @@ export default function LandingPage() {
         <section className="ml-hero" aria-labelledby="ml-title">
           <div className="ml-hero-text">
             <h1 id="ml-title" className="ml-h1">
-              God’s Perspective AI&nbsp;Gateway
+              Jack with God’s Perspective
             </h1>
-            <p className="ml-slogan">
-              One Jack. <span>Every AI.</span>
-            </p>
+            <p className="ml-slogan">One Jack. Every AI. Any Mission.</p>
             <p className="ml-lead">
               Every AI works for Jack: ChatGPT, Claude, Gemini and hundreds more. Tell him what you need. He
               picks the best quality for the price, gets it done, and asks before anything important.
@@ -127,7 +125,8 @@ export default function LandingPage() {
           <Ring
             label={`Jack of all trades on a ring of AI companies: ${AI_LOGOS.flatMap((l) => (l.alt ? [l.alt] : [])).join(', ')} and more`}
             logos={RING_LOGOS}
-            mascots={[{ space: 'personal', x: 128, y: 406, height: 250 }]}
+            compact
+            mascots={[{ space: 'personal', x: 168, y: 409, height: 300, shadow: false }]}
           />
         </section>
 

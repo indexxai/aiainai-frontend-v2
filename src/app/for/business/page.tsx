@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
+  AI_LOGOS,
   CrossLink,
   End,
   Face,
@@ -65,10 +66,21 @@ const FAQ: [string, string][] = [
   ],
 ];
 
+/** Ring positions on the design: the seven logos evenly spaced on the smaller ring, clear of the ship. */
+const RING_LOGOS = [
+  { x: 383, y: 236 },
+  { x: 515, y: 269 },
+  { x: 563, y: 393 },
+  { x: 500, y: 514 },
+  { x: 384, y: 589 },
+  { x: 247, y: 600 },
+  { x: 144, y: 515 },
+];
+
 /** Captain Jack for business, coming soon (design "42 · Captain Jack landing page — minimal"). */
 export default function BusinessPage() {
   return (
-    <div className="ml">
+    <div className="ml ml-solo">
       <ArtBackdrop />
       <SiteHeader
         current="business"
@@ -91,10 +103,10 @@ export default function BusinessPage() {
             <h1 id="ml-title" className="ml-h1">
               Captain Jack
               <br />
-              <span>and his crew.</span>
+              and his crew.
             </h1>
             <p className="ml-slogan" style={{ maxWidth: 560 }}>
-              AI agents that run the busywork <span>of your business.</span>
+              AI agents that run the busywork of your business.
             </p>
             <div className="ml-ctas">
               <Link href="/signup" className="as-btn primary">
@@ -107,14 +119,10 @@ export default function BusinessPage() {
             </div>
           </div>
           <Ring
-            label="Captain Jack with his crew of AI agents: lead replies, social posts, CRM and reports"
-            nodes={[
-              { icon: 'mail', label: 'Lead replies', x: 366, y: 199 },
-              { icon: 'megaphone', label: 'Social posts', x: 608, y: 328 },
-              { icon: 'contact', label: 'CRM', x: 474, y: 584 },
-              { icon: 'file-text', label: 'Reports', x: 185, y: 626 },
-            ]}
-            mascots={[{ space: 'business', x: 121, y: 418, height: 240 }]}
+            label={`Captain Jack on a ring of AI companies: ${AI_LOGOS.flatMap((l) => (l.alt ? [l.alt] : [])).join(', ')} and more`}
+            logos={RING_LOGOS}
+            compact
+            mascots={[{ space: 'business', x: 168, y: 409, height: 288, shadow: false }]}
           />
         </section>
 

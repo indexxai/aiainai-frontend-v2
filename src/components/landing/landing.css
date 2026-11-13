@@ -276,6 +276,17 @@
   font: 600 clamp(10px, 1.9cqw, 13px) / 1.4 var(--font-sans);
   white-space: nowrap;
 }
+/* The smaller ring (Jack of all trades and Captain Jack pages): oval 456 × 336 at (122, 252),
+   logo ovals at 75%. */
+.lr-compact .lr-line {
+  left: 17.94%;
+  top: 35%;
+  width: 67.06%;
+  height: 46.67%;
+}
+.lr-compact .lr-logo {
+  transform: translate(-50%, -50%) rotate(-30deg) scale(0.75);
+}
 /* A mascot standing on the ring: placed at its feet, lifted by its own height. */
 .lr-stand {
   position: absolute;
@@ -1577,5 +1588,31 @@
   .lr-node,
   .lr-stand {
     animation: none;
+  }
+}
+
+/* Jack of all trades and Captain Jack pages: one-colour headings, roomier hero text, and the
+   ring raised and pushed right on wide screens. */
+.ml-solo .ml-h1 span,
+.ml-solo .ml-h2 span,
+.ml-solo .ml-slogan span {
+  color: inherit;
+}
+.ml-solo .ml-hero-text > .ml-slogan,
+.ml-solo .ml-hero-text > .ml-ctas {
+  margin-top: 16px;
+}
+@media (min-width: 1101px) {
+  .ml-solo .ml-hero > .lr {
+    justify-self: end;
+    align-self: start;
+    margin-top: -140px;
+    margin-right: -72px;
+  }
+}
+@media (min-width: 1280px) {
+  /* As on the design: the first line of the heading stays whole, even if it runs a little past the text column. */
+  .ml-solo .ml-h1 .ml-line {
+    white-space: nowrap;
   }
 }

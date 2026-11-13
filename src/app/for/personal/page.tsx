@@ -22,15 +22,15 @@ export const metadata: Metadata = {
     'Your AI for everyday life. Trips, bills, shopping, email and plans: Jack picks the best AI for each part, gets it done, and asks before he pays or sends anything.',
 };
 
-/** Ring positions on the design: Jack and the seven logos, evenly spaced. */
+/** Ring positions on the design: the seven logos evenly spaced on the smaller ring, clear of Jack. */
 const RING_LOGOS = [
-  { x: 270, y: 230 },
-  { x: 455, y: 197 },
-  { x: 602, y: 304 },
-  { x: 572, y: 486 },
-  { x: 430, y: 610 },
-  { x: 245, y: 643 },
-  { x: 98, y: 536 },
+  { x: 346, y: 242 },
+  { x: 488, y: 253 },
+  { x: 565, y: 368 },
+  { x: 513, y: 500 },
+  { x: 396, y: 584 },
+  { x: 253, y: 601 },
+  { x: 144, y: 515 },
 ];
 
 const AREAS: [IconName, string, string][] = [
@@ -81,7 +81,7 @@ const FAQ: [string, string][] = [
 /** Jack of all trades, for personal life (design "41 · Jack of all trades landing page — minimal"). */
 export default function PersonalPage() {
   return (
-    <div className="ml">
+    <div className="ml ml-solo">
       <ArtBackdrop />
       <SiteHeader
         current="personal"
@@ -102,13 +102,13 @@ export default function PersonalPage() {
               Jack’s AI for personal life
             </span>
             <h1 id="ml-title" className="ml-h1">
-              Jack of all trades,
+              <span className="ml-line">Jack of All Trades</span>
               <br />
-              <span>with God’s Perspective.</span>
+              your AI Agent
+              <br />
+              with God’s Perspective
             </h1>
-            <p className="ml-slogan">
-              One Jack. Every AI. <span>For everyday life.</span>
-            </p>
+            <p className="ml-slogan">One Jack. Every AI. Any Mission.</p>
             <div className="ml-ctas">
               <Link href="/signup" className="as-btn primary">
                 Get started free
@@ -122,7 +122,8 @@ export default function PersonalPage() {
           <Ring
             label={`Jack of all trades on a ring of AI companies: ${AI_LOGOS.flatMap((l) => (l.alt ? [l.alt] : [])).join(', ')} and more`}
             logos={RING_LOGOS}
-            mascots={[{ space: 'personal', x: 128, y: 406, height: 250 }]}
+            compact
+            mascots={[{ space: 'personal', x: 168, y: 409, height: 300, shadow: false }]}
           />
         </section>
 

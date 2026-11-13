@@ -147,26 +147,30 @@ export const AI_LOGOS = [
   { src: '/models/model-blue.png', alt: '', w: 54 },
 ] as const;
 
-type RingMascot = { space: Space; x: number; y: number; height: number; late?: boolean };
+type RingMascot = { space: Space; x: number; y: number; height: number; late?: boolean; shadow?: boolean };
 type RingNode = { icon: IconName; label: string; x: number; y: number };
 
 /**
  * A tilted oval with things evenly spaced on it (positions worked out along the line): AI logos,
  * crew members, and the mascots standing on it. Scales with its width.
+ * `compact`: the smaller oval with smaller logo ovals used on the Jack of all trades and
+ * Captain Jack pages (positions are still given in the 680 × 720 box).
  */
 export function Ring({
   label,
   logos = [],
   nodes = [],
   mascots,
+  compact,
 }: {
   label: string;
   logos?: { x: number; y: number }[];
   nodes?: RingNode[];
   mascots: RingMascot[];
+  compact?: boolean;
 }) {
   return (
-    <div className="lr" role="img" aria-label={label}>
+    <div className={cx('lr', compact && 'lr-compact')} role="img" aria-label={label}>
       <div className="lr-line" />
       {logos.map((p, i) => {
         const l = AI_LOGOS[i]!;
@@ -194,8 +198,11 @@ export function Ring({
         </div>
       ))}
       {mascots.map((m) => {
+        const shadow = m.shadow !== false;
         const sw = Math.round(m.height * 0.4);
         const sh = Math.round(sw * 0.11);
+        // Without a shadow the feet sit on the given point.
+        const lift = shadow ? m.height + 2 + sh / 2 : m.height - 2;
         return (
           <div
             key={m.space}
@@ -203,8 +210,8 @@ export function Ring({
             style={{
               left: pct(m.x, BOX.w),
               top: pct(m.y, BOX.h),
-              // The shadow's middle sits on the given point; the mascot stands above it.
-              transform: `translate(-50%, -${cqw(m.height + 2 + sh / 2)})`,
+              // The shadow's middle (or, with no shadow, the feet) sits on the given point.
+              transform: `translate(-50%, -${cqw(lift)})`,
             }}
           >
             <JackImg
@@ -213,10 +220,12 @@ export function Ring({
               className={cx('ml-float', m.late && 'ml-late')}
               style={{ height: cqw(m.height) }}
             />
-            <div
-              className={cx('ml-shadow', m.late && 'ml-late')}
-              style={{ width: cqw(sw), height: cqw(sh) }}
-            />
+            {shadow && (
+              <div
+                className={cx('ml-shadow', m.late && 'ml-late')}
+                style={{ width: cqw(sw), height: cqw(sh) }}
+              />
+            )}
           </div>
         );
       })}

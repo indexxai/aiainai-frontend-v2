@@ -27,7 +27,7 @@ export const LAUNCHER_PRODUCTS: LauncherProduct[] = [
   { id: "wallstreet", name: "Wallstreet", url: () => "https://wallstreet.indexx.ai/", dark: A + "wallstreetLogo.webp", light: A + "wallstreetLogo.webp", lightFilter: "invert(1)" },
   { id: "xtokens", name: "xTokens", url: () => "https://indexx.ai/xtokens", dark: A + "XCryptoLogo.webp", light: A + "XCryptoLogo.webp" },
   { id: "xxemail", name: "XXEmail", url: () => "https://test.xxemail.com/", dark: A + "xxEmailLogo.png", light: A + "xxEmailLogo.png" },
-  { id: "yaysapp", name: "YaysApp", url: () => "https://web.yaysapp.com", dark: A + "YaysAppLogo.webp", light: A + "YaysAppLogo.webp" },
+  { id: "yaysapp", name: "YaysApp", url: () => "https://yaysapp.com/", dark: A + "YaysAppLogo.webp", light: A + "YaysAppLogo.webp" },
 ];
 
 // Where "Explore Zodiac" in the launcher panel goes.

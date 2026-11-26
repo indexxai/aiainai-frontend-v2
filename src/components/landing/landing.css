@@ -1616,3 +1616,13 @@
     white-space: nowrap;
   }
 }
+
+/* Main landing page: more room between the top bar and the hero. */
+.ml-hero.ml-hero-home {
+  padding-top: 88px;
+}
+@media (max-width: 1100px) {
+  .ml-hero.ml-hero-home {
+    padding-top: 48px;
+  }
+}

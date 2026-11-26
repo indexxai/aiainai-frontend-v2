@@ -102,7 +102,7 @@ export default function LandingPage() {
       />
 
       <main>
-        <section className="ml-hero" aria-labelledby="ml-title">
+        <section className="ml-hero ml-hero-home" aria-labelledby="ml-title">
           <div className="ml-hero-text">
             <h1 id="ml-title" className="ml-h1">
               Jack with God’s Perspective

@@ -1,0 +1,320 @@
+/* Apps: list and the code / preview workspace. Plain surfaces, thin lines. */
+.apl,
+.apw {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.apl-head,
+.apw-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.apl-sub,
+.apw-meta {
+  margin: 4px 0 0;
+  color: var(--ink-muted);
+  font: 400 14px/22px var(--font-sans);
+  max-width: 62ch;
+}
+.apl-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.apl-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  text-decoration: none;
+}
+.apl-card:hover {
+  background: var(--surface-hover);
+}
+.apl-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 15px/22px var(--font-sans);
+}
+.apl-meta {
+  color: var(--ink-muted);
+  font: 400 13px/18px var(--font-sans);
+}
+.apl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 16px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+/* Workspace */
+.apw-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  height: min(62vh, 640px);
+  min-height: 360px;
+}
+.apw-code,
+.apw-preview {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+}
+.apw-code {
+  flex-direction: row;
+}
+.apw-preview {
+  flex-direction: column;
+}
+.apw-tree {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  width: 168px;
+  flex: none;
+  overflow: auto;
+  border-right: 1px solid var(--line);
+  background: var(--surface-sunken);
+}
+.apw-file {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--radius-sm, 6px);
+  background: transparent;
+  color: var(--ink-muted);
+  font: 400 13px/18px var(--font-mono, ui-monospace, monospace);
+  text-align: left;
+  cursor: pointer;
+}
+.apw-file span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.apw-file:hover {
+  background: var(--surface-hover);
+}
+.apw-file[aria-current='true'] {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+.apw-editor {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.apw-editor-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  min-height: 40px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-muted);
+  font: 500 13px/18px var(--font-sans);
+}
+.apw-editor-actions {
+  display: flex;
+  gap: 4px;
+}
+.apw-text {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
+  border: 0;
+  padding: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 400 13px/20px var(--font-mono, ui-monospace, monospace);
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+.apw-text:focus {
+  outline: 0;
+}
+.apw-frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #fff;
+}
+.apw-blank,
+.apw-none {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-muted);
+  font: 400 13px/20px var(--font-sans);
+}
+.apw-blank {
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+}
+.apw-tree .apw-none {
+  padding: 8px;
+}
+.apw-tabs {
+  display: none;
+  gap: 4px;
+}
+.apw-tab {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink-muted);
+  font: 500 14px/20px var(--font-sans);
+  cursor: pointer;
+}
+.apw-tab[aria-selected='true'] {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+.apw-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  font: 500 14px/20px var(--font-sans);
+  text-decoration: none;
+}
+.apw-dl:hover {
+  background: var(--surface-hover);
+}
+
+/* Step by step */
+.apw-steps-title {
+  margin: 0 0 8px;
+  font: 600 15px/22px var(--font-sans);
+}
+.apw-steplist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.apw-step {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font: 400 14px/22px var(--font-sans);
+}
+.apw-step p {
+  margin: 0;
+  color: var(--ink-muted);
+}
+.apw-step[data-running='true'] b::after {
+  content: ' …';
+  color: var(--ink-muted);
+}
+.apw-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.apw-chip {
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: 400 12px/18px var(--font-mono, ui-monospace, monospace);
+  cursor: pointer;
+}
+.apw-chip-removed {
+  color: var(--ink-muted);
+  text-decoration: line-through;
+  cursor: default;
+}
+
+/* Prompt box */
+.apw-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  position: sticky;
+  bottom: 0;
+  padding: 8px 0 0;
+  background: var(--bg);
+}
+.apw-prompt {
+  flex: 1;
+  box-sizing: border-box;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  font: 400 14px/22px var(--font-sans);
+}
+.apw-prompt:focus {
+  outline: 0;
+  border-color: var(--line-strong);
+}
+
+@media (max-width: 860px) {
+  .apl,
+  .apw {
+    padding: 16px;
+  }
+  .apw-tabs {
+    display: flex;
+  }
+  .apw-split {
+    grid-template-columns: minmax(0, 1fr);
+    height: 60vh;
+  }
+  .apw-split[data-tab='code'] .apw-preview,
+  .apw-split[data-tab='preview'] .apw-code {
+    display: none;
+  }
+  .apw-tree {
+    width: 120px;
+  }
+}

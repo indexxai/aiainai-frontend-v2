@@ -23,6 +23,7 @@ export const MAIN_NAV: Section[] = [
   { id: 'approvals', label: 'Approvals', href: '/approvals', icon: 'hand' },
   { id: 'projects', label: 'Projects', href: '/projects', icon: 'folder' },
   { id: 'docs', label: 'Docs', href: '/docs', icon: 'file-text' },
+  { id: 'apps', label: 'Apps', href: '/apps', icon: 'code' },
   { id: 'image', label: 'Image', href: '/image', icon: 'image' },
   { id: 'files', label: 'Files', href: '/files', icon: 'paperclip' },
   { id: 'wallet', label: 'Wallet', href: '/wallet', icon: 'credit-card' },
@@ -45,6 +46,7 @@ export const PHONE_TABS: Section[] = [
 export const PHONE_MORE: Section[] = [
   { id: 'projects', label: 'Projects', href: '/projects', icon: 'folder' },
   { id: 'docs', label: 'Docs', href: '/docs', icon: 'file-text' },
+  { id: 'apps', label: 'Apps', href: '/apps', icon: 'code' },
   { id: 'image', label: 'Image', href: '/image', icon: 'image' },
   { id: 'files', label: 'Files', href: '/files', icon: 'paperclip' },
   { id: 'wallet', label: 'Wallet', href: '/wallet', icon: 'credit-card' },

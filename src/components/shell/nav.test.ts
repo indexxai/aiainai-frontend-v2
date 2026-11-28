@@ -26,6 +26,7 @@ describe('navigation', () => {
       'Approvals',
       'Projects',
       'Docs',
+      'Apps',
       'Image',
       'Files',
       'Wallet',

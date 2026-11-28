@@ -35,6 +35,7 @@ export function AppWorkspace({ initial }: { initial: AppData }) {
     () => buildPreview(Object.entries(done).map(([path, content]) => ({ path, content }))),
     [done],
   );
+  const hasBackend = paths.some((p) => p.startsWith('backend/'));
   const shown = draft ?? files[selected] ?? '';
   const dirty = draft !== null && draft !== (done[selected] ?? '');
 
@@ -216,7 +217,10 @@ export function AppWorkspace({ initial }: { initial: AppData }) {
 
         <section className="apw-preview" aria-label="Preview">
           <div className="apw-editor-bar">
-            <span>Preview</span>
+            <span>
+              Preview
+              {hasBackend && <span className="apw-note"> · front end only; backend/ is in the zip</span>}
+            </span>
             <Button
               size="sm"
               variant="ghost"

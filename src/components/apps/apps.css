@@ -318,3 +318,8 @@
     width: 120px;
   }
 }
+
+.apw-note {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
